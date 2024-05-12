@@ -1,0 +1,6 @@
+@Shoppy.WebAPI_HostAddress = http://localhost:5054
+
+GET {{Shoppy.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
