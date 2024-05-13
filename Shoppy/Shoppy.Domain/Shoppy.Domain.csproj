@@ -9,7 +9,6 @@
     <ItemGroup>
       <Folder Include="Notification\" />
       <Folder Include="Repositories\" />
-      <Folder Include="Specifications\" />
     </ItemGroup>
 
 </Project>
