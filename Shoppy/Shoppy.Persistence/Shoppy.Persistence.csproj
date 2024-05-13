@@ -9,7 +9,6 @@
     <ItemGroup>
       <Folder Include="Configurations\" />
       <Folder Include="Interceptors\" />
-      <Folder Include="Repositories\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -17,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="EFCore.BulkExtensions" Version="8.0.3" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
