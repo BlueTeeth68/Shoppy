@@ -7,8 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Entities\" />
+      <Folder Include="Notification\" />
       <Folder Include="Repositories\" />
+      <Folder Include="Specifications\" />
     </ItemGroup>
 
 </Project>
