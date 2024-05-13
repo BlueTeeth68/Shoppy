@@ -1,5 +1,6 @@
 using Shoppy.Persistence;
 using Shoppy.WebAPI.ConfigurationOptions;
+using Shoppy.WebAPI.Middlewares.GlobalExceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +18,17 @@ services.Configure<AppSettings>(configuration);
 //add persistence
 services.AddPersistence(appSettings.ConnectionStrings.DefaultConnection);
 
-builder.Services.AddControllers();
+services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.AddExceptionHandler<GlobalExceptionHandlers>();
 
 var app = builder.Build();
 
+//use Global exception
+app.UseExceptionHandler(options => { });
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

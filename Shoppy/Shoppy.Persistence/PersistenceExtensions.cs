@@ -12,7 +12,7 @@ public static class PersistenceExtensions
         services.AddDbContextPool<AppDbContext>(options => { options.UseSqlServer(connectionString); });
 
         //add identity
-        services.AddIdentityCore<AppUser>(options =>
+        services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -22,7 +22,6 @@ public static class PersistenceExtensions
                 options.Lockout.MaxFailedAccessAttempts = 3;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
             })
-            .AddRoles<IdentityRole>()
             .AddSignInManager<SignInManager<AppUser>>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();

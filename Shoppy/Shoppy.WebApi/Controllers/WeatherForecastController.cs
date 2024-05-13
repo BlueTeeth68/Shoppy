@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Shoppy.Domain.Exceptions;
 
 namespace Shoppy.WebAPI.Controllers
 {
@@ -22,12 +23,18 @@ namespace Shoppy.WebAPI.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                {
+                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                    TemperatureC = Random.Shared.Next(-20, 55),
+                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                })
+                .ToArray();
+        }
+
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            throw new NotFoundException("Not found api");
         }
     }
 }

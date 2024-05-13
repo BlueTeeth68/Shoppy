@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Middlewares\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Shoppy.Application\Shoppy.Application.csproj" />
     <ProjectReference Include="..\Shoppy.Domain\Shoppy.Domain.csproj" />
     <ProjectReference Include="..\Shoppy.Infrastructure\Shoppy.Infrastructure.csproj" />
