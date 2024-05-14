@@ -6,6 +6,7 @@ using Shoppy.Application.Utils;
 using Shoppy.Domain.Constants;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
+using Shoppy.Domain.Repositories.UnitOfWork;
 using Shoppy.Infrastructure.Web.Authentication;
 using Shoppy.Persistence.Identity;
 
