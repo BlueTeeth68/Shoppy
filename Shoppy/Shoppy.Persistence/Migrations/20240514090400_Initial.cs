@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Shoppy.Persistence.Migrations
 {
     /// <inheritdoc />
@@ -378,6 +380,15 @@ namespace Shoppy.Persistence.Migrations
                         principalTable: "ProductRatings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { new Guid("5fc71af5-0216-402b-a5cb-ba17701e2fa3"), null, "Admin", "ADMIN" },
+                    { new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3"), null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

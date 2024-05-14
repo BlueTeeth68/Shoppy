@@ -10,11 +10,17 @@
       <Folder Include="Caching\" />
       <Folder Include="Configurations\" />
       <Folder Include="ExtensionMethods\" />
-      <Folder Include="Web\" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Shoppy.Application\Shoppy.Application.csproj" />
       <ProjectReference Include="..\Shoppy.Domain\Shoppy.Domain.csproj" />
+      <ProjectReference Include="..\Shoppy.Persistence\Shoppy.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     </ItemGroup>
 
 </Project>

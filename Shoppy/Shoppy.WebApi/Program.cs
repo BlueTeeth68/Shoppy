@@ -1,4 +1,10 @@
+using Shoppy.Application;
+using Shoppy.Domain.Identity;
+using Shoppy.Infrastructure;
+using Shoppy.Infrastructure.Identity;
+using Shoppy.Infrastructure.Web.Authentication;
 using Shoppy.Persistence;
+using Shoppy.WebAPI;
 using Shoppy.WebAPI.ConfigurationOptions;
 using Shoppy.WebAPI.Middlewares.GlobalExceptions;
 
@@ -14,16 +20,15 @@ configuration.Bind(appSettings);
 
 services.Configure<AppSettings>(configuration);
 
-
-//add persistence
-services.AddPersistence(appSettings.ConnectionStrings.DefaultConnection);
-
-services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddApplication()
+    .AddInfrastructure(configuration)
+    .AddPersistence(appSettings.ConnectionStrings.DefaultConnection)
+    .AddPresentation(appSettings.JwtSettings);
 
 services.AddExceptionHandler<GlobalExceptionHandlers>();
+
+services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+services.AddScoped<ICurrentUser, CurrentUser>();
 
 var app = builder.Build();
 
@@ -38,6 +43,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

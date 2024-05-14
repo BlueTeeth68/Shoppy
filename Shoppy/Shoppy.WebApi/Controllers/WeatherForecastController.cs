@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shoppy.Domain.Constants;
 using Shoppy.Domain.Exceptions;
 
 namespace Shoppy.WebAPI.Controllers
@@ -19,6 +21,7 @@ namespace Shoppy.WebAPI.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = $"{RoleConstant.AdminRole}")]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
