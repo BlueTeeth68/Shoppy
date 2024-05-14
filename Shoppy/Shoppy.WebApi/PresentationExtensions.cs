@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Shoppy.Infrastructure.Web.Authentication;
 

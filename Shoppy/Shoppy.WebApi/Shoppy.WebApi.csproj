@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Shoppy.WebAPI</RootNamespace>
+    <UserSecretsId>7dcd8ffc-1d00-4a96-be58-592d795d5988</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
