@@ -85,7 +85,10 @@ namespace Shoppy.Persistence.Migrations
                     PictureUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -108,8 +111,7 @@ namespace Shoppy.Persistence.Migrations
                         name: "FK_AspNetUsers_Carts_CartId",
                         column: x => x.CartId,
                         principalTable: "Carts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -121,6 +123,10 @@ namespace Shoppy.Persistence.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductThumbUrl = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Sku = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AuthorName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Publisher = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    NumberOfPage = table.Column<int>(type: "int", nullable: true),
+                    DateOfPublication = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(12,2)", precision: 12, scale: 2, nullable: false),
                     AvgRate = table.Column<decimal>(type: "decimal(2,1)", precision: 2, scale: 1, nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -161,6 +167,30 @@ namespace Shoppy.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Addresses_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppUserIdentityRole<Guid>",
+                columns: table => new
+                {
+                    AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserIdentityRole<Guid>", x => new { x.AppUserId, x.IdentityRoleId });
+                    table.ForeignKey(
+                        name: "FK_AppUserIdentityRole<Guid>_AspNetRoles_IdentityRoleId",
+                        column: x => x.IdentityRoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserIdentityRole<Guid>_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -391,10 +421,39 @@ namespace Shoppy.Persistence.Migrations
                     { new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3"), null, "User", "USER" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "CartId", "ConcurrencyStamp", "CreatedDateTime", "Email", "EmailConfirmed", "FullName", "Gender", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PictureUrl", "SecurityStamp", "Status", "TwoFactorEnabled", "UpdatedDateTime", "UserName" },
+                values: new object[,]
+                {
+                    { new Guid("021657c8-d4d0-4167-a1a6-b7bb840f33bf"), 0, null, "71cb5ed2-45c4-45ca-8a95-5ad8f7a8aab7", new DateTime(2024, 5, 15, 7, 7, 3, 186, DateTimeKind.Utc).AddTicks(3833), "user1@gmail.com", false, "Jane Smith", 1, true, null, "USER1@GMAIL.COM", "USER1@GMAIL.COM", "AQAAAAIAAYagAAAAEF2Flm4yKX1De+RKxI4BbwQ+U2+6+0IXUHH2Y94hUPTwXHSyZgmRNJaPQliQa2289g==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "dfbb15fa-24e3-4633-ad8a-d3dec8cf58a9", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 186, DateTimeKind.Utc).AddTicks(3836), "user1@gmail.com" },
+                    { new Guid("2c96fabb-f759-43ef-9a31-328c25d2eff5"), 0, null, "14b08047-628a-4fb3-bb64-20de4bf05a4e", new DateTime(2024, 5, 15, 7, 7, 3, 319, DateTimeKind.Utc).AddTicks(152), "user2@gmail.com", false, "Michael Johnson", 2, true, null, "USER2@GMAIL.COM", "USER2@GMAIL.COM", "AQAAAAIAAYagAAAAECCQMRpgGmXfKScEp5RArMXCLootpvhs+bh0CdJqLARM80NmgmMbxPuPLUzan6BOGA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "1ec97943-c4ae-43ba-9b9f-56168f50d937", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 319, DateTimeKind.Utc).AddTicks(156), "user2@gmail.com" },
+                    { new Guid("30a4345d-df2e-46ab-8c0e-d38a7933b591"), 0, null, "0a603104-1dd7-4ee1-9818-7ea86fdc2fc5", new DateTime(2024, 5, 15, 7, 7, 3, 464, DateTimeKind.Utc).AddTicks(8333), "user3@gmail.com", false, "Emily Davis", 2, true, null, "USER3@GMAIL.COM", "USER3@GMAIL.COM", "AQAAAAIAAYagAAAAEN3EaOxYUsW2wl5To+HiRR+QWY7tLLKdJV7xj4GRaKiO6HFDH/f8fWw+FXcf9IpDlA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "748c4223-edb5-43bc-8d20-ebc878c8c593", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 464, DateTimeKind.Utc).AddTicks(8336), "user3@gmail.com" },
+                    { new Guid("594f8fe1-1cf1-4f5a-a8ae-6b9509fbf283"), 0, null, "02853d11-a0bc-4804-8dac-9e75dab38570", new DateTime(2024, 5, 15, 7, 7, 3, 595, DateTimeKind.Utc).AddTicks(7345), "user4@gmail.com", false, "David Lee", 1, true, null, "USER4@GMAIL.COM", "USER4@GMAIL.COM", "AQAAAAIAAYagAAAAEMZ+aTETtsx6o7K3ognkQ/gJTLaqKH0dHLB26dTchxKJ5IPr5d3xNwFjd0aXOQbjvQ==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "08d9e29f-48e3-42d7-94cc-ef74bf7f7c02", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 595, DateTimeKind.Utc).AddTicks(7348), "user4@gmail.com" },
+                    { new Guid("85d8a27f-9d32-4269-b5d0-844589d498d0"), 0, null, "13acdb12-3bdd-42c0-a16b-f0452f712875", new DateTime(2024, 5, 15, 7, 7, 3, 95, DateTimeKind.Utc).AddTicks(1566), "admin@gmail.com", false, "John Doe", 1, true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEF6EsdPY3dp7RpR2QxpAgIqAUsctEoDcyBTfeVyRIYJtq1MskjEnzciA/8iXScGZHQ==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "e7cdda6f-4932-4031-9bf0-055a58ea2e6b", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 95, DateTimeKind.Utc).AddTicks(1568), "admin@gmail.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3"), new Guid("021657c8-d4d0-4167-a1a6-b7bb840f33bf") },
+                    { new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3"), new Guid("2c96fabb-f759-43ef-9a31-328c25d2eff5") },
+                    { new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3"), new Guid("30a4345d-df2e-46ab-8c0e-d38a7933b591") },
+                    { new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3"), new Guid("594f8fe1-1cf1-4f5a-a8ae-6b9509fbf283") },
+                    { new Guid("5fc71af5-0216-402b-a5cb-ba17701e2fa3"), new Guid("85d8a27f-9d32-4269-b5d0-844589d498d0") }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_UserId",
                 table: "Addresses",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserIdentityRole<Guid>_IdentityRoleId",
+                table: "AppUserIdentityRole<Guid>",
+                column: "IdentityRoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -432,7 +491,8 @@ namespace Shoppy.Persistence.Migrations
                 name: "IX_AspNetUsers_CartId",
                 table: "AspNetUsers",
                 column: "CartId",
-                unique: true);
+                unique: true,
+                filter: "[CartId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -509,6 +569,9 @@ namespace Shoppy.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Addresses");
+
+            migrationBuilder.DropTable(
+                name: "AppUserIdentityRole<Guid>");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

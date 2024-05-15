@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shoppy.Application.Services.Interfaces;
 using Shoppy.Infrastructure.Authentication;
+using Shoppy.Infrastructure.Identity.UserServices;
 using Shoppy.Infrastructure.Web.Authentication;
 
 namespace Shoppy.Infrastructure;
@@ -16,6 +17,7 @@ public static class InfrastructureExtensions
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }

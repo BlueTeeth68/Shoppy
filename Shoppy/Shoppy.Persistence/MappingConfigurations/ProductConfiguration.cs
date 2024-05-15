@@ -8,7 +8,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("Products");
+        // builder.ToTable("Products");
         builder.HasIndex(p => p.Sku)
             .IsUnique(true);
 

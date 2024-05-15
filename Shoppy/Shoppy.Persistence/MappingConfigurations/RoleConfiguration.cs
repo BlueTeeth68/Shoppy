@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shoppy.Domain.Constants;
+using Shoppy.Persistence.Identity;
 
 namespace Shoppy.Persistence.MappingConfigurations;
 
@@ -9,9 +10,13 @@ public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole<Guid>>
 {
     public void Configure(EntityTypeBuilder<IdentityRole<Guid>> builder)
     {
-        builder.ToTable("AspNetRoles");
+        // builder.ToTable("AspNetRoles");
+
+        builder.HasMany<AppUser>()
+            .WithMany();
+        
         builder.HasData(
-            new IdentityRole<Guid>
+            new IdentityRole<Guid>()
             {
                 Id = new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3"),
                 Name = RoleConstant.UserRole,

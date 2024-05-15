@@ -22,6 +22,21 @@ namespace Shoppy.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AppUserIdentityRole<Guid>", b =>
+                {
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IdentityRoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AppUserId", "IdentityRoleId");
+
+                    b.HasIndex("IdentityRoleId");
+
+                    b.ToTable("AppUserIdentityRole<Guid>");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
@@ -146,6 +161,33 @@ namespace Shoppy.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("85d8a27f-9d32-4269-b5d0-844589d498d0"),
+                            RoleId = new Guid("5fc71af5-0216-402b-a5cb-ba17701e2fa3")
+                        },
+                        new
+                        {
+                            UserId = new Guid("021657c8-d4d0-4167-a1a6-b7bb840f33bf"),
+                            RoleId = new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3")
+                        },
+                        new
+                        {
+                            UserId = new Guid("2c96fabb-f759-43ef-9a31-328c25d2eff5"),
+                            RoleId = new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3")
+                        },
+                        new
+                        {
+                            UserId = new Guid("30a4345d-df2e-46ab-8c0e-d38a7933b591"),
+                            RoleId = new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3")
+                        },
+                        new
+                        {
+                            UserId = new Guid("594f8fe1-1cf1-4f5a-a8ae-6b9509fbf283"),
+                            RoleId = new Guid("8bbf66a4-da08-4b87-bdb2-1502e38562f3")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -292,7 +334,7 @@ namespace Shoppy.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Shoppy.Domain.Entities.OrderItem", b =>
@@ -340,6 +382,10 @@ namespace Shoppy.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AuthorName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<decimal>("AvgRate")
                         .HasPrecision(2, 1)
                         .HasColumnType("decimal(2,1)");
@@ -350,6 +396,9 @@ namespace Shoppy.Persistence.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateOfPublication")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -357,6 +406,9 @@ namespace Shoppy.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
+
+                    b.Property<int?>("NumberOfPage")
+                        .HasColumnType("int");
 
                     b.Property<int>("NumberOfSale")
                         .HasColumnType("int");
@@ -368,6 +420,10 @@ namespace Shoppy.Persistence.Migrations
                     b.Property<string>("ProductThumbUrl")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Publisher")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -398,7 +454,7 @@ namespace Shoppy.Persistence.Migrations
                     b.HasIndex("Sku")
                         .IsUnique();
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Shoppy.Domain.Entities.ProductCategory", b =>
@@ -433,7 +489,7 @@ namespace Shoppy.Persistence.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("Shoppy.Domain.Entities.ProductRating", b =>
@@ -510,12 +566,15 @@ namespace Shoppy.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CartId")
+                    b.Property<Guid?>("CartId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -559,6 +618,12 @@ namespace Shoppy.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -568,6 +633,9 @@ namespace Shoppy.Persistence.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("UpdatedDateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -575,7 +643,8 @@ namespace Shoppy.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CartId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CartId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -586,6 +655,133 @@ namespace Shoppy.Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("85d8a27f-9d32-4269-b5d0-844589d498d0"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "13acdb12-3bdd-42c0-a16b-f0452f712875",
+                            CreatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 95, DateTimeKind.Utc).AddTicks(1566),
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "John Doe",
+                            Gender = 1,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEF6EsdPY3dp7RpR2QxpAgIqAUsctEoDcyBTfeVyRIYJtq1MskjEnzciA/8iXScGZHQ==",
+                            PhoneNumberConfirmed = false,
+                            PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
+                            SecurityStamp = "e7cdda6f-4932-4031-9bf0-055a58ea2e6b",
+                            Status = 1,
+                            TwoFactorEnabled = false,
+                            UpdatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 95, DateTimeKind.Utc).AddTicks(1568),
+                            UserName = "admin@gmail.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("021657c8-d4d0-4167-a1a6-b7bb840f33bf"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "71cb5ed2-45c4-45ca-8a95-5ad8f7a8aab7",
+                            CreatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 186, DateTimeKind.Utc).AddTicks(3833),
+                            Email = "user1@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "Jane Smith",
+                            Gender = 1,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "USER1@GMAIL.COM",
+                            NormalizedUserName = "USER1@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEF2Flm4yKX1De+RKxI4BbwQ+U2+6+0IXUHH2Y94hUPTwXHSyZgmRNJaPQliQa2289g==",
+                            PhoneNumberConfirmed = false,
+                            PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
+                            SecurityStamp = "dfbb15fa-24e3-4633-ad8a-d3dec8cf58a9",
+                            Status = 1,
+                            TwoFactorEnabled = false,
+                            UpdatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 186, DateTimeKind.Utc).AddTicks(3836),
+                            UserName = "user1@gmail.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("2c96fabb-f759-43ef-9a31-328c25d2eff5"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "14b08047-628a-4fb3-bb64-20de4bf05a4e",
+                            CreatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 319, DateTimeKind.Utc).AddTicks(152),
+                            Email = "user2@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "Michael Johnson",
+                            Gender = 2,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "USER2@GMAIL.COM",
+                            NormalizedUserName = "USER2@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAECCQMRpgGmXfKScEp5RArMXCLootpvhs+bh0CdJqLARM80NmgmMbxPuPLUzan6BOGA==",
+                            PhoneNumberConfirmed = false,
+                            PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
+                            SecurityStamp = "1ec97943-c4ae-43ba-9b9f-56168f50d937",
+                            Status = 1,
+                            TwoFactorEnabled = false,
+                            UpdatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 319, DateTimeKind.Utc).AddTicks(156),
+                            UserName = "user2@gmail.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("30a4345d-df2e-46ab-8c0e-d38a7933b591"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0a603104-1dd7-4ee1-9818-7ea86fdc2fc5",
+                            CreatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 464, DateTimeKind.Utc).AddTicks(8333),
+                            Email = "user3@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "Emily Davis",
+                            Gender = 2,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "USER3@GMAIL.COM",
+                            NormalizedUserName = "USER3@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN3EaOxYUsW2wl5To+HiRR+QWY7tLLKdJV7xj4GRaKiO6HFDH/f8fWw+FXcf9IpDlA==",
+                            PhoneNumberConfirmed = false,
+                            PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
+                            SecurityStamp = "748c4223-edb5-43bc-8d20-ebc878c8c593",
+                            Status = 1,
+                            TwoFactorEnabled = false,
+                            UpdatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 464, DateTimeKind.Utc).AddTicks(8336),
+                            UserName = "user3@gmail.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("594f8fe1-1cf1-4f5a-a8ae-6b9509fbf283"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "02853d11-a0bc-4804-8dac-9e75dab38570",
+                            CreatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 595, DateTimeKind.Utc).AddTicks(7345),
+                            Email = "user4@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "David Lee",
+                            Gender = 1,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "USER4@GMAIL.COM",
+                            NormalizedUserName = "USER4@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMZ+aTETtsx6o7K3ognkQ/gJTLaqKH0dHLB26dTchxKJ5IPr5d3xNwFjd0aXOQbjvQ==",
+                            PhoneNumberConfirmed = false,
+                            PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
+                            SecurityStamp = "08d9e29f-48e3-42d7-94cc-ef74bf7f7c02",
+                            Status = 1,
+                            TwoFactorEnabled = false,
+                            UpdatedDateTime = new DateTime(2024, 5, 15, 7, 7, 3, 595, DateTimeKind.Utc).AddTicks(7348),
+                            UserName = "user4@gmail.com"
+                        });
+                });
+
+            modelBuilder.Entity("AppUserIdentityRole<Guid>", b =>
+                {
+                    b.HasOne("Shoppy.Persistence.Identity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                        .WithMany()
+                        .HasForeignKey("IdentityRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -730,9 +926,7 @@ namespace Shoppy.Persistence.Migrations
                 {
                     b.HasOne("Shoppy.Domain.Entities.Cart", "Cart")
                         .WithOne()
-                        .HasForeignKey("Shoppy.Persistence.Identity.AppUser", "CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Shoppy.Persistence.Identity.AppUser", "CartId");
 
                     b.Navigation("Cart");
                 });

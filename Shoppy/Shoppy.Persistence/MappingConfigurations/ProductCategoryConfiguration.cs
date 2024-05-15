@@ -8,7 +8,7 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
 {
     public void Configure(EntityTypeBuilder<ProductCategory> builder)
     {
-        builder.ToTable("ProductCategories");
+        // builder.ToTable("ProductCategories");
 
         builder.HasIndex(pc => pc.Name)
             .IsUnique(true);

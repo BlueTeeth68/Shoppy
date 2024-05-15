@@ -4,6 +4,7 @@ using Shoppy.Application.Features.Authentication.Results.Command;
 using Shoppy.Application.Services.Interfaces;
 using Shoppy.Application.Utils;
 using Shoppy.Domain.Constants;
+using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.UnitOfWork;
@@ -22,7 +23,7 @@ public class AuthService(
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
-        if (user == null)
+        if (user is not { Status: UserStatus.Active })
         {
             throw new NotFoundException("User not found");
         }
@@ -52,8 +53,8 @@ public class AuthService(
     public async Task<RegisterResult> RegisterAsync(RegisterCommand request)
     {
         var existedUser = await userManager.FindByEmailAsync(request.Email);
-
-        if (existedUser != null)
+        
+        if (existedUser != null )
         {
             throw new ConflictException("Email has been existed");
         }
@@ -63,6 +64,7 @@ public class AuthService(
             Email = request.Email,
             FullName = request.FullName,
             UserName = request.Email,
+            Status = UserStatus.Active,
         };
 
         var cart = new Cart()

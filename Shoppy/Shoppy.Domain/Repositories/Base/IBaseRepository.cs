@@ -1,4 +1,5 @@
-﻿using Shoppy.Domain.Entities.Base;
+﻿using System.Linq.Expressions;
+using Shoppy.Domain.Entities.Base;
 
 namespace Shoppy.Domain.Repositories.Base;
 
@@ -8,6 +9,17 @@ public interface IBaseRepository<TEntity, in TKey> : IConcurrencyHandler<TEntity
     IQueryable<TEntity> GetQueryableSet();
 
     Task<TEntity?> GetByIdAsync(TKey id, bool disableTracking = false);
+
+    Task<PagingResult<TEntity>> GetPaginateAsync(
+        Expression<Func<TEntity, bool>>? filter,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy,
+        int page,
+        int size,
+        string? includeProperties = null,
+        bool disableTracking = false
+    );
+
+    Task ToPaginationAsync(ref IQueryable<TEntity> query, int page, int size);
 
     Task AddOrUpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
@@ -20,12 +32,6 @@ public interface IBaseRepository<TEntity, in TKey> : IConcurrencyHandler<TEntity
     void UpdateRange(List<TEntity> entities, CancellationToken cancellationToken = default);
 
     void Delete(TEntity entity);
-
-    Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> query);
-
-    Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> query);
-
-    Task<List<T>> ToListAsync<T>(IQueryable<T> query);
 
     Task BulkInsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
 
