@@ -15,6 +15,8 @@ public class AppUser : IdentityUser<Guid>, ITrackable
     public Gender? Gender { get; set; }
 
     public UserStatus Status { get; set; }
+    
+    public bool IsDelete { get; set; }
 
     public Guid? CartId { get; set; }
 

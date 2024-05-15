@@ -4,6 +4,5 @@ public enum ProductStatus
 {
     Active = 1,
     Inactive = 2,
-    OutOfStock = 3,
-    Deleted = 4
+    OutOfStock = 3
 }

@@ -4,7 +4,7 @@ using Shoppy.Domain.Repositories.UnitOfWork;
 
 namespace Shoppy.Persistence.Repositories.UnitOfWork;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork : IUnitOfWork, IAsyncDisposable
 {
     private readonly AppDbContext _dbContext;
     private readonly ILogger<UnitOfWork> _logger;
@@ -16,7 +16,7 @@ public class UnitOfWork : IUnitOfWork
     public IProductCategoryRepository ProductCategoryRepository { get; }
     public IProductRatingRepository ProductRatingRepository { get; }
     public IProductRepository ProductRepository { get; }
-
+    
     public UnitOfWork(AppDbContext dbContext, ILogger<UnitOfWork> logger, IAddressRepository addressRepository,
         ICartItemRepository cartItemRepository, IOrderRepository orderRepository,
         IOrderItemRepository orderItemRepository, IProductCategoryRepository productCategoryRepository,
@@ -31,5 +31,32 @@ public class UnitOfWork : IUnitOfWork
         ProductCategoryRepository = productCategoryRepository;
         ProductRatingRepository = productRatingRepository;
         ProductRepository = productRepository;
+    }
+    
+    public async Task<int> SaveChangeAsync()
+    {
+        return await _dbContext.SaveChangesAsync();
+    }
+
+    private bool _disposed = false;
+
+    protected virtual async Task DisposeAsync(bool disposing)
+    {
+        if (!this._disposed)
+        {
+            if (disposing)
+            {
+               await _dbContext.DisposeAsync();
+            }
+        }
+        this._disposed = true;
+
+        await Task.CompletedTask;
+    }
+    
+    public async ValueTask DisposeAsync()
+    {
+         await DisposeAsync(true);
+        GC.SuppressFinalize(this);
     }
 }

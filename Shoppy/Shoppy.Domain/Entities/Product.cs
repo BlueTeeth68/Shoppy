@@ -13,28 +13,30 @@ public class Product : BaseEntity<Guid>, IAggregateRoot
     [StringLength(250)] public string? ProductThumbUrl { get; set; }
 
     [StringLength(100)] public string Sku { get; set; } = null!;
-    
-    [StringLength(100)]
-    public string? AuthorName { get; set; } 
-    
-    [StringLength(100)]
-    public string? Publisher { get; set; }
-    
-    public int? NumberOfPage { get; set; }
-    
+
+    [StringLength(100)] public string? AuthorName { get; set; }
+
+    [StringLength(100)] public string? Publisher { get; set; }
+
+    [Range(0, 100000)] public int? NumberOfPage { get; set; }
+
     public DateTime? DateOfPublication { get; set; }
 
+    [Range(0, int.MaxValue)]
     public decimal Price { get; set; }
 
-    [Range(0, 5)] public decimal AvgRate { get; set; }
+    [Range(0, 5)] public decimal? AvgRate { get; set; }
 
+    [Range(0, int.MaxValue)]
     public int Quantity { get; set; }
 
     public int NumberOfSale { get; set; }
 
     public ProductStatus Status { get; set; }
+    
+    public bool IsDelete { get; set; }
 
     public Guid CategoryId { get; set; }
-    
+
     public virtual ProductCategory Category { get; set; } = null!;
 }

@@ -9,4 +9,6 @@ public interface IUnitOfWork
     IProductCategoryRepository ProductCategoryRepository { get; }
     IProductRatingRepository ProductRatingRepository { get; }
     IProductRepository ProductRepository { get; }
+
+    Task<int> SaveChangeAsync();
 }

@@ -39,9 +39,9 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
         return DbSet;
     }
 
-    public async Task<T?> GetByIdAsync(TKey id, bool disableTracking = false)
+    public async Task<T?> GetByIdAsync(TKey id, CancellationToken cancellationToken, bool disableTracking = false)
     {
-        return await DbSet.FindAsync(id);
+        return await DbSet.FindAsync(id, cancellationToken);
     }
 
     public async Task<PagingResult<T>> GetPaginateAsync(Expression<Func<T, bool>>? filter,

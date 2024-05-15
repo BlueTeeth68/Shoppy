@@ -8,7 +8,7 @@ public interface IBaseRepository<TEntity, in TKey> : IConcurrencyHandler<TEntity
 {
     IQueryable<TEntity> GetQueryableSet();
 
-    Task<TEntity?> GetByIdAsync(TKey id, bool disableTracking = false);
+    Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default, bool disableTracking = false);
 
     Task<PagingResult<TEntity>> GetPaginateAsync(
         Expression<Func<TEntity, bool>>? filter,
