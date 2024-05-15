@@ -16,6 +16,8 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
     {
         // builder.ToTable("AspNetUsers");
 
+        #region relation mapping
+
         builder.HasMany<Address>()
             .WithOne()
             .HasForeignKey(a => a.UserId);
@@ -32,9 +34,22 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne()
             .HasForeignKey(o => o.UserId);
 
-        var passwordHasher = new PasswordHasher<AppUser>();
+        #endregion
+
+        #region define index
+
+        builder.HasIndex(u => u.IsDelete);
+        builder.HasIndex(u => u.FullName);
+        builder.HasIndex(u => u.Gender);
+
+        #endregion
+
+        builder.HasQueryFilter(u => u.IsDelete);
+
+        #region Data seeding
 
         //Data seeding
+        var passwordHasher = new PasswordHasher<AppUser>();
 
         var users = new List<AppUser>()
         {
@@ -80,6 +95,8 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
         };
 
         builder.HasData(users);
+
+        #endregion
     }
 
     private static AppUser CreateSeedUser
