@@ -27,6 +27,13 @@ public class ProductsController : ControllerBase
         return Created(nameof(AddAsync), result);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> FilterAsync([FromQuery] FilterProductQuery request)
+    {
+        var result = await _mediator.Send(request);
+        return Ok(result);
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
