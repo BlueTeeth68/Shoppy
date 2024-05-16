@@ -45,4 +45,52 @@ public static class ProductMapper
             CategoryName = entity.Category?.Name
         };
     }
+
+    public static void UpdateProductToEntity(UpdateProductCommand dto, ref Product entity)
+    {
+        if (!string.IsNullOrEmpty(dto.Name))
+        {
+            entity.Name = dto.Name;
+        }
+
+        if (!string.IsNullOrEmpty(dto.Description))
+        {
+            entity.Description = dto.Description;
+        }
+
+        if (!string.IsNullOrEmpty(dto.Sku))
+        {
+            entity.Sku = dto.Sku;
+        }
+
+        if (!string.IsNullOrEmpty(dto.AuthorName))
+        {
+            entity.AuthorName = dto.AuthorName;
+        }
+
+        if (!string.IsNullOrEmpty(dto.Publisher))
+        {
+            entity.Publisher = dto.Publisher;
+        }
+
+        if (dto.NumberOfPage.HasValue)
+        {
+            entity.NumberOfPage = dto.NumberOfPage.Value;
+        }
+
+        if (dto.DateOfPublication.HasValue)
+        {
+            entity.DateOfPublication = dto.DateOfPublication.Value;
+        }
+
+        if (dto.Price.HasValue)
+        {
+            entity.Price = dto.Price.Value;
+        }
+
+        if (dto.CategoryId.HasValue)
+        {
+            entity.CategoryId = dto.CategoryId.Value;
+        }
+    }
 }

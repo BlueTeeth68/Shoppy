@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
 
 namespace Shoppy.Application.Features.Products.Requests.Command;
 
-public record UpdateProductCommand
+public record UpdateProductCommand: IRequest
 {
-    public Guid? Id { get; init; }
+    public Guid Id { get; init; }
     
     [StringLength(250)] public string? Name { get; init; }
     

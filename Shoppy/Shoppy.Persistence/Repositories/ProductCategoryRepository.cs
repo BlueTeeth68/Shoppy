@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Repositories;
@@ -45,20 +46,14 @@ public class ProductCategoryRepository : BaseRepository<ProductCategory, Guid>, 
         }).ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> ExistById(Guid id)
+    public async Task<bool> ExistByExpressionAsync(Expression<Func<ProductCategory, bool>> expression,
+        CancellationToken cancellationToken = default)
     {
-        var entity = await DbSet.AsNoTracking().Where(pc => pc.Id == id)
+        var entityId = await DbSet.Where(expression)
             .Select(pc => pc.Id)
             .FirstOrDefaultAsync();
-        return entity != Guid.Empty;
-    }
 
-    public async Task<bool> ExistByName(string name)
-    {
-        var entity = await DbSet.AsNoTracking().Where(pc => pc.Name == name)
-            .Select(pc => pc.Id)
-            .FirstOrDefaultAsync();
-        return entity != Guid.Empty;
+        return entityId != Guid.Empty;
     }
 
     public async Task<ProductCategory?> GetUpdateByIdAsync(Guid id, CancellationToken cancellationToken)
