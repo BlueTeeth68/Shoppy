@@ -39,64 +39,18 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
         return DbSet;
     }
 
-    public async Task<T?> GetByIdAsync(TKey id, CancellationToken cancellationToken, bool disableTracking = false)
+    public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default, bool disableTracking = false)
     {
-        return await DbSet.FindAsync(id, cancellationToken);
+        var query = DbSet;
+        if (disableTracking)
+            DbSet.AsNoTracking();
+        return await query.ToListAsync(cancellationToken);
     }
 
-    public async Task<PagingResult<T>> GetPaginateAsync(Expression<Func<T, bool>>? filter,
-        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy, int page, int size, string? includeProperties = null,
+    public async Task<T?> GetByIdAsync(TKey id, CancellationToken cancellationToken,
         bool disableTracking = false)
     {
-        IQueryable<T> query = DbSet;
-        var result = new PagingResult<T>();
-
-        try
-        {
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (includeProperties != null)
-            {
-                query = includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-            }
-
-            result.TotalRecords = await query.CountAsync();
-
-            if (orderBy != null)
-            {
-                query = orderBy(query);
-            }
-
-            if (page <= 0)
-            {
-                throw new BadRequestException("Page must be greater than 0.");
-            }
-
-            if (size <= 0)
-            {
-                throw new BadRequestException("Size must be greater than 0.");
-            }
-
-            await ToPaginationAsync(ref query, page, size);
-            result.Results = await query.ToListAsync();
-            result.TotalPages = (int)Math.Ceiling((double)result.TotalRecords / size);
-
-            return result;
-        }
-        catch (Exception e)
-        {
-            Logger.LogError("Error when filter data of {class name} entity.\nDetail: {error}", typeof(T), e.Message);
-            throw new Exception(e.Message);
-        }
+        return await DbSet.FindAsync(id, cancellationToken);
     }
 
     public Task ToPaginationAsync(ref IQueryable<T> query, int page, int size)
