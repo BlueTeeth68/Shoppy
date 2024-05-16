@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Shoppy.Application.Features.Products.Requests.Query;
 using Shoppy.Application.Features.Products.Results.Query;
 using Shoppy.Application.Services.Interfaces;
-using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.Domain.Repositories.UnitOfWork;
@@ -12,7 +11,7 @@ using Shoppy.Persistence.Specifications;
 
 namespace Shoppy.Infrastructure.Services;
 
-public class ProductService: IProductService
+public class ProductService : IProductService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<ProductService> _logger;
@@ -95,7 +94,6 @@ public class ProductService: IProductService
                 orderBy = q => q.OrderByDescending(p => p.NumberOfSale);
             }
 
-
             var userSpecification = new ProductSpecification(
                 criteria: Expression.Lambda<Func<Product, bool>>(filterExpression, parameter),
                 orderByExpression: orderBy)
@@ -133,6 +131,7 @@ public class ProductService: IProductService
         }
         catch (Exception e)
         {
+            _logger.LogError("Error when execute {} method at {}", nameof(this.FilterProductAsync), DateTime.UtcNow);
             throw new Exception($"Error when execute {nameof(this.FilterProductAsync)} method");
         }
     }

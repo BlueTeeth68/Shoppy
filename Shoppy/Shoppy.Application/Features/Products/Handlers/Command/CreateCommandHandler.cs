@@ -18,6 +18,11 @@ public class CreateCommandHandler : IRequestHandler<CreateProductCommand, Guid>
 
     public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
+        if (await _unitOfWork.ProductRepository.ExistByExpressionAsync(p => p.Sku == request.Sku, cancellationToken))
+        {
+            throw new ConflictException("Product Sku has been existed");
+        }
+
         var entity = ProductMapper.CreateProductCommandToProduct(request);
 
         var category =
