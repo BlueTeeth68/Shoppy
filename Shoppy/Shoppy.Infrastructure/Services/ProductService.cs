@@ -45,7 +45,6 @@ public class ProductService : IProductService
                         Expression.Constant(filter.Status)));
             }
 
-
             if (!string.IsNullOrEmpty(filter.Name))
             {
                 filterExpression = Expression.AndAlso(filterExpression,
@@ -57,7 +56,6 @@ public class ProductService : IProductService
                         Expression.Constant(filter.Name)));
             }
 
-            //Default sort by modified date desc
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q =>
                 q.OrderByDescending(u => u.UpdatedDateTime);
 
@@ -101,7 +99,7 @@ public class ProductService : IProductService
                 DisableTracking = true
             };
 
-            var queryable = SpecificationEvaluator.GetQuery<Product>(query, userSpecification);
+            var queryable = SpecificationEvaluator.GetQuery(query, userSpecification);
 
             var totalRecord = await queryable.CountAsync();
 
@@ -131,7 +129,8 @@ public class ProductService : IProductService
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when execute {} method at {}", nameof(this.FilterProductAsync), DateTime.UtcNow);
+            _logger.LogError("Error when execute {} method at {}.\nDetail {}", nameof(this.FilterProductAsync),
+                DateTime.UtcNow, e.Message);
             throw new Exception($"Error when execute {nameof(this.FilterProductAsync)} method");
         }
     }

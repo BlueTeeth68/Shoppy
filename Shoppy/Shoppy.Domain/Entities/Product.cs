@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities.Base;
 
@@ -22,21 +23,21 @@ public class Product : BaseEntity<Guid>, IAggregateRoot
 
     public DateTime? DateOfPublication { get; set; }
 
-    [Range(0, int.MaxValue)]
-    public decimal Price { get; set; }
+    [Range(0, int.MaxValue)] public decimal Price { get; set; }
 
     [Range(0, 5)] public decimal? AvgRate { get; set; }
 
-    [Range(0, int.MaxValue)]
-    public int Quantity { get; set; }
+    [Range(0, int.MaxValue)] public int Quantity { get; set; }
 
     public int NumberOfSale { get; set; }
 
     public ProductStatus Status { get; set; }
-    
+
     public bool IsDelete { get; set; }
 
     public Guid CategoryId { get; set; }
 
     public virtual ProductCategory Category { get; set; } = null!;
+
+    public virtual ICollection<ProductImage> Images { get; set; } = new Collection<ProductImage>();
 }

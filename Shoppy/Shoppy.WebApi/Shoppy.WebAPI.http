@@ -1,6 +1,29 @@
 @Shoppy.WebAPI_HostAddress = http://localhost:5054
+@auth_token = 
 
-GET {{Shoppy.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
+###
+#GET {{Shoppy.WebAPI_HostAddress}}/weatherforecast/
+#Accept: application/json
+
+###
+
+POST {{Shoppy.WebAPI_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "Admin@123456"
+}
+
+### Get all category
+GET {{Shoppy.WebAPI_HostAddress}}/api/v1/categories
+Content-Type: application/json
+
+### Get Category by id
+@categoryId = 99ada3c1-eea5-4431-a529-b3114de224da
+
+GET {{Shoppy.WebAPI_HostAddress}}/api/v1/categories/{{categoryId}}
+
+Authorization: Bearer {{auth_token}}
 
 ###

@@ -22,6 +22,7 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     public virtual DbSet<ProductCategory> ProductCategories { get; set; }
     public virtual DbSet<ProductRating> ProductRatings { get; set; }
     public virtual DbSet<RatingResource> RatingResources { get; set; }
+    public virtual DbSet<ProductImage> ProductImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
