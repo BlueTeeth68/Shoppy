@@ -56,7 +56,7 @@ public class UserService : IUserService
                     Expression.Call(
                         Expression.Property(parameter, nameof(AppUser.FullName)),
                         typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) })
-                        ?? throw new NotImplementedException(
+                        ?? throw new NotSupportedException(
                             $"{nameof(string.Contains)} method is deprecated or not supported."),
                         Expression.Constant(filter.Name)));
             }
