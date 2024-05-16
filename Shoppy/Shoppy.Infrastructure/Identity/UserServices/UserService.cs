@@ -98,6 +98,7 @@ public class UserService : IUserService
                 .Take(filter.Size.Value)
                 .Select(u => new FilterUserResult()
                 {
+                    Id = u.Id,
                     FullName = u.FullName,
                     Gender = u.Gender,
                     Status = u.Status,
