@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories;
 using Shoppy.Domain.Repositories.UnitOfWork;
 
@@ -16,7 +18,7 @@ public class UnitOfWork : IUnitOfWork, IAsyncDisposable
     public IProductCategoryRepository ProductCategoryRepository { get; }
     public IProductRatingRepository ProductRatingRepository { get; }
     public IProductRepository ProductRepository { get; }
-    
+
     public UnitOfWork(AppDbContext dbContext, ILogger<UnitOfWork> logger, IAddressRepository addressRepository,
         ICartItemRepository cartItemRepository, IOrderRepository orderRepository,
         IOrderItemRepository orderItemRepository, IProductCategoryRepository productCategoryRepository,
@@ -32,11 +34,23 @@ public class UnitOfWork : IUnitOfWork, IAsyncDisposable
         ProductRatingRepository = productRatingRepository;
         ProductRepository = productRepository;
     }
-    
+
     public async Task<int> SaveChangeAsync()
     {
-        return await _dbContext.SaveChangesAsync();
+        try
+        {
+            return await _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException e)
+        {
+            throw new ConflictException("The data has been update by someone else. Try reload and do again");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
+
 
     private bool _disposed = false;
 
@@ -46,17 +60,18 @@ public class UnitOfWork : IUnitOfWork, IAsyncDisposable
         {
             if (disposing)
             {
-               await _dbContext.DisposeAsync();
+                await _dbContext.DisposeAsync();
             }
         }
+
         this._disposed = true;
 
         await Task.CompletedTask;
     }
-    
+
     public async ValueTask DisposeAsync()
     {
-         await DisposeAsync(true);
+        await DisposeAsync(true);
         GC.SuppressFinalize(this);
     }
 }
