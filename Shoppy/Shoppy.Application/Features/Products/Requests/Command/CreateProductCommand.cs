@@ -6,31 +6,31 @@ namespace Shoppy.Application.Features.Products.Requests.Command;
 public class CreateProductCommand : IRequest<Guid>
 {
     [Required]
-    [StringLength(250)]public string Name { get; set; } = null!;
+    [StringLength(250)]public string Name { get; init; } = null!;
 
-    public string? Description { get; set; }
+    public string? Description { get; init; }
 
     [Required]
     [MaxLength(100)]
-    public string Sku { get; set; } = null!;
+    public string Sku { get; init; } = null!;
 
     [MaxLength(100)]
-    public string? AuthorName { get; set; }
+    public string? AuthorName { get; init; }
 
     [MaxLength(100)]
-    public string? Publisher { get; set; }
+    public string? Publisher { get; init; }
 
     [Range(0, 100000)]
-    public int? NumberOfPage { get; set; }
+    public int? NumberOfPage { get; init; }
 
-    public DateTime? DateOfPublication { get; set; }
-
-    [Range(0, int.MaxValue)]
-    public decimal Price { get; set; }
+    public DateTime? DateOfPublication { get; init; }
 
     [Range(0, int.MaxValue)]
-    public int Quantity { get; set; }
+    public decimal Price { get; init; }
+
+    [Range(0, int.MaxValue)]
+    public int Quantity { get; init; }
 
     [Required]
-    public Guid CategoryId { get; set; }
+    public Guid CategoryId { get; init; }
 }

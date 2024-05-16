@@ -85,6 +85,7 @@ namespace Shoppy.Persistence.Migrations
                     PictureUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -128,10 +129,11 @@ namespace Shoppy.Persistence.Migrations
                     NumberOfPage = table.Column<int>(type: "int", nullable: true),
                     DateOfPublication = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(12,2)", precision: 12, scale: 2, nullable: false),
-                    AvgRate = table.Column<decimal>(type: "decimal(2,1)", precision: 2, scale: 1, nullable: false),
+                    AvgRate = table.Column<decimal>(type: "decimal(2,1)", precision: 2, scale: 1, nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     NumberOfSale = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -423,14 +425,26 @@ namespace Shoppy.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "CartId", "ConcurrencyStamp", "CreatedDateTime", "Email", "EmailConfirmed", "FullName", "Gender", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PictureUrl", "SecurityStamp", "Status", "TwoFactorEnabled", "UpdatedDateTime", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "CartId", "ConcurrencyStamp", "CreatedDateTime", "Email", "EmailConfirmed", "FullName", "Gender", "IsDelete", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PictureUrl", "SecurityStamp", "Status", "TwoFactorEnabled", "UpdatedDateTime", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("021657c8-d4d0-4167-a1a6-b7bb840f33bf"), 0, null, "71cb5ed2-45c4-45ca-8a95-5ad8f7a8aab7", new DateTime(2024, 5, 15, 7, 7, 3, 186, DateTimeKind.Utc).AddTicks(3833), "user1@gmail.com", false, "Jane Smith", 1, true, null, "USER1@GMAIL.COM", "USER1@GMAIL.COM", "AQAAAAIAAYagAAAAEF2Flm4yKX1De+RKxI4BbwQ+U2+6+0IXUHH2Y94hUPTwXHSyZgmRNJaPQliQa2289g==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "dfbb15fa-24e3-4633-ad8a-d3dec8cf58a9", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 186, DateTimeKind.Utc).AddTicks(3836), "user1@gmail.com" },
-                    { new Guid("2c96fabb-f759-43ef-9a31-328c25d2eff5"), 0, null, "14b08047-628a-4fb3-bb64-20de4bf05a4e", new DateTime(2024, 5, 15, 7, 7, 3, 319, DateTimeKind.Utc).AddTicks(152), "user2@gmail.com", false, "Michael Johnson", 2, true, null, "USER2@GMAIL.COM", "USER2@GMAIL.COM", "AQAAAAIAAYagAAAAECCQMRpgGmXfKScEp5RArMXCLootpvhs+bh0CdJqLARM80NmgmMbxPuPLUzan6BOGA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "1ec97943-c4ae-43ba-9b9f-56168f50d937", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 319, DateTimeKind.Utc).AddTicks(156), "user2@gmail.com" },
-                    { new Guid("30a4345d-df2e-46ab-8c0e-d38a7933b591"), 0, null, "0a603104-1dd7-4ee1-9818-7ea86fdc2fc5", new DateTime(2024, 5, 15, 7, 7, 3, 464, DateTimeKind.Utc).AddTicks(8333), "user3@gmail.com", false, "Emily Davis", 2, true, null, "USER3@GMAIL.COM", "USER3@GMAIL.COM", "AQAAAAIAAYagAAAAEN3EaOxYUsW2wl5To+HiRR+QWY7tLLKdJV7xj4GRaKiO6HFDH/f8fWw+FXcf9IpDlA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "748c4223-edb5-43bc-8d20-ebc878c8c593", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 464, DateTimeKind.Utc).AddTicks(8336), "user3@gmail.com" },
-                    { new Guid("594f8fe1-1cf1-4f5a-a8ae-6b9509fbf283"), 0, null, "02853d11-a0bc-4804-8dac-9e75dab38570", new DateTime(2024, 5, 15, 7, 7, 3, 595, DateTimeKind.Utc).AddTicks(7345), "user4@gmail.com", false, "David Lee", 1, true, null, "USER4@GMAIL.COM", "USER4@GMAIL.COM", "AQAAAAIAAYagAAAAEMZ+aTETtsx6o7K3ognkQ/gJTLaqKH0dHLB26dTchxKJ5IPr5d3xNwFjd0aXOQbjvQ==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "08d9e29f-48e3-42d7-94cc-ef74bf7f7c02", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 595, DateTimeKind.Utc).AddTicks(7348), "user4@gmail.com" },
-                    { new Guid("85d8a27f-9d32-4269-b5d0-844589d498d0"), 0, null, "13acdb12-3bdd-42c0-a16b-f0452f712875", new DateTime(2024, 5, 15, 7, 7, 3, 95, DateTimeKind.Utc).AddTicks(1566), "admin@gmail.com", false, "John Doe", 1, true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEF6EsdPY3dp7RpR2QxpAgIqAUsctEoDcyBTfeVyRIYJtq1MskjEnzciA/8iXScGZHQ==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "e7cdda6f-4932-4031-9bf0-055a58ea2e6b", 1, false, new DateTime(2024, 5, 15, 7, 7, 3, 95, DateTimeKind.Utc).AddTicks(1568), "admin@gmail.com" }
+                    { new Guid("021657c8-d4d0-4167-a1a6-b7bb840f33bf"), 0, null, "b7104da5-e09f-42cf-ba4e-162437dc154c", new DateTime(2024, 5, 16, 4, 23, 9, 863, DateTimeKind.Utc).AddTicks(8385), "user1@gmail.com", false, "Jane Smith", 1, false, true, null, "USER1@GMAIL.COM", "USER1@GMAIL.COM", "AQAAAAIAAYagAAAAELrgHw93+kVe+DFKBiHKoBSI5svSzm9VW8OTRtEkoyKQPPjtoqHHNqxctOpDMBSKiA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "555a1a8b-977e-4e71-a788-98885c7d8a16", 1, false, new DateTime(2024, 5, 16, 4, 23, 9, 863, DateTimeKind.Utc).AddTicks(8388), "user1@gmail.com" },
+                    { new Guid("2c96fabb-f759-43ef-9a31-328c25d2eff5"), 0, null, "cea0bff0-aaec-4b36-983c-3087decdaf29", new DateTime(2024, 5, 16, 4, 23, 9, 983, DateTimeKind.Utc).AddTicks(4813), "user2@gmail.com", false, "Michael Johnson", 2, false, true, null, "USER2@GMAIL.COM", "USER2@GMAIL.COM", "AQAAAAIAAYagAAAAEBspFaCOirbWf+cLwVVx7UsHZ6RKRfohufM/ONVt0k0GoQ0J0pa1zBBUV3lDPdTpfA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "eb468a8b-1c4f-4e34-b4a0-cbd551586235", 1, false, new DateTime(2024, 5, 16, 4, 23, 9, 983, DateTimeKind.Utc).AddTicks(4816), "user2@gmail.com" },
+                    { new Guid("30a4345d-df2e-46ab-8c0e-d38a7933b591"), 0, null, "29ea31a7-c4a0-4ea4-9816-ac515a667a99", new DateTime(2024, 5, 16, 4, 23, 10, 94, DateTimeKind.Utc).AddTicks(9838), "user3@gmail.com", false, "Emily Davis", 2, false, true, null, "USER3@GMAIL.COM", "USER3@GMAIL.COM", "AQAAAAIAAYagAAAAEIc+Y400VYR82NFI4siOFt/rP8/B0xUZtsFM/R9HpWqzXghgV/YNqT0woKOurBbUSA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "10699d95-cc66-46f5-9316-2ec89adf4c3f", 1, false, new DateTime(2024, 5, 16, 4, 23, 10, 94, DateTimeKind.Utc).AddTicks(9842), "user3@gmail.com" },
+                    { new Guid("594f8fe1-1cf1-4f5a-a8ae-6b9509fbf283"), 0, null, "11a1f72b-4f71-4a18-9374-42e57a11ad9b", new DateTime(2024, 5, 16, 4, 23, 10, 192, DateTimeKind.Utc).AddTicks(9545), "user4@gmail.com", false, "David Lee", 1, false, true, null, "USER4@GMAIL.COM", "USER4@GMAIL.COM", "AQAAAAIAAYagAAAAEMKwgJF1XF9gxnVciQHc0q6xCcn7YgnXmeCGWTatwwKk6aXpazZv9CyA+bN8a9jkXA==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "c303c596-5245-4183-9563-d5835001e673", 1, false, new DateTime(2024, 5, 16, 4, 23, 10, 192, DateTimeKind.Utc).AddTicks(9553), "user4@gmail.com" },
+                    { new Guid("85d8a27f-9d32-4269-b5d0-844589d498d0"), 0, null, "370ffe5f-d018-43cb-b74c-a3882450d6eb", new DateTime(2024, 5, 16, 4, 23, 9, 743, DateTimeKind.Utc).AddTicks(3906), "admin@gmail.com", false, "John Doe", 1, false, true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEEw9XBX2FqIO+9uBEtvpn2+WxfcJNSrUvcR6LUeVY62vWaNRKbw5bofAOJyhiohPEQ==", null, false, "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg", "e0c901cb-37e8-4a77-aa11-1ecb9ea6f997", 1, false, new DateTime(2024, 5, 16, 4, 23, 9, 743, DateTimeKind.Utc).AddTicks(3909), "admin@gmail.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductCategories",
+                columns: new[] { "Id", "CreatedDateTime", "Description", "Name", "UpdatedDateTime" },
+                values: new object[,]
+                {
+                    { new Guid("292c90a5-1a0a-45a4-8f3d-37f09b09b422"), new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4928), null, "History", new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4928) },
+                    { new Guid("2baf4c50-c927-4b54-971e-3ff5f300e147"), new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4905), null, "Romance", new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4909) },
+                    { new Guid("97cf6bd7-7290-449a-a61d-5ea2fdfcf8de"), new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4931), null, "Education and Teacher", new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4931) },
+                    { new Guid("99ada3c1-eea5-4431-a529-b3114de224da"), new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4922), null, "Economic", new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4923) },
+                    { new Guid("adf36edc-3e08-4a36-8e20-0d79747f0962"), new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4925), null, "Business and Money", new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4926) }
                 });
 
             migrationBuilder.InsertData(
@@ -495,6 +509,26 @@ namespace Shoppy.Persistence.Migrations
                 filter: "[CartId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_Email",
+                table: "AspNetUsers",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_FullName",
+                table: "AspNetUsers",
+                column: "FullName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_Gender",
+                table: "AspNetUsers",
+                column: "Gender");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_IsDelete_NormalizedEmail",
+                table: "AspNetUsers",
+                columns: new[] { "IsDelete", "NormalizedEmail" });
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -546,6 +580,11 @@ namespace Shoppy.Persistence.Migrations
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_IsDelete",
+                table: "Products",
+                column: "IsDelete");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_Name",

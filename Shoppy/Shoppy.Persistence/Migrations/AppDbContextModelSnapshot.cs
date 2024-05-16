@@ -500,37 +500,37 @@ namespace Shoppy.Persistence.Migrations
                         new
                         {
                             Id = new Guid("2baf4c50-c927-4b54-971e-3ff5f300e147"),
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9069),
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4905),
                             Name = "Romance",
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9073)
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4909)
                         },
                         new
                         {
                             Id = new Guid("99ada3c1-eea5-4431-a529-b3114de224da"),
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9086),
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4922),
                             Name = "Economic",
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9087)
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4923)
                         },
                         new
                         {
                             Id = new Guid("adf36edc-3e08-4a36-8e20-0d79747f0962"),
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9091),
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4925),
                             Name = "Business and Money",
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9091)
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4926)
                         },
                         new
                         {
                             Id = new Guid("292c90a5-1a0a-45a4-8f3d-37f09b09b422"),
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9093),
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4928),
                             Name = "History",
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9094)
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4928)
                         },
                         new
                         {
                             Id = new Guid("97cf6bd7-7290-449a-a61d-5ea2fdfcf8de"),
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9096),
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4931),
                             Name = "Education and Teacher",
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 312, DateTimeKind.Utc).AddTicks(9097)
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 309, DateTimeKind.Utc).AddTicks(4931)
                         });
                 });
 
@@ -691,11 +691,11 @@ namespace Shoppy.Persistence.Migrations
                         .IsUnique()
                         .HasFilter("[CartId] IS NOT NULL");
 
+                    b.HasIndex("Email");
+
                     b.HasIndex("FullName");
 
                     b.HasIndex("Gender");
-
-                    b.HasIndex("IsDelete");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -705,6 +705,8 @@ namespace Shoppy.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("IsDelete", "NormalizedEmail");
+
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
@@ -712,8 +714,8 @@ namespace Shoppy.Persistence.Migrations
                         {
                             Id = new Guid("85d8a27f-9d32-4269-b5d0-844589d498d0"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bf418e62-48cf-4d81-b90e-54fed7def290",
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 20, 686, DateTimeKind.Utc).AddTicks(4443),
+                            ConcurrencyStamp = "370ffe5f-d018-43cb-b74c-a3882450d6eb",
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 9, 743, DateTimeKind.Utc).AddTicks(3906),
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             FullName = "John Doe",
@@ -722,21 +724,21 @@ namespace Shoppy.Persistence.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAED4zz3yyFktpu9eoMNaGI6oU9Y+DO97A49/gismetztX+zcc54az62OivgUmVQoXKw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEw9XBX2FqIO+9uBEtvpn2+WxfcJNSrUvcR6LUeVY62vWaNRKbw5bofAOJyhiohPEQ==",
                             PhoneNumberConfirmed = false,
                             PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
-                            SecurityStamp = "3cd987e8-d316-472a-8ae7-096c8ee4b9da",
+                            SecurityStamp = "e0c901cb-37e8-4a77-aa11-1ecb9ea6f997",
                             Status = 1,
                             TwoFactorEnabled = false,
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 20, 686, DateTimeKind.Utc).AddTicks(4446),
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 9, 743, DateTimeKind.Utc).AddTicks(3909),
                             UserName = "admin@gmail.com"
                         },
                         new
                         {
                             Id = new Guid("021657c8-d4d0-4167-a1a6-b7bb840f33bf"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a5701e6e-0c0a-4b0a-8642-ba9aeddf14fa",
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 20, 784, DateTimeKind.Utc).AddTicks(977),
+                            ConcurrencyStamp = "b7104da5-e09f-42cf-ba4e-162437dc154c",
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 9, 863, DateTimeKind.Utc).AddTicks(8385),
                             Email = "user1@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Jane Smith",
@@ -745,21 +747,21 @@ namespace Shoppy.Persistence.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "USER1@GMAIL.COM",
                             NormalizedUserName = "USER1@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOM/mRz/EuRskrYsRbDJaWdiXRT/ZCCkgwyEwAbyqWhFF/q/Q/enIx/BXNKEA6M6Kw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELrgHw93+kVe+DFKBiHKoBSI5svSzm9VW8OTRtEkoyKQPPjtoqHHNqxctOpDMBSKiA==",
                             PhoneNumberConfirmed = false,
                             PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
-                            SecurityStamp = "1ed64a3f-d8fb-4f45-b5de-afff0b9e62a1",
+                            SecurityStamp = "555a1a8b-977e-4e71-a788-98885c7d8a16",
                             Status = 1,
                             TwoFactorEnabled = false,
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 20, 784, DateTimeKind.Utc).AddTicks(981),
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 9, 863, DateTimeKind.Utc).AddTicks(8388),
                             UserName = "user1@gmail.com"
                         },
                         new
                         {
                             Id = new Guid("2c96fabb-f759-43ef-9a31-328c25d2eff5"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9afb5650-b019-41d7-b075-5d77981ce08d",
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 20, 890, DateTimeKind.Utc).AddTicks(9956),
+                            ConcurrencyStamp = "cea0bff0-aaec-4b36-983c-3087decdaf29",
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 9, 983, DateTimeKind.Utc).AddTicks(4813),
                             Email = "user2@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Michael Johnson",
@@ -768,21 +770,21 @@ namespace Shoppy.Persistence.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "USER2@GMAIL.COM",
                             NormalizedUserName = "USER2@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG4dEHbaathqbxd3sc9+mY5Z6Mn1H7KhYw4LSVwOyckW4umQupPwYZaxC78Nm2/Rvw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBspFaCOirbWf+cLwVVx7UsHZ6RKRfohufM/ONVt0k0GoQ0J0pa1zBBUV3lDPdTpfA==",
                             PhoneNumberConfirmed = false,
                             PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
-                            SecurityStamp = "395d00a7-5585-4f49-a6fb-a1aaa2e75a00",
+                            SecurityStamp = "eb468a8b-1c4f-4e34-b4a0-cbd551586235",
                             Status = 1,
                             TwoFactorEnabled = false,
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 20, 890, DateTimeKind.Utc).AddTicks(9962),
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 9, 983, DateTimeKind.Utc).AddTicks(4816),
                             UserName = "user2@gmail.com"
                         },
                         new
                         {
                             Id = new Guid("30a4345d-df2e-46ab-8c0e-d38a7933b591"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1ae5018f-10ec-4b3d-9028-de59c2abf525",
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 30, DateTimeKind.Utc).AddTicks(402),
+                            ConcurrencyStamp = "29ea31a7-c4a0-4ea4-9816-ac515a667a99",
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 94, DateTimeKind.Utc).AddTicks(9838),
                             Email = "user3@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Emily Davis",
@@ -791,21 +793,21 @@ namespace Shoppy.Persistence.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "USER3@GMAIL.COM",
                             NormalizedUserName = "USER3@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHAMRrLIURuM53dui7uQ1bP1jXfnvPbaGzA6dyiiYRkIiZTRTmlgQmFMsZhokErg/A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIc+Y400VYR82NFI4siOFt/rP8/B0xUZtsFM/R9HpWqzXghgV/YNqT0woKOurBbUSA==",
                             PhoneNumberConfirmed = false,
                             PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
-                            SecurityStamp = "41d2646a-d178-4f65-adc1-e7ae81c0a028",
+                            SecurityStamp = "10699d95-cc66-46f5-9316-2ec89adf4c3f",
                             Status = 1,
                             TwoFactorEnabled = false,
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 30, DateTimeKind.Utc).AddTicks(407),
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 94, DateTimeKind.Utc).AddTicks(9842),
                             UserName = "user3@gmail.com"
                         },
                         new
                         {
                             Id = new Guid("594f8fe1-1cf1-4f5a-a8ae-6b9509fbf283"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2ee6ee6d-5de5-4db4-8426-b0a6996ce3a3",
-                            CreatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 168, DateTimeKind.Utc).AddTicks(8992),
+                            ConcurrencyStamp = "11a1f72b-4f71-4a18-9374-42e57a11ad9b",
+                            CreatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 192, DateTimeKind.Utc).AddTicks(9545),
                             Email = "user4@gmail.com",
                             EmailConfirmed = false,
                             FullName = "David Lee",
@@ -814,13 +816,13 @@ namespace Shoppy.Persistence.Migrations
                             LockoutEnabled = true,
                             NormalizedEmail = "USER4@GMAIL.COM",
                             NormalizedUserName = "USER4@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFQeOb4AuS64C3DOMDdUH4eTs//5/uADbV+SaBPgFVrESI/TK0oSXG52DG+BMwhkXg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMKwgJF1XF9gxnVciQHc0q6xCcn7YgnXmeCGWTatwwKk6aXpazZv9CyA+bN8a9jkXA==",
                             PhoneNumberConfirmed = false,
                             PictureUrl = "https://avatarfiles.alphacoders.com/151/thumb-151233.jpg",
-                            SecurityStamp = "cdb5c0ee-3f31-4815-af6e-05c7a9ce45d9",
+                            SecurityStamp = "c303c596-5245-4183-9563-d5835001e673",
                             Status = 1,
                             TwoFactorEnabled = false,
-                            UpdatedDateTime = new DateTime(2024, 5, 15, 10, 35, 21, 168, DateTimeKind.Utc).AddTicks(8996),
+                            UpdatedDateTime = new DateTime(2024, 5, 16, 4, 23, 10, 192, DateTimeKind.Utc).AddTicks(9553),
                             UserName = "user4@gmail.com"
                         });
                 });

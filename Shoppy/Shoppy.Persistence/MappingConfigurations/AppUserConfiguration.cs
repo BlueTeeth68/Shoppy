@@ -38,13 +38,14 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
 
         #region define index
 
-        builder.HasIndex(u => u.IsDelete);
         builder.HasIndex(u => u.FullName);
         builder.HasIndex(u => u.Gender);
+        builder.HasIndex(u => u.Email);
+        builder.HasIndex(u => new { u.IsDelete, u.NormalizedEmail });
 
         #endregion
 
-        builder.HasQueryFilter(u => u.IsDelete);
+        builder.HasQueryFilter(u => !u.IsDelete);
 
         #region Data seeding
 

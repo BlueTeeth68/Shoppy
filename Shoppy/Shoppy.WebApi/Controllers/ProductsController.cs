@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Products.Requests.Command;
 using Shoppy.Application.Features.Products.Requests.Query;
+using Shoppy.Domain.Constants;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -17,6 +19,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = $"{RoleConstant.AdminRole}")]
     public async Task<IActionResult> AddAsync([FromBody] CreateProductCommand request)
     {
         var result = await _mediator.Send(request);
@@ -32,6 +35,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = $"{RoleConstant.AdminRole}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await _mediator.Send(new DeleteProductCommand(id));

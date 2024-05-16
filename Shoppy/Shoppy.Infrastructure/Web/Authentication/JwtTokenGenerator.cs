@@ -23,7 +23,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     public async Task<string> GenerateAccessTokenAsync(AppUser user)
     {
-        var userClaims = await _userManager.GetClaimsAsync(user);
+        // var userClaims = await _userManager.GetClaimsAsync(user);
         var roles = await _userManager.GetRolesAsync(user);
 
         var roleClaims = roles.Select(t => new Claim(ClaimTypes.Role, t)).ToList();
@@ -34,7 +34,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? "")
             }
-            .Union(userClaims)
+            // .Union(userClaims)
             .Union(roleClaims);
 
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
@@ -53,7 +53,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     public async Task<string> GenerateRefreshTokenAsync(AppUser user)
     {
-        var userClaims = await _userManager.GetClaimsAsync(user);
+        // var userClaims = await _userManager.GetClaimsAsync(user);
         var roles = await _userManager.GetRolesAsync(user);
 
         var roleClaims = roles.Select(r => new Claim(ClaimTypes.Role, r)).ToList();
@@ -61,7 +61,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             }
-            .Union(userClaims)
+            // .Union(userClaims)
             .Union(roleClaims);
 
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
