@@ -1,4 +1,4 @@
-﻿namespace Shoppy.Infrastructure.Web.Authentication;
+﻿namespace Shoppy.Infrastructure.Configurations;
 
 public class JwtSettings
 {

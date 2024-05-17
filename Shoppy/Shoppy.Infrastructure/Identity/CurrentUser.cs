@@ -7,17 +7,17 @@ namespace Shoppy.Infrastructure.Identity;
 
 public class CurrentUser(IHttpContextAccessor context) : ICurrentUser
 {
-    public bool IsAuthenticated => context.HttpContext.User.Identity is { IsAuthenticated: true };
+    public bool IsAuthenticated => context.HttpContext?.User.Identity is { IsAuthenticated: true };
 
     public Guid UserId
     {
         get
         {
-            var userId = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                         ?? context.HttpContext.User.FindFirst("sub")?.Value;
+            var userId = context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                         ?? context.HttpContext?.User.FindFirst("sub")?.Value;
 
             if (userId == null)
-                throw new NotFoundException("User id could bot be retrieve");
+                throw new NotFoundException("User id could not be retrieve");
 
             return Guid.Parse(userId);
         }

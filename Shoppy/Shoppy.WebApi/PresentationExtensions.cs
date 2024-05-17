@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Shoppy.Domain.Identity;
+using Shoppy.Infrastructure.Configurations;
+using Shoppy.Infrastructure.Identity;
 using Shoppy.Infrastructure.Web.Authentication;
 
 namespace Shoppy.WebAPI;
@@ -32,11 +35,11 @@ public static class PresentationExtensions
         });
 
         services.AddAuthorization();
-        
+
         services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
-        
+
         services.AddSwaggerGen(option =>
         {
             option.SwaggerDoc("v1",
@@ -71,6 +74,8 @@ public static class PresentationExtensions
                 }
             });
         });
+
+        services.AddScoped<ICurrentUser, CurrentUser>();
 
         return services;
     }

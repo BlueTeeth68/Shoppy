@@ -8,8 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Caching\" />
-      <Folder Include="Configurations\" />
-      <Folder Include="ExtensionMethods\" />
     </ItemGroup>
 
     <ItemGroup>

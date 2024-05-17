@@ -5,5 +5,4 @@ namespace Shoppy.Domain.Repositories;
 
 public interface IOrderRepository: IBaseRepository<Order, Guid>
 {
-    
 }

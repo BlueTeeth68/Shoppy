@@ -20,7 +20,6 @@ public static class OrderMapper
 
         return new Order()
         {
-            UserId = dto.UserId,
             Items = items,
             TotalPrice = totalPrice
         };

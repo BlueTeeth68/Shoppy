@@ -1,4 +1,5 @@
-﻿using Shoppy.Infrastructure.Web.Authentication;
+﻿using Shoppy.Infrastructure.Configurations;
+using Shoppy.Infrastructure.Web.Authentication;
 
 namespace Shoppy.WebAPI.ConfigurationOptions;
 
