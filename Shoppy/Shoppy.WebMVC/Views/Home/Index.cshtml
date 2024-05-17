@@ -1,14 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    ViewBag.Active = 1;
 }
 
 @section metadata
 {
     <meta name="keywords" content="VnExpress, tin tức, tin the gioi, tin nhanh, tin tuc viet nam, doc bao"/>
 }
-
-
-@await Html.PartialAsync($"~/Views/Partial/Home/NavBarComponent.cshtml")
 
 @await Html.PartialAsync($"~/Views/Partial/Home/CarouselComponent.cshtml")
 

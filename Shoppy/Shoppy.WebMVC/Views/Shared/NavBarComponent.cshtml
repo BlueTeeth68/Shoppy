@@ -39,17 +39,17 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <a href="shop.html" class="nav-item nav-link">Shop</a>
-                        <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
-                        <div class="nav-item dropdown">
+                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link @Html.Raw(ViewBag.Active == 1 ? "active" : "")">Home</a>
+                        <a asp-controller="Books" asp-action="Index" class="nav-item nav-link @Html.Raw(ViewBag.Active == 2 ? "active" : "")">Bookstore</a>
+                        <a asp-controller="Books" asp-action="Detail" class="nav-item nav-link @Html.Raw(ViewBag.Active == 3 ? "active" : "")">Book Detail</a>
+                        <div class="nav-item dropdown @Html.Raw(ViewBag.Active == 4 ? "active" : "")">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                             <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                                 <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                                 <a href="checkout.html" class="dropdown-item">Checkout</a>
                             </div>
                         </div>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                        <a href="contact.html @Html.Raw(ViewBag.Active == 5 ? "active" : "")" class="nav-item nav-link">Contact</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a href="" class="btn px-0">
