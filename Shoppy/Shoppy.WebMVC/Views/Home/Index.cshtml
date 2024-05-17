@@ -2,7 +2,19 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section metadata
+{
+    <meta name="keywords" content="VnExpress, tin tức, tin the gioi, tin nhanh, tin tuc viet nam, doc bao"/>
+}
+
+
+@await Html.PartialAsync($"~/Views/Partial/Home/NavBarComponent.cshtml")
+
+@await Html.PartialAsync($"~/Views/Partial/Home/CarouselComponent.cshtml")
+
+@await Html.PartialAsync($"~/Views/Partial/Home/FeatureComponent.cshtml")
+@await Html.PartialAsync($"~/Views/Partial/Home/CategoryComponent.cshtml")
+@await Html.PartialAsync($"~/Views/Partial/Home/ProductComponent.cshtml")
+@await Html.PartialAsync($"~/Views/Partial/Home/OfferComponent.cshtml")
+@await Html.PartialAsync($"~/Views/Partial/Home/ProductComponent.cshtml")
+@await Html.PartialAsync($"~/Views/Partial/Home/VenderComponent.cshtml")
