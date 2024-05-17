@@ -11,19 +11,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9F446669-1BAB-4E8A-BB22-910E57890CF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.WebApi", "Shoppy.WebApi\Shoppy.WebApi.csproj", "{174FC362-61C7-4918-B75C-297EF317415C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoppy.WebApi", "Shoppy.WebApi\Shoppy.WebApi.csproj", "{174FC362-61C7-4918-B75C-297EF317415C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.WebMVC", "Shoppy.WebMVC\Shoppy.WebMVC.csproj", "{522D167C-604A-433A-81D1-A57778295DC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoppy.SharedLibrary", "Shoppy.SharedLibrary\Shoppy.SharedLibrary.csproj", "{7491B7FF-A252-44C8-84C1-822D50ED0661}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.SharedLibrary", "Shoppy.SharedLibrary\Shoppy.SharedLibrary.csproj", "{7491B7FF-A252-44C8-84C1-822D50ED0661}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoppy.Application", "Shoppy.Application\Shoppy.Application.csproj", "{AAEC8EFE-6972-4B3A-8BF4-268E42221C79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.Application", "Shoppy.Application\Shoppy.Application.csproj", "{AAEC8EFE-6972-4B3A-8BF4-268E42221C79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoppy.Domain", "Shoppy.Domain\Shoppy.Domain.csproj", "{D63F81A8-3637-4A87-B473-BA696222A3AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.Domain", "Shoppy.Domain\Shoppy.Domain.csproj", "{D63F81A8-3637-4A87-B473-BA696222A3AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoppy.Persistence", "Shoppy.Persistence\Shoppy.Persistence.csproj", "{5AF63CFA-9C0F-4551-95CD-C1A383B8CE42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.Persistence", "Shoppy.Persistence\Shoppy.Persistence.csproj", "{5AF63CFA-9C0F-4551-95CD-C1A383B8CE42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoppy.Infrastructure", "Shoppy.Infrastructure\Shoppy.Infrastructure.csproj", "{CC199E0C-8B4A-4556-AB69-CDE6F054EDE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.Infrastructure", "Shoppy.Infrastructure\Shoppy.Infrastructure.csproj", "{CC199E0C-8B4A-4556-AB69-CDE6F054EDE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoppy.WebMVC", "Shoppy.WebMVC\Shoppy.WebMVC.csproj", "{C0C7C794-0326-45C0-9D52-2F8C592F9401}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,6 @@ Global
 		{174FC362-61C7-4918-B75C-297EF317415C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{174FC362-61C7-4918-B75C-297EF317415C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{174FC362-61C7-4918-B75C-297EF317415C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{522D167C-604A-433A-81D1-A57778295DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{522D167C-604A-433A-81D1-A57778295DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{522D167C-604A-433A-81D1-A57778295DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{522D167C-604A-433A-81D1-A57778295DC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7491B7FF-A252-44C8-84C1-822D50ED0661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7491B7FF-A252-44C8-84C1-822D50ED0661}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7491B7FF-A252-44C8-84C1-822D50ED0661}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,18 +55,22 @@ Global
 		{CC199E0C-8B4A-4556-AB69-CDE6F054EDE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC199E0C-8B4A-4556-AB69-CDE6F054EDE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC199E0C-8B4A-4556-AB69-CDE6F054EDE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0C7C794-0326-45C0-9D52-2F8C592F9401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0C7C794-0326-45C0-9D52-2F8C592F9401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0C7C794-0326-45C0-9D52-2F8C592F9401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0C7C794-0326-45C0-9D52-2F8C592F9401}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{174FC362-61C7-4918-B75C-297EF317415C} = {046CCA89-B4D2-4823-AAA2-E55ECB863E43}
-		{522D167C-604A-433A-81D1-A57778295DC0} = {046CCA89-B4D2-4823-AAA2-E55ECB863E43}
 		{7491B7FF-A252-44C8-84C1-822D50ED0661} = {046CCA89-B4D2-4823-AAA2-E55ECB863E43}
 		{AAEC8EFE-6972-4B3A-8BF4-268E42221C79} = {BFEFCB57-5D96-4410-96A6-43BCA9BA6DD1}
 		{D63F81A8-3637-4A87-B473-BA696222A3AE} = {BFEFCB57-5D96-4410-96A6-43BCA9BA6DD1}
 		{5AF63CFA-9C0F-4551-95CD-C1A383B8CE42} = {53C21C1C-D172-4992-BF7B-9941B6D7A4C9}
 		{CC199E0C-8B4A-4556-AB69-CDE6F054EDE0} = {53C21C1C-D172-4992-BF7B-9941B6D7A4C9}
+		{C0C7C794-0326-45C0-9D52-2F8C592F9401} = {046CCA89-B4D2-4823-AAA2-E55ECB863E43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {660426E2-F44A-49C7-B524-24B70652AC21}
