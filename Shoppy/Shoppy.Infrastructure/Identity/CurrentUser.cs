@@ -16,10 +16,9 @@ public class CurrentUser(IHttpContextAccessor context) : ICurrentUser
             var userId = context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                          ?? context.HttpContext?.User.FindFirst("sub")?.Value;
 
-            if (userId == null)
-                throw new NotFoundException("User id could not be retrieve");
-
-            return Guid.Parse(userId);
+            return Guid.TryParse(userId, out var result)
+                ? result
+                : throw new NotFoundException("User id could not be retrieve");
         }
     }
 }

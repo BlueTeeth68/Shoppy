@@ -7,4 +7,6 @@ namespace Shoppy.Application.Services.Interfaces;
 public interface IUserService
 {
     Task<PagingResult<FilterUserResult>> FilterUserAsync(FilterUserQuery filter);
+
+    Task CreateUserDataAsync(int size);
 }
