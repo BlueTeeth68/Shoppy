@@ -11,4 +11,9 @@
     <Folder Include="Views\Partial\Books\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Cart\CheckOut.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Cart\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
