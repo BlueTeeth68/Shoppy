@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Categories.Requests.Query;
 using Shoppy.Application.Features.Orders.Requests.Command;
+using Shoppy.Application.Features.Orders.Requests.Query;
+using Shoppy.Application.Features.Orders.Results;
+using Shoppy.SharedLibrary.Models.Base;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -17,16 +20,30 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateOrderCommand request)
+    public async Task<ActionResult<BaseResult<Guid>>> CreateAsync([FromBody] CreateOrderCommand request)
     {
-        var result = await _mediator.Send(request);
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<Guid>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
         return Created(nameof(CreateAsync), result);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<OrderDetailQuery>> GetByIdAsync([FromRoute] Guid id)
     {
-        var result = await _mediator.Send(new GetCategoryByIdQuery(id));
+        var data = await _mediator.Send(new GetOrderDetailQuery()
+        {
+            Id = id
+        });
+
+        var result = new BaseResult<OrderDetailQuery>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
         return Ok(result);
     }
 }

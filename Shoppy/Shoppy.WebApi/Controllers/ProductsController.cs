@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Products.Requests.Command;
 using Shoppy.Application.Features.Products.Requests.Query;
+using Shoppy.Application.Features.Products.Results.Query;
 using Shoppy.Domain.Constants;
 using Shoppy.Domain.Exceptions;
+using Shoppy.Domain.Repositories.Base;
+using Shoppy.SharedLibrary.Models.Base;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -21,39 +24,59 @@ public class ProductsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = $"{RoleConstant.AdminRole}")]
-    public async Task<IActionResult> AddAsync([FromBody] CreateProductCommand request)
+    public async Task<ActionResult<BaseResult<Guid>>> AddAsync([FromBody] CreateProductCommand request)
     {
-        var result = await _mediator.Send(request);
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<Guid>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
 
         return Created(nameof(AddAsync), result);
     }
 
     [HttpGet]
-    public async Task<IActionResult> FilterAsync([FromQuery] FilterProductQuery request)
+    public async Task<ActionResult<BaseResult<PagingResult<FilterProductResult>>>> FilterAsync(
+        [FromQuery] FilterProductQuery request)
     {
-        var result = await _mediator.Send(request);
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<PagingResult<FilterProductResult>>()
+        {
+            IsSuccess = true,
+            Result = data,
+        };
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<BaseResult<ProductDetailQueryResult>>> GetByIdAsync([FromRoute] Guid id)
     {
-        var result = await _mediator.Send(new GetProductByIdQuery(id));
+        var data = await _mediator.Send(new GetProductByIdQuery(id));
+        var result = new BaseResult<ProductDetailQueryResult>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
         return Ok(result);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateProductCommand request)
+    public async Task<ActionResult<BaseResult<object>>> UpdateAsync([FromRoute] Guid id,
+        [FromBody] UpdateProductCommand request)
     {
         if (id != request.Id)
             throw new BadRequestException("Id do not match");
         await _mediator.Send(request);
-        return Ok();
+        return Ok(new BaseResult<object>()
+        {
+            IsSuccess = true
+        });
     }
 
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = $"{RoleConstant.AdminRole}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await _mediator.Send(new DeleteProductCommand(id));
         return NoContent();

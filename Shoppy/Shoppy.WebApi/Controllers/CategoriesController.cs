@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Categories.Requests.Command;
 using Shoppy.Application.Features.Categories.Requests.Query;
+using Shoppy.Application.Features.Categories.Results.Query;
 using Shoppy.Domain.Constants;
 using Shoppy.Domain.Exceptions;
+using Shoppy.SharedLibrary.Models.Base;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -20,35 +22,56 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAlLAsync()
+    public async Task<ActionResult<BaseResult<List<CategoryResult>>>> GetAlLAsync()
     {
-        var result = await _mediator.Send(new GetAllCategoriesQuery());
+        var data = await _mediator.Send(new GetAllCategoriesQuery());
+
+        var result = new BaseResult<List<CategoryResult>>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<BaseResult<CategoryResult>>> GetByIdAsync([FromRoute] Guid id)
     {
-        var result = await _mediator.Send(new GetCategoryByIdQuery(id));
+        var data = await _mediator.Send(new GetCategoryByIdQuery(id));
+
+        var result = new BaseResult<CategoryResult>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
         return Ok(result);
     }
 
     [HttpPost]
     [Authorize(Roles = $"{RoleConstant.AdminRole}")]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryCommand request)
+    public async Task<ActionResult<Guid>> CreateAsync([FromBody] CreateCategoryCommand request)
     {
-        var result = await _mediator.Send(request);
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<Guid>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
         return Created(nameof(CreateAsync), result);
     }
 
     [HttpPut("{id:guid}")]
     [Authorize(Roles = $"{RoleConstant.AdminRole}")]
-    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCategoryCommand request)
+    public async Task<ActionResult<BaseResult<object>>> UpdateAsync([FromRoute] Guid id,
+        [FromBody] UpdateCategoryCommand request)
     {
         if (id != request.Id)
             throw new BadRequestException("Id does not match");
 
         await _mediator.Send(request);
-        return Ok();
+        return Ok(new BaseResult<object>()
+        {
+            IsSuccess = true
+        });
     }
 }
