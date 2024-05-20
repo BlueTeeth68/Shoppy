@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Domain.Exceptions.Base;
+using Shoppy.SharedLibrary.Models.Base;
 
 namespace Shoppy.WebAPI.Middlewares.GlobalExceptions;
 
@@ -18,68 +19,43 @@ public class GlobalExceptionHandlers : IExceptionHandler
     {
         var response = httpContext.Response;
 
+        var problemDetails = new ProblemDetails
+        {
+            Detail = exception.Message,
+            Instance = null
+        };
+
+        problemDetails.Extensions.Add("message", exception.Message);
+
         if (exception is BaseException ex)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = ex.Message,
-                Instance = null,
-                Status = ex.StatusCode,
-                Title = ex.Title,
-                Type = ex.Type
-            };
-
-            problemDetails.Extensions.Add("message", ex.Message);
-
-            response.ContentType = "application/problem+json";
-            response.StatusCode = problemDetails.Status.Value;
-
-            var result = JsonSerializer.Serialize(problemDetails);
-            await response.WriteAsync(result, cancellationToken: cancellationToken);
-
-            return true;
+            problemDetails.Status = ex.StatusCode;
+            problemDetails.Title = ex.Title;
+            problemDetails.Type = ex.Type;
         }
         else if (exception is ValidationException)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = exception.Message,
-                Instance = null,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = "Bad Request",
-                Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1"
-            };
-
-            problemDetails.Extensions.Add("message", exception.Message);
-
-            response.ContentType = "application/problem+json";
-            response.StatusCode = problemDetails.Status.Value;
-
-            var result = JsonSerializer.Serialize(problemDetails);
-            await response.WriteAsync(result, cancellationToken: cancellationToken);
-
-            return true;
+            problemDetails.Status = (int)HttpStatusCode.BadRequest;
+            problemDetails.Title = "Bad Request";
+            problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
         }
         else
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = exception.Message,
-                Instance = null,
-                Status = (int)HttpStatusCode.InternalServerError,
-                Title = "Internal Server Error",
-                Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1"
-            };
-
-            problemDetails.Extensions.Add("message", exception.Message);
-
-            response.ContentType = "application/problem+json";
-            response.StatusCode = problemDetails.Status.Value;
-
-            var result = JsonSerializer.Serialize(problemDetails);
-            await response.WriteAsync(result, cancellationToken: cancellationToken);
-
-            return true;
+            problemDetails.Status = (int)HttpStatusCode.InternalServerError;
+            problemDetails.Title = "Internal Server Error";
+            problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1";
         }
+
+        response.ContentType = "application/problem+json";
+        response.StatusCode = problemDetails.Status.Value;
+
+        var result = JsonSerializer.Serialize(new BaseResult<object>()
+        {
+            IsSuccess = false,
+            Error = problemDetails
+        });
+        await response.WriteAsync(result, cancellationToken: cancellationToken);
+
+        return true;
     }
 }

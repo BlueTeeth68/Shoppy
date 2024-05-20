@@ -1,7 +1,18 @@
+using Shoppy.WebMVC.Services.Implements;
+using Shoppy.WebMVC.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient();
+
+//add service
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+//add sesssion
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -15,6 +26,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.UseRouting();
 

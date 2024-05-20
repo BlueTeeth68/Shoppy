@@ -1,4 +1,11 @@
-﻿<div class="container-fluid">
+﻿@{
+    var fullName = Context.Request.HttpContext.Session.GetString("fullName");
+    var email = Context.Request.HttpContext.Session.GetString("email");
+    var accessToken = Context.Request.HttpContext.Session.GetString("accessToken");
+    var isAuthenticated = accessToken != null;
+}
+
+<div class="container-fluid">
     <div class="row bg-secondary py-1 px-xl-5">
         <div class="col-lg-6 d-none d-lg-block">
             <div class="d-inline-flex align-items-center h-100">
@@ -11,10 +18,32 @@
         <div class="col-lg-6 text-center text-lg-right">
             <div class="d-inline-flex align-items-center">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+                        @(fullName ?? "My Account")
+                    </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">Sign in</button>
-                        <button class="dropdown-item" type="button">Sign up</button>
+
+                        @{
+                            if (isAuthenticated)
+                            {
+                                <button class="dropdown-item" type="button">
+                                    <a asp-controller="Auth" asp-action="Login">My Account</a>
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    <a asp-controller="Auth" asp-action="Login">Log out</a>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="dropdown-item" type="button">
+                                    <a asp-controller="Auth" asp-action="Login">Sign in</a>
+                                </button>
+                                <button class="dropdown-item" type="button">
+                                    <a asp-controller="Auth" asp-action="Register">Sign up</a>
+                                </button>
+                            }
+                        }
+
                     </div>
                 </div>
 

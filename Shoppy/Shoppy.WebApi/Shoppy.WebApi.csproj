@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Shoppy.SharedLibrary\Shoppy.SharedLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+
 </Project>

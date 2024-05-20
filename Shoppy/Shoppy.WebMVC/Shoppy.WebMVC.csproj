@@ -9,11 +9,27 @@
   <ItemGroup>
     <Folder Include="Middleware\" />
     <Folder Include="Views\Partial\Books\" />
+    <Folder Include="wwwroot\img\mordernize\" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Cart\CheckOut.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Cart\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\backgrounds\rocket.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s11.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s7.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shoppy.Application\Shoppy.Application.csproj" />
+    <ProjectReference Include="..\Shoppy.SharedLibrary\Shoppy.SharedLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

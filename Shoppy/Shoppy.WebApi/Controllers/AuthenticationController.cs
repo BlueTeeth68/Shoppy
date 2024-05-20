@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Authentication.Requests.Command;
+using Shoppy.Application.Features.Authentication.Results.Command;
+using Shoppy.SharedLibrary.Models.Base;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -16,16 +18,24 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginAsync([FromBody] LoginCommand request)
+    public async Task<ActionResult<BaseResult<LoginResult>>> LoginAsync([FromBody] LoginCommand request)
     {
-        var result = await _mediator.Send(request);
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<LoginResult>()
+        {
+            Result = data
+        };
         return Ok(result);
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] RegisterCommand request)
+    public async Task<ActionResult<BaseResult<RegisterResult>>> RegisterAsync([FromBody] RegisterCommand request)
     {
-        var result = await _mediator.Send(request);
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<RegisterResult>()
+        {
+            Result = data
+        };
         return Created(nameof(RegisterAsync), result);
     }
 }
