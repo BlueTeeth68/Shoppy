@@ -1,7 +1,7 @@
 ﻿@{
-    var fullName = Context.Request.HttpContext.Session.GetString("fullName");
-    var email = Context.Request.HttpContext.Session.GetString("email");
-    var accessToken = Context.Request.HttpContext.Session.GetString("accessToken");
+    var fullName = Context.Request.Cookies["fullName"];
+    var email = Context.Request.Cookies["email"];
+    var accessToken = Context.Request.Cookies["accessToken"];
     var isAuthenticated = accessToken != null;
 }
 
@@ -30,7 +30,7 @@
                                     <a asp-controller="Auth" asp-action="Login">My Account</a>
                                 </button>
                                 <button class="dropdown-item" type="button">
-                                    <a asp-controller="Auth" asp-action="Login">Log out</a>
+                                    <a asp-controller="Auth" asp-action="Logout">Log out</a>
                                 </button>
                             }
                             else

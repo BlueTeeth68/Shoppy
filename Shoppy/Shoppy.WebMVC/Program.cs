@@ -1,18 +1,28 @@
+using Shoppy.WebMVC.Configurations;
 using Shoppy.WebMVC.Services.Implements;
 using Shoppy.WebMVC.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+var services = builder.Services;
+var configuration = builder.Configuration;
 
-builder.Services.AddHttpClient();
+var appSettings = new AppSettings();
+configuration.Bind(appSettings);
+
+services.Configure<AppSettings>(configuration);
+services.AddSingleton(appSettings);
+
+// Add services to the container.
+services.AddControllersWithViews();
+
+services.AddHttpClient();
 
 //add service
-builder.Services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<IAuthService, AuthService>();
 
 //add sesssion
-builder.Services.AddSession();
+services.AddSession();
 
 var app = builder.Build();
 

@@ -18,10 +18,10 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<BaseResult<LoginResult>>> LoginAsync([FromBody] LoginCommand request)
+    public async Task<ActionResult<BaseResult<LoginResponse>>> LoginAsync([FromBody] LoginCommand request)
     {
         var data = await _mediator.Send(request);
-        var result = new BaseResult<LoginResult>()
+        var result = new BaseResult<LoginResponse>()
         {
             Result = data
         };
@@ -29,10 +29,10 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<BaseResult<RegisterResult>>> RegisterAsync([FromBody] RegisterCommand request)
+    public async Task<ActionResult<BaseResult<RegisterResponse>>> RegisterAsync([FromBody] RegisterCommand request)
     {
         var data = await _mediator.Send(request);
-        var result = new BaseResult<RegisterResult>()
+        var result = new BaseResult<RegisterResponse>()
         {
             Result = data
         };

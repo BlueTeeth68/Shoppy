@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Shoppy.Application.Features.Authentication.Results.Command;
 using Shoppy.SharedLibrary.Models.Base;
-using Shoppy.WebMVC.Models.Auth;
+using Shoppy.SharedLibrary.Models.Requests.Auth;
+using Shoppy.WebMVC.Configurations;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Services.Implements;
@@ -9,21 +10,34 @@ namespace Shoppy.WebMVC.Services.Implements;
 public class AuthService : IAuthService
 {
     private readonly HttpClient _client;
+    private readonly AppSettings _appSettings;
+    private const string BasePath = "auth/";
 
-    public AuthService(HttpClient client)
+    public AuthService(HttpClient client, AppSettings appSettings)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
+        _appSettings = appSettings;
     }
 
-    public const string BasePath = "https://localhost:44301/api/v1/auth/";
-
-    public async Task<BaseResult<LoginResult>?> LoginAsync(LoginModel request)
+    public async Task<BaseResult<LoginResponse>?> LoginAsync(LoginModel request)
     {
-        var response = await _client.PostAsJsonAsync($"{BasePath}login", request);
+        var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}{BasePath}login", request);
 
         var content = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<BaseResult<LoginResult>>(content);
+        var result = JsonConvert.DeserializeObject<BaseResult<LoginResponse>>(content);
 
         return result;
     }
+
+    public async Task<BaseResult<RegisterResponse>?> RegisterAsync(RegisterModel request)
+    {
+        var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}{BasePath}register", request);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<RegisterResponse>>(content);
+
+        return result;
+    }
+    
+    
 }

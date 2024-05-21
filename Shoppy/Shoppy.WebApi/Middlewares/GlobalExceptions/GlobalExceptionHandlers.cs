@@ -48,12 +48,17 @@ public class GlobalExceptionHandlers : IExceptionHandler
 
         response.ContentType = "application/problem+json";
         response.StatusCode = problemDetails.Status.Value;
+        
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
 
         var result = JsonSerializer.Serialize(new BaseResult<object>()
         {
             IsSuccess = false,
             Error = problemDetails
-        });
+        }, options);
         await response.WriteAsync(result, cancellationToken: cancellationToken);
 
         return true;

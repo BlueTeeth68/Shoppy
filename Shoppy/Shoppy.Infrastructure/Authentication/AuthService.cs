@@ -7,7 +7,6 @@ using Shoppy.Domain.Constants;
 using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
-using Shoppy.Domain.Repositories.UnitOfWork;
 using Shoppy.Infrastructure.Web.Authentication;
 using Shoppy.Persistence.Identity;
 
@@ -19,7 +18,7 @@ public class AuthService(
     UserManager<AppUser> userManager)
     : IAuthService
 {
-    public async Task<LoginResult> LoginAsync(LoginCommand request)
+    public async Task<LoginResponse> LoginAsync(LoginCommand request)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
@@ -38,7 +37,7 @@ public class AuthService(
 
         var accessToken = await tokenGenerator.GenerateAccessTokenAsync(user);
 
-        var response = new LoginResult()
+        var response = new LoginResponse()
         {
             Id = user.Id,
             Email = user.Email ?? "",
@@ -50,7 +49,7 @@ public class AuthService(
         return response;
     }
 
-    public async Task<RegisterResult> RegisterAsync(RegisterCommand request)
+    public async Task<RegisterResponse> RegisterAsync(RegisterCommand request)
     {
         var existedUser = await userManager.FindByEmailAsync(request.Email);
         
@@ -90,7 +89,7 @@ public class AuthService(
             var accessToken = await tokenGenerator.GenerateAccessTokenAsync(user);
             var refreshToken = await tokenGenerator.GenerateRefreshTokenAsync(user);
 
-            var response = new RegisterResult()
+            var response = new RegisterResponse()
             {
                 Email = user.Email,
                 FullName = StringUtils.FormatName(user.FullName),

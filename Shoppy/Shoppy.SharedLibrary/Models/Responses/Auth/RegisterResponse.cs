@@ -1,6 +1,6 @@
-﻿namespace Shoppy.Application.Features.Authentication.Results.Command;
+﻿namespace Shoppy.SharedLibrary.Models.Responses.Auth;
 
-public class RegisterResult
+public class RegisterResponse
 {
     public Guid Id { get; set; }
     public string? Email { get; set; }

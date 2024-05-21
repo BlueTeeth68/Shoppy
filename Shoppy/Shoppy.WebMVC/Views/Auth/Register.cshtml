@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Shoppy.SharedLibrary.Models.Requests.Auth.RegisterModel
+
+@{
     Layout = "_AuthLayout";
     ViewData["title"] = "Register";
 }
@@ -13,23 +15,34 @@
                     <div class="card mb-0">
                         <div class="card-body">
                             <a asp-controller="Home" asp-action="Index" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                                <img src="~/img/mordernize/logos/dark-logo.svg" width="180" alt="">
+                                <h1 class="text-uppercase text-primary fw-bold ">Shoppy</h1>
                             </a>
-                            <p class="text-center">Your Social Campaigns</p>
-                            <form>
+                            @{
+                            if (@ViewBag.ErrorMessage != null)
+                            {
+                            <p class="text-danger text-center">@ViewBag.ErrorMessage</p>
+                            }
+                            }
+                            <form asp-controller="Auth" asp-action="Register" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="mb-3">
-                                    <label for="exampleInputtext1" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="exampleInputtext1" aria-describedby="textHelp">
+                                    <label asp-for="Email" class="form-label"></label>
+                                    <input asp-for="Email" class="form-control"/>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    <label asp-for="FullName" class="form-label"></label>
+                                    <input asp-for="FullName" class="form-control"/>
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
                                 </div>
+
                                 <div class="mb-4">
-                                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1">
+                                    <label asp-for="Password" class="form-label"></label>
+                                    <input asp-for="Password" class="form-control"></input>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
-                                <a asp-controller="Home" asp-action="Index" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign Up</a>
+                                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign Up</button>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
                                     <a class="text-primary fw-bold ms-2" asp-controller="Auth" asp-action="Login">Sign In</a>

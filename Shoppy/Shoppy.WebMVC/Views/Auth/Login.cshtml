@@ -1,4 +1,4 @@
-﻿@model Shoppy.WebMVC.Models.Auth.LoginModel;
+﻿@model Shoppy.SharedLibrary.Models.Requests.Auth.LoginModel;
 
 @{
     Layout = "_AuthLayout";
@@ -18,9 +18,9 @@
                                 <h1 class="text-uppercase text-primary fw-bold ">Shoppy</h1>
                             </a>
                             @{
-                                if (Model?.ErrorMessage != null)
+                                if (@ViewBag.ErrorMessage != null)
                                 {
-                                    <p class="text-danger text-center">@Model.ErrorMessage</p>
+                                    <p class="text-danger text-center">@ViewBag.ErrorMessage</p>
                                 }
                             }
                             <form asp-action="Login" method="post">

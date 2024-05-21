@@ -1,17 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
+﻿using MediatR;
 using Shoppy.Application.Features.Authentication.Results.Command;
+using Shoppy.SharedLibrary.Models.Requests.Auth;
 
 namespace Shoppy.Application.Features.Authentication.Requests.Command;
 
-public record RegisterCommand(
-    [Required]
-    [DataType(DataType.EmailAddress)]
-    [MaxLength(100)]
-    string Email,
-    [Required]
-    [MinLength(8)]
-    [DataType(DataType.Password)]
-    string Password,
-    [Required] [MaxLength(50)] string FullName
-): IRequest<RegisterResult>;
+public record RegisterCommand : RegisterModel, IRequest<RegisterResponse>;

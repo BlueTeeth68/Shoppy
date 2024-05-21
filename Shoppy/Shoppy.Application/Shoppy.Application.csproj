@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Shoppy.Domain\Shoppy.Domain.csproj" />
+      <ProjectReference Include="..\Shoppy.SharedLibrary\Shoppy.SharedLibrary.csproj" />
     </ItemGroup>
 
     <ItemGroup>

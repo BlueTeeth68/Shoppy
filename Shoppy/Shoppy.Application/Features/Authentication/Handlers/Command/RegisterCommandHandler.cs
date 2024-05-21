@@ -5,7 +5,7 @@ using Shoppy.Application.Services.Interfaces;
 
 namespace Shoppy.Application.Features.Authentication.Handlers.Command;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResult>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResponse>
 {
     private readonly IAuthService _authService;
 
@@ -14,7 +14,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterR
         _authService = authService;
     }
 
-    public async Task<RegisterResult> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<RegisterResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         return await _authService.RegisterAsync(request);
     }

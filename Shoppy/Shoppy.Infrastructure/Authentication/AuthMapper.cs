@@ -5,8 +5,8 @@ namespace Shoppy.Infrastructure.Authentication;
 
 public static class AuthMapper
 {
-    public static LoginResult UserToLoginResult(AppUser entity)
-        => new LoginResult()
+    public static LoginResponse UserToLoginResult(AppUser entity)
+        => new LoginResponse()
         {
             Id = entity.Id,
             Email = entity.Email,
