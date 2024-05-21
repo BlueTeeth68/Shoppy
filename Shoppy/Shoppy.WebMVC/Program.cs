@@ -20,6 +20,7 @@ services.AddHttpClient();
 
 //add service
 services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<IProductService, ProductService>();
 
 //add sesssion
 services.AddSession();
