@@ -38,6 +38,16 @@ namespace Shoppy.WebMVC.Controllers
                 ViewBag.Name = filter.Name;
             }
 
+            if (!string.IsNullOrEmpty(filter.SortName))
+            {
+                ViewBag.SortName = filter.SortName;
+            }
+
+            if (!string.IsNullOrEmpty(filter.SortPrice))
+            {
+                ViewBag.SortName = filter.SortPrice;
+            }
+            
             if (filter.Page == null || filter.Size == null)
             {
                 filter.Page = 1;

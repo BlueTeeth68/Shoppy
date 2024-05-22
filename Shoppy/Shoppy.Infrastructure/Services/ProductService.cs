@@ -5,6 +5,7 @@ using Shoppy.Application.Features.Products.Requests.Query;
 using Shoppy.Application.Features.Products.Results.Query;
 using Shoppy.Application.Services.Interfaces;
 using Shoppy.Domain.Entities;
+using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.Domain.Repositories.UnitOfWork;
 using Shoppy.Persistence.Specifications;
@@ -139,6 +140,46 @@ public class ProductService : IProductService
             _logger.LogError("Error when execute {} method at {}.\nDetail {}", nameof(this.FilterProductAsync),
                 DateTime.UtcNow, e.Message);
             throw new Exception($"Error when execute {nameof(this.FilterProductAsync)} method");
+        }
+    }
+
+    public async Task SeedDataAsync(int size, Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        if (!await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == categoryId, cancellationToken))
+        {
+            throw new BadRequestException("Category does not exist");
+        }
+
+        var baseName = Guid.NewGuid().ToString();
+
+        Product product;
+        var products = new List<Product>();
+
+        for (var i = 0; i < size; i++)
+        {
+            products.Add(new Product()
+            {
+                Id = Guid.NewGuid(),
+                Name = $"Product_{baseName}",
+                Quantity = 1000,
+                Sku = $"{baseName}_{i}",
+                ProductThumbUrl = "https://m.media-amazon.com/images/I/81XWahQULEL._SY425_.jpg",
+                CreatedDateTime = DateTime.UtcNow,
+                Price = 15,
+                NumberOfPage = 300,
+                CategoryId = categoryId
+            });
+        }
+
+        try
+        {
+            await _unitOfWork.ProductRepository.BulkInsertAsync(products, cancellationToken: cancellationToken);
+            await _unitOfWork.SaveChangeAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error seeding data: {}", e.Message);
+            throw new Exception("Error when seed product data");
         }
     }
 }

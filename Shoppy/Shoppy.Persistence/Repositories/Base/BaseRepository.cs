@@ -99,17 +99,17 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
         DbSet.Remove(entity);
     }
 
-    public async Task BulkInsertAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
+    public async Task BulkInsertAsync(IEnumerable<T> entities, CancellationToken cancellationToken=default)
     {
         await _dbContext.BulkInsertAsync(entities, cancellationToken: cancellationToken);
     }
 
-    public async Task BulkUpdateAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
+    public async Task BulkUpdateAsync(IEnumerable<T> entities, CancellationToken cancellationToken= default)
     {
         await _dbContext.BulkUpdateAsync(entities, cancellationToken: cancellationToken);
     }
 
-    public async Task BulkDeleteAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
+    public async Task BulkDeleteAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         await _dbContext.BulkDeleteAsync(entities, cancellationToken: cancellationToken);
     }

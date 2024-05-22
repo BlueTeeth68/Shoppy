@@ -26,9 +26,9 @@ public interface IBaseRepository<TEntity, in TKey> : IConcurrencyHandler<TEntity
 
     void Delete(TEntity entity);
 
-    Task BulkInsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
+    Task BulkInsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
-    Task BulkUpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
+    Task BulkUpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken= default);
 
-    Task BulkDeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
+    Task BulkDeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken= default);
 }

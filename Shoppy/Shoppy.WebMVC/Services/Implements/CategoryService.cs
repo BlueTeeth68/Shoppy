@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Shoppy.Application.Features.Categories.Results.Query;
-using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Responses.Categories;
-using Shoppy.SharedLibrary.Models.Responses.Products;
 using Shoppy.WebMVC.Configurations;
 using Shoppy.WebMVC.Services.Interfaces;
 

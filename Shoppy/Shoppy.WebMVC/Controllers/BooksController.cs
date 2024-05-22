@@ -51,7 +51,6 @@ public class BooksController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-
     private async Task<IActionResult?> FetchCategoriesAsync()
     {
         var categories = await _categoryService.GetAllAsync();

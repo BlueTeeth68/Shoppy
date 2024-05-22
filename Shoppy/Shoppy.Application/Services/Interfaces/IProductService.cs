@@ -7,4 +7,6 @@ namespace Shoppy.Application.Services.Interfaces;
 public interface IProductService
 {
     Task<PagingResult<FilterProductResult>> FilterProductAsync(FilterProductQuery request);
+
+    Task SeedDataAsync(int size, Guid categoryId, CancellationToken cancellationToken = default);
 }

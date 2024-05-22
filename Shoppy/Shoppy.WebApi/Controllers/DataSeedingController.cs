@@ -24,4 +24,12 @@ public class DataSeedingController : ControllerBase
         await _mediator.Send(new SeedUserCommand() { Size = size });
         return Ok();
     }
+
+    [HttpPost("products")]
+    [Authorize(Roles = $"{RoleConstant.AdminRole}")]
+    public async Task<IActionResult> SeedProductAsync([FromQuery] SeedProductCommand request)
+    {
+        await _mediator.Send(request);
+        return Ok();
+    }
 }
