@@ -10,48 +10,73 @@ namespace Shoppy.WebMVC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService)
+        public HomeController(ILogger<HomeController> logger, IProductService productService,
+            ICategoryService categoryService)
         {
             _logger = logger;
             _productService = productService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] FilterProductRequest? filter)
         {
-            var filterProduct = new FilterProductRequest()
+            filter ??= new FilterProductRequest()
             {
                 Page = 1, Size = 6
             };
 
+            if (filter.Page == null || filter.Size == null)
+            {
+                filter.Page = 1;
+                filter.Size = 6;
+            }
+
             try
             {
-                var result = await _productService.FilterProductAsync(filterProduct);
-                if (result == null)
-                {
-                    ViewBag.ErrorMessage = "Something wrong";
-                    return View();
-                }
+                // var categories = await _categoryService.GetAllAsync();
+                // if (categories?.Result == null)
+                // {
+                //     ViewBag.ErrorMessage = "Something wrong";
+                //     return View();
+                // }
+                //
+                // if (!categories.IsSuccess)
+                // {
+                //     ViewBag.ErrorMessage = categories.Error?.Detail ?? "Something wrong";
+                //     return View();
+                // }
+                //
+                // ViewBag.Categories = categories.Result;
+                //
+                // var products = await _productService.FilterProductAsync(filterProduct);
+                // if (products?.Result == null)
+                // {
+                //     ViewBag.ErrorMessage = "Something wrong";
+                //     return View();
+                // }
+                //
+                // if (!products.IsSuccess)
+                // {
+                //     ViewBag.ErrorMessage = products.Error?.Detail ?? "Something wrong";
+                //     return View();
+                // }
+                //
+                // ViewBag.Products = products.Result.Results;
 
-                if (result.IsSuccess)
-                {
-                    if (result.Result == null)
-                    {
-                        ViewBag.ErrorMessage = "Something wrong";
-                        return View();
-                    }
+                var fetchCategoryTask = FetchCategoriesAsync();
+                var fetchProductsTask = FetchProductsAsync(filter);
 
-                    ViewBag.Products = result.Result.Results;
-                    return View();
-                }
+                await Task.WhenAll(fetchCategoryTask, fetchProductsTask);
 
-                ViewBag.ErrorMessage = result.Error?.Detail ?? "Something wrong";
-
-                return View();
+                return fetchCategoryTask.Result ?? fetchProductsTask.Result ?? View();
             }
             catch (Exception e)
             {
+                _logger.LogError("Error when fetching home page.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                    e.Message);
                 return RedirectToAction("Error");
             }
         }
@@ -60,6 +85,44 @@ namespace Shoppy.WebMVC.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private async Task<IActionResult?> FetchCategoriesAsync()
+        {
+            var categories = await _categoryService.GetAllAsync();
+            if (categories?.Result == null)
+            {
+                ViewBag.ErrorMessage = "Something wrong";
+                return View();
+            }
+
+            if (!categories.IsSuccess)
+            {
+                ViewBag.ErrorMessage = categories.Error?.Detail ?? "Something wrong";
+                return View();
+            }
+
+            ViewBag.Categories = categories.Result;
+            return null;
+        }
+
+        private async Task<IActionResult?> FetchProductsAsync(FilterProductRequest filterProduct)
+        {
+            var products = await _productService.FilterProductAsync(filterProduct);
+            if (products?.Result == null)
+            {
+                ViewBag.ErrorMessage = "Something wrong";
+                return View();
+            }
+
+            if (!products.IsSuccess)
+            {
+                ViewBag.ErrorMessage = products.Error?.Detail ?? "Something wrong";
+                return View();
+            }
+
+            ViewBag.Products = products.Result.Results;
+            return null;
         }
     }
 }

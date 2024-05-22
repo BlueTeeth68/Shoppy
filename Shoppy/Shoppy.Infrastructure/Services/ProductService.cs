@@ -45,6 +45,13 @@ public class ProductService : IProductService
                         Expression.Constant(filter.Status)));
             }
 
+            if (filter.CategoryId.HasValue)
+            {
+                filterExpression = Expression.AndAlso(filterExpression,
+                    Expression.Equal(Expression.Property(parameter, nameof(Product.CategoryId)),
+                        Expression.Constant(filter.CategoryId)));
+            }
+
             if (!string.IsNullOrEmpty(filter.Name))
             {
                 filterExpression = Expression.AndAlso(filterExpression,

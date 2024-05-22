@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Shoppy.SharedLibrary.Models.Responses.Categories
+@{
+    var listCategory = (List<CategoryDto>)ViewBag.Categories;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -35,7 +41,13 @@
 @await Html.PartialAsync("Header")
 <!-- Topbar End -->
 
-@await Html.PartialAsync("~/Views/Shared/NavBarComponent.cshtml")
+@{
+    if (listCategory != null)
+    {
+        @await Html.PartialAsync("~/Views/Shared/NavBarComponent.cshtml", listCategory);
+    }
+}
+
 
 @RenderBody()
 

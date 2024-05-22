@@ -78,19 +78,19 @@
     </div>
     <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
         <div class="col-lg-4">
-            <a href="" class="text-decoration-none">
-                Shoppy
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h2 class="text-uppercase text-primary fw-bold ">Shoppy</h2>
             </a>
         </div>
         <div class="col-lg-4 col-6 text-left">
-            <form action="">
+            <form asp-controller="Home" asp-action="Index" method="get">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for products">
-                    <div class="input-group-append">
+                    <input type="text" name="name" class="form-control" placeholder="Search">
+                    <button type="submit" class="input-group-append">
                         <span class="input-group-text bg-transparent text-primary">
                             <i class="fa fa-search"></i>
                         </span>
-                    </div>
+                    </button>
                 </div>
             </form>
         </div>

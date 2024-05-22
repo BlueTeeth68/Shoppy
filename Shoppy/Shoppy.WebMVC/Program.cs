@@ -21,6 +21,7 @@ services.AddHttpClient();
 //add service
 services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<IProductService, ProductService>();
+services.AddScoped<ICategoryService, CategoryService>();
 
 //add sesssion
 services.AddSession();
