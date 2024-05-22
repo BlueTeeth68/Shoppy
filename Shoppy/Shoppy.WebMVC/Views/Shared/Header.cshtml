@@ -3,6 +3,8 @@
     var email = Context.Request.Cookies["email"];
     var accessToken = Context.Request.Cookies["accessToken"];
     var isAuthenticated = accessToken != null;
+    var categoryId = (Guid?)ViewBag.CategoryId;
+    var name = (string?)ViewBag.Name;
 }
 
 <div class="container-fluid">
@@ -85,7 +87,8 @@
         <div class="col-lg-4 col-6 text-left">
             <form asp-controller="Home" asp-action="Index" method="get">
                 <div class="input-group">
-                    <input type="text" name="name" class="form-control" placeholder="Search">
+                    <input type="text" name="name" value="@name" class="form-control" placeholder="Search">
+                    <input type="hidden" name="categoryId" value="@categoryId"/>
                     <button type="submit" class="input-group-append">
                         <span class="input-group-text bg-transparent text-primary">
                             <i class="fa fa-search"></i>

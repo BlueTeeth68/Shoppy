@@ -28,11 +28,24 @@ namespace Shoppy.WebMVC.Controllers
                 Page = 1, Size = 6
             };
 
+            if (filter.CategoryId != null)
+            {
+                ViewBag.CategoryId = filter.CategoryId;
+            }
+
+            if (!string.IsNullOrEmpty(filter.Name))
+            {
+                ViewBag.Name = filter.Name;
+            }
+
             if (filter.Page == null || filter.Size == null)
             {
                 filter.Page = 1;
                 filter.Size = 6;
             }
+
+            ViewBag.Page = filter.Page;
+            ViewBag.Size = filter.Size;
 
             try
             {
@@ -63,13 +76,14 @@ namespace Shoppy.WebMVC.Controllers
             if (categories?.Result == null)
             {
                 ViewBag.ErrorMessage = "Something wrong";
-                return View();
+                return RedirectToAction("Error");
             }
 
             if (!categories.IsSuccess)
             {
                 ViewBag.ErrorMessage = categories.Error?.Detail ?? "Something wrong";
-                return View();
+                // return View();
+                return RedirectToAction("Error");
             }
 
             ViewBag.Categories = categories.Result;
@@ -82,16 +96,17 @@ namespace Shoppy.WebMVC.Controllers
             if (products?.Result == null)
             {
                 ViewBag.ErrorMessage = "Something wrong";
-                return View();
+                return RedirectToAction("Error");
             }
 
             if (!products.IsSuccess)
             {
                 ViewBag.ErrorMessage = products.Error?.Detail ?? "Something wrong";
-                return View();
+                return RedirectToAction("Error");
             }
 
             ViewBag.Products = products.Result.Results;
+            ViewBag.TotalPage = products.Result.TotalPages;
             return null;
         }
     }

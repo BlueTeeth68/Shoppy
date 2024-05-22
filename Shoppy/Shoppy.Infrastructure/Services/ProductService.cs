@@ -30,7 +30,7 @@ public class ProductService : IProductService
         Expression filterExpression = Expression.Constant(true); // default is "where true"
 
         //set default page size
-        if (!filter.Page.HasValue || !filter.Size.HasValue)
+        if (!filter.Page.HasValue || !filter.Size.HasValue || filter.Page.Value <= 0 || filter.Size.Value <= 0)
         {
             filter.Page = 1;
             filter.Size = 10;

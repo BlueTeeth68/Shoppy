@@ -40,7 +40,7 @@ public class UserService : IUserService
         Expression filterExpression = Expression.Constant(true); // default is "where true"
 
         //set default page size
-        if (!filter.Page.HasValue || !filter.Size.HasValue)
+        if (!filter.Page.HasValue || !filter.Size.HasValue || filter.Page.Value <= 0 || filter.Size.Value <= 0)
         {
             filter.Page = 1;
             filter.Size = 10;
@@ -101,7 +101,7 @@ public class UserService : IUserService
                 DisableTracking = true
             };
 
-            var queryable = SpecificationEvaluator.GetQuery<AppUser>(query, userSpecification);
+            var queryable = SpecificationEvaluator.GetQuery(query, userSpecification);
 
             var totalRecord = await queryable.CountAsync();
 
@@ -128,6 +128,8 @@ public class UserService : IUserService
         }
         catch (Exception e)
         {
+            _logger.LogError("Error when execute {} method.\nDate: {}.\nDetail: {}", nameof(this.FilterUserAsync),
+                DateTime.UtcNow, e.Message);
             throw new Exception($"Error when execute {nameof(this.FilterUserAsync)} method");
         }
     }
