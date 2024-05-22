@@ -4,7 +4,7 @@ using Shoppy.Application.Services.Interfaces;
 
 namespace Shoppy.Application.Features.Carts.Handlers.Command;
 
-public class UpdateCartItemHandler: IRequestHandler<UpdateCartItemCommand>
+public class UpdateCartItemHandler : IRequestHandler<UpdateCartItemCommand>
 {
     private readonly IUserService _userService;
 
@@ -13,8 +13,8 @@ public class UpdateCartItemHandler: IRequestHandler<UpdateCartItemCommand>
         _userService = userService;
     }
 
-    public Task Handle(UpdateCartItemCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateCartItemCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _userService.UpdateCartItemAsync(request.ProductId, request.Quantity, cancellationToken);
     }
 }
