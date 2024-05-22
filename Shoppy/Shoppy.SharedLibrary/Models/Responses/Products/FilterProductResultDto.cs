@@ -2,7 +2,7 @@
 
 namespace Shoppy.SharedLibrary.Models.Responses.Products;
 
-public class FilterProductResponse
+public class FilterProductResultDto
 {
     public Guid Id { get; set; }
 

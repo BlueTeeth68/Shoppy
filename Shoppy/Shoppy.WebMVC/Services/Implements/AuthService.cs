@@ -19,7 +19,7 @@ public class AuthService : IAuthService
         _appSettings = appSettings;
     }
 
-    public async Task<BaseResult<LoginResponse>?> LoginAsync(LoginModel request)
+    public async Task<BaseResult<LoginResponse>?> LoginAsync(LoginDto request)
     {
         var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}{BasePath}login", request);
 
@@ -29,7 +29,7 @@ public class AuthService : IAuthService
         return result;
     }
 
-    public async Task<BaseResult<RegisterResponse>?> RegisterAsync(RegisterModel request)
+    public async Task<BaseResult<RegisterResponse>?> RegisterAsync(RegisterDto request)
     {
         var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}{BasePath}register", request);
 

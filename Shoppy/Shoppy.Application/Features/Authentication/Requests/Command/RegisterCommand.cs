@@ -4,4 +4,4 @@ using Shoppy.SharedLibrary.Models.Requests.Auth;
 
 namespace Shoppy.Application.Features.Authentication.Requests.Command;
 
-public record RegisterCommand : RegisterModel, IRequest<RegisterResponse>;
+public record RegisterCommand : RegisterDto, IRequest<RegisterResponse>;

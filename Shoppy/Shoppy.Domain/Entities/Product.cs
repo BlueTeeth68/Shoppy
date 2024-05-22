@@ -31,7 +31,7 @@ public class Product : BaseEntity<Guid>, IAggregateRoot
 
     public int NumberOfSale { get; set; }
 
-    public ProductStatus Status { get; set; }
+    public ProductStatus Status { get; set; } = ProductStatus.Active;
 
     public bool IsDelete { get; set; }
 

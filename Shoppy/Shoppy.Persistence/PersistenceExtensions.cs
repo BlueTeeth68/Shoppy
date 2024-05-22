@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Shoppy.Domain.Entities;
 using Shoppy.Domain.Repositories;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.Domain.Repositories.UnitOfWork;
@@ -43,7 +42,8 @@ public static class PersistenceExtensions
             .AddScoped<IOrderItemRepository, OrderItemRepository>()
             .AddScoped<IProductCategoryRepository, ProductCategoryRepository>()
             .AddScoped<IProductRatingRepository, ProductRatingRepository>()
-            .AddScoped<IProductRepository, ProductRepository>();
+            .AddScoped<IProductRepository, ProductRepository>()
+            .AddScoped<ICartRepository, CartRepository>();
 
         //unit of work
         services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -18,11 +18,12 @@ public class UnitOfWork : IUnitOfWork, IAsyncDisposable
     public IProductCategoryRepository ProductCategoryRepository { get; }
     public IProductRatingRepository ProductRatingRepository { get; }
     public IProductRepository ProductRepository { get; }
+    public ICartRepository CartRepository { get; }
 
     public UnitOfWork(AppDbContext dbContext, ILogger<UnitOfWork> logger, IAddressRepository addressRepository,
         ICartItemRepository cartItemRepository, IOrderRepository orderRepository,
         IOrderItemRepository orderItemRepository, IProductCategoryRepository productCategoryRepository,
-        IProductRatingRepository productRatingRepository, IProductRepository productRepository)
+        IProductRatingRepository productRatingRepository, IProductRepository productRepository, ICartRepository cartRepository)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -33,6 +34,7 @@ public class UnitOfWork : IUnitOfWork, IAsyncDisposable
         ProductCategoryRepository = productCategoryRepository;
         ProductRatingRepository = productRatingRepository;
         ProductRepository = productRepository;
+        CartRepository = cartRepository;
     }
 
     public async Task<int> SaveChangeAsync()

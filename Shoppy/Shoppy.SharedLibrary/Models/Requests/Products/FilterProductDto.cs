@@ -3,7 +3,7 @@ using Shoppy.Domain.Constants.Enums;
 
 namespace Shoppy.SharedLibrary.Models.Requests.Products;
 
-public class FilterProductRequest
+public class FilterProductDto
 {
     [MaxLength(250)] public string? Name { get; set; }
     public ProductStatus? Status { get; set; }

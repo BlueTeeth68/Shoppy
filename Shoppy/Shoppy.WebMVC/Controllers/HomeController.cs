@@ -21,9 +21,9 @@ namespace Shoppy.WebMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] FilterProductRequest? filter)
+        public async Task<IActionResult> Index([FromQuery] FilterProductDto? filter)
         {
-            filter ??= new FilterProductRequest()
+            filter ??= new FilterProductDto()
             {
                 Page = 1, Size = 6
             };
@@ -100,7 +100,7 @@ namespace Shoppy.WebMVC.Controllers
             return null;
         }
 
-        private async Task<IActionResult?> FetchProductsAsync(FilterProductRequest filterProduct)
+        private async Task<IActionResult?> FetchProductsAsync(FilterProductDto filterProduct)
         {
             var products = await _productService.FilterProductAsync(filterProduct);
             if (products?.Result == null)

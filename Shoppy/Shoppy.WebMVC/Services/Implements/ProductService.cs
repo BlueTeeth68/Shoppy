@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
+using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Requests.Products;
@@ -21,13 +22,14 @@ public class ProductService : IProductService
         _appSettings = appSettings;
     }
 
-    public async Task<BaseResult<PagingResult<FilterProductResponse>>?> FilterProductAsync(FilterProductRequest request)
+    public async Task<BaseResult<PagingResult<FilterProductResultDto>>?> FilterProductAsync(FilterProductDto request)
     {
+        request.Status = ProductStatus.Active;
         var queryString = BuildQueryString(request);
         var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}{BasePath}?{queryString}");
 
         var content = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<BaseResult<PagingResult<FilterProductResponse>>>(content);
+        var result = JsonConvert.DeserializeObject<BaseResult<PagingResult<FilterProductResultDto>>>(content);
 
         return result;
     }
@@ -42,7 +44,7 @@ public class ProductService : IProductService
         return result;
     }
 
-    private string BuildQueryString(FilterProductRequest request)
+    private string BuildQueryString(FilterProductDto request)
     {
         var queryStringBuilder = new StringBuilder();
 

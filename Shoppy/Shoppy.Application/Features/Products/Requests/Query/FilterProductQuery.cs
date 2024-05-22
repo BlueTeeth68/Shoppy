@@ -5,6 +5,6 @@ using Shoppy.SharedLibrary.Models.Requests.Products;
 
 namespace Shoppy.Application.Features.Products.Requests.Query;
 
-public class FilterProductQuery : FilterProductRequest, IRequest<PagingResult<FilterProductResult>>
+public class FilterProductQuery : FilterProductDto, IRequest<PagingResult<FilterProductResult>>
 {
 }

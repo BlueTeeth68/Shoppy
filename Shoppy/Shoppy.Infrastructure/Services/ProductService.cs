@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Shoppy.Application.Features.Products.Requests.Query;
 using Shoppy.Application.Features.Products.Results.Query;
 using Shoppy.Application.Services.Interfaces;
+using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
@@ -167,7 +168,8 @@ public class ProductService : IProductService
                 CreatedDateTime = DateTime.UtcNow,
                 Price = 15,
                 NumberOfPage = 300,
-                CategoryId = categoryId
+                CategoryId = categoryId,
+                Status = ProductStatus.Active
             });
         }
 

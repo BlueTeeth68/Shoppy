@@ -6,7 +6,7 @@ namespace Shoppy.WebMVC.Services.Interfaces;
 
 public interface IAuthService
 {
-    Task<BaseResult<LoginResponse>?> LoginAsync(LoginModel request);
+    Task<BaseResult<LoginResponse>?> LoginAsync(LoginDto request);
 
-    Task<BaseResult<RegisterResponse>?> RegisterAsync(RegisterModel request);
+    Task<BaseResult<RegisterResponse>?> RegisterAsync(RegisterDto request);
 }

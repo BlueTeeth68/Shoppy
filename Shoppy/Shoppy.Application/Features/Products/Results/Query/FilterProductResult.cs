@@ -2,6 +2,6 @@
 
 namespace Shoppy.Application.Features.Products.Results.Query;
 
-public class FilterProductResult : FilterProductResponse
+public class FilterProductResult : FilterProductResultDto
 {
 }

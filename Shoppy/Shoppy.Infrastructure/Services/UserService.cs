@@ -1,35 +1,40 @@
 ﻿using System.Linq.Expressions;
-using System.Transactions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shoppy.Application.Features.Carts.Request.Command;
 using Shoppy.Application.Features.Users.Requests.Query;
 using Shoppy.Application.Features.Users.Resutls;
+using Shoppy.Application.Mappers;
 using Shoppy.Application.Services.Interfaces;
 using Shoppy.Domain.Constants;
 using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
+using Shoppy.Domain.Identity;
 using Shoppy.Domain.Repositories.Base;
+using Shoppy.Domain.Repositories.UnitOfWork;
 using Shoppy.Persistence.Identity;
 using Shoppy.Persistence.Specifications;
+using Shoppy.SharedLibrary.Models.Responses.Carts;
 
-namespace Shoppy.Infrastructure.Identity.UserServices;
+namespace Shoppy.Infrastructure.Services;
 
 public class UserService : IUserService
 {
     private readonly UserManager<AppUser> _userManager;
-    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly ILogger<UserService> _logger;
+    private readonly ICurrentUser _currentUser;
+    private readonly IUnitOfWork _unitOfWork;
     private const string DefaultUserPassword = "User@123456";
 
-    public UserService(UserManager<AppUser> userManager, ILogger<UserService> logger,
-        RoleManager<IdentityRole<Guid>> roleManager)
+    public UserService(UserManager<AppUser> userManager, ILogger<UserService> logger, ICurrentUser currentUser,
+        IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _logger = logger;
-        _roleManager = roleManager;
+        _currentUser = currentUser;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<PagingResult<FilterUserResult>> FilterUserAsync(FilterUserQuery filter)
@@ -173,41 +178,114 @@ public class UserService : IUserService
         }
     }
 
-    public async Task BulkCreateUserDataAsync(int size)
+    public async Task<CartDto> GetUserCartDetailAsync()
     {
-        var userRole = await _roleManager.FindByNameAsync(RoleConstant.UserRole)
-            .ContinueWith(t => t.Result ?? throw new NotFoundException($"Role {RoleConstant.UserRole} does not exist"));
+        var userQuery = _userManager.Users;
 
-        var passwordHasher = new PasswordHasher<AppUser>();
+        // var cart = await userQuery.Where(u => u.Id == _currentUser.UserId && u.Cart != null)
+        //     .Select(u => new CartDto()
+        //     {
+        //         TotalItem = u.Cart.TotalItem,
+        //         Items = u.Cart.Items.Select(i => new CartItemDto()
+        //         {
+        //             Quantity = i.Quantity,
+        //             ProductId = i.ProductId,
+        //             ProductName = i.Product.Name,
+        //             ProductThumbUrl = i.Product.ProductThumbUrl,
+        //             Price = i.Product.Price
+        //         }).ToList()
+        //     }).FirstOrDefaultAsync();
 
-        var baseName = Guid.NewGuid().ToString();
+        var user = await userQuery.Where(u => u.Id == _currentUser.UserId)
+            .Include(u => u.Cart)
+            .ThenInclude(c => c.Items)
+            .ThenInclude(i => i.Product)
+            .FirstOrDefaultAsync();
 
-        var user = new AppUser();
-        var users = new List<AppUser>();
-        Cart cart;
+        if (user == null)
+            throw new NotFoundException("User do not login");
 
-        for (var i = 0; i < size; i++)
+        if (user.Cart == null)
         {
-            var email = $"{baseName}_{i}@gmail.com";
-            var emailNormalize = email.ToUpper();
+            user.Cart = new Cart();
+            await _userManager.UpdateAsync(user);
+        }
 
-            user.UserName = email;
-            user.NormalizedUserName = emailNormalize;
-            user.Email = email;
-            user.NormalizedEmail = emailNormalize;
-            user.LockoutEnabled = true;
-            user.SecurityStamp = Guid.NewGuid().ToString();
-            user.FullName = $"{baseName}_{i}";
-            user.Gender = Gender.Female;
-            user.Status = UserStatus.Active;
-            user.CreatedDateTime = DateTime.UtcNow;
-            user.UpdatedDateTime = DateTime.UtcNow;
-            user.PasswordHash = passwordHasher.HashPassword(user, DefaultUserPassword);
+        var cart = CartMapper.CartToCartDto(user.Cart);
+        return cart;
+    }
 
-            cart = new Cart();
-            user.Cart = cart;
+    public async Task AddToCartAsync(AddCartItemCommand item, CancellationToken cancellationToken = default)
+    {
+        //check product
+        var product = await _unitOfWork.ProductRepository
+            .GetQueryableSet().Where(p => p.Id == item.ProductId && p.Status == ProductStatus.Active)
+            .Select(p => new Product()
+            {
+                Price = p.Price,
+                Quantity = p.Quantity,
+            }).FirstOrDefaultAsync(cancellationToken: cancellationToken)
+            .ContinueWith(t => t.Result ?? throw new NotFoundException($"Product {item.ProductId} not found"),
+                cancellationToken);
 
-            users.Add(user);
+        //get cart 
+        var user = await _userManager.Users.Where(u => u.Id == _currentUser.UserId)
+            .Include(u => u.Cart)
+            .ThenInclude(c => c.Items)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken)
+            .ContinueWith(t => t.Result ?? throw new NotFoundException("User not found"), cancellationToken);
+
+        //check cartItem exist
+        user.Cart ??= new Cart();
+
+        //Update/add new cart item
+        var existedItem = user.Cart.Items.FirstOrDefault(i => i.ProductId == item.ProductId);
+        if (existedItem != null)
+        {
+            existedItem.Quantity += item.Quantity;
+            if (existedItem.Quantity > product.Quantity)
+            {
+                throw new BadRequestException("Cart item quantity exceed product quantity");
+            }
+        }
+        else
+        {
+            var cartItemEntity = new CartItem()
+            {
+                ProductId = item.ProductId,
+                Quantity = item.Quantity,
+                CreatedDateTime = DateTime.UtcNow
+            };
+
+            user.Cart.Items.Add(cartItemEntity);
+            user.Cart.TotalItem++;
+        }
+
+        await _userManager.UpdateAsync(user);
+    }
+
+    public async Task RemoveCartItemAsync(Guid productId, CancellationToken cancellationToken = default)
+    {
+        var user = await _userManager.Users.Where(u => u.Id == _currentUser.UserId)
+            .Select(u => new AppUser()
+            {
+                CartId = u.CartId
+            }).FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        if (user == null)
+            throw new NotFoundException("User not found");
+
+        if (user.CartId.HasValue)
+        {
+            var result =
+                await _unitOfWork.CartItemRepository.RemoveAsync(user.CartId.Value, productId, cancellationToken);
+            if (result > 0)
+            {
+                await _unitOfWork.CartRepository.GetQueryableSet()
+                    .Where(c => c.Id == user.CartId.Value)
+                    .ExecuteUpdateAsync(c => c.SetProperty(cart => cart.TotalItem, cart => cart.TotalItem - result),
+                        cancellationToken: cancellationToken);
+            }
         }
     }
 }

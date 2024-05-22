@@ -5,4 +5,4 @@ using Shoppy.SharedLibrary.Models.Requests.Auth;
 
 namespace Shoppy.Application.Features.Authentication.Requests.Command;
 
-public record LoginCommand : LoginModel, IRequest<LoginResponse>;
+public record LoginCommand : LoginDto, IRequest<LoginResponse>;

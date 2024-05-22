@@ -1,11 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Shoppy.Application.Features.Carts.Request.Command;
+using Shoppy.Application.Features.Carts.Request.Query;
 using Shoppy.Application.Features.Users.Requests.Query;
 using Shoppy.Application.Features.Users.Resutls;
 using Shoppy.Domain.Constants;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
+using Shoppy.SharedLibrary.Models.Responses.Carts;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -32,5 +36,29 @@ public class UsersController : ControllerBase
             Result = data
         };
         return Ok(result);
+    }
+
+    [HttpGet("cart")]
+    [Authorize]
+    public async Task<ActionResult<BaseResult<CartDto>>> GetUserCartAsync()
+    {
+        var result = await _mediator.Send(new GetUserCartDetailQuery());
+        return Ok(result);
+    }
+
+    [HttpPost("cart")]
+    [Authorize]
+    public async Task<IActionResult> AddToCartAsync([FromBody] AddCartItemCommand request)
+    {
+        await _mediator.Send(request);
+        return Ok();
+    }
+
+    [HttpDelete("cart/{productId:guid}")]
+    [Authorize]
+    public async Task<IActionResult> RemoveFromCartAsync([FromRoute] Guid productId)
+    {
+        await _mediator.Send(new RemoveCartItemCommand() { ProductId = productId });
+        return Ok();
     }
 }

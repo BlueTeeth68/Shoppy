@@ -11,4 +11,7 @@ public class CartItem : BaseEntity<Guid>, IAggregateRoot
 
     public Guid ProductId { get; set; }
     public virtual Product Product { get; set; } = null!;
+
+    public virtual Guid CartId { get; set; }
+    public virtual Cart Cart { get; set; } = null!;
 }

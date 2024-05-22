@@ -2,7 +2,7 @@
 
 namespace Shoppy.SharedLibrary.Models.Requests.Auth;
 
-public record LoginModel
+public record LoginDto
 {
     [Required]
     [DataType(DataType.EmailAddress)]

@@ -30,7 +30,7 @@ public class AuthController : Controller
 
     [HttpPost]
     [ActionName("Login")]
-    public async Task<IActionResult> LoginAsync(LoginModel request)
+    public async Task<IActionResult> LoginAsync(LoginDto request)
     {
         if (!ModelState.IsValid)
         {
@@ -78,7 +78,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> RegisterAsync(RegisterModel request)
+    public async Task<IActionResult> RegisterAsync(RegisterDto request)
     {
         if (!ModelState.IsValid)
         {
@@ -128,7 +128,7 @@ public class AuthController : Controller
         return Task.CompletedTask;
     }
 
-    private async Task AddResultOptionsAsync(RegisterResponse result)
+    private async Task AddResultOptionsAsync(RegisterResultDto result)
     {
         var accessTokenCookieOptions = new CookieOptions()
         {
