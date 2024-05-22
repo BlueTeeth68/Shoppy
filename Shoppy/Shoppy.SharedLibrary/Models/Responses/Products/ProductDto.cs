@@ -2,7 +2,7 @@
 
 namespace Shoppy.SharedLibrary.Models.Responses.Products;
 
-public class FilterProductResponse
+public class ProductDto
 {
     public Guid Id { get; set; }
 
@@ -11,6 +11,16 @@ public class FilterProductResponse
     public string? Description { get; set; }
 
     public string? ProductThumbUrl { get; set; }
+
+    public string? Sku { get; set; } = null!;
+
+    public string? AuthorName { get; set; }
+
+    public string? Publisher { get; set; }
+
+    public int? NumberOfPage { get; set; }
+
+    public DateTime? DateOfPublication { get; set; }
 
     public decimal? Price { get; set; }
 
@@ -21,4 +31,8 @@ public class FilterProductResponse
     public int? NumberOfSale { get; set; }
 
     public ProductStatus? Status { get; set; }
+
+    public Guid? CategoryId { get; set; }
+
+    public string? CategoryName { get; set; }
 }

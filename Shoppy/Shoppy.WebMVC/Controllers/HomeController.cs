@@ -36,36 +36,6 @@ namespace Shoppy.WebMVC.Controllers
 
             try
             {
-                // var categories = await _categoryService.GetAllAsync();
-                // if (categories?.Result == null)
-                // {
-                //     ViewBag.ErrorMessage = "Something wrong";
-                //     return View();
-                // }
-                //
-                // if (!categories.IsSuccess)
-                // {
-                //     ViewBag.ErrorMessage = categories.Error?.Detail ?? "Something wrong";
-                //     return View();
-                // }
-                //
-                // ViewBag.Categories = categories.Result;
-                //
-                // var products = await _productService.FilterProductAsync(filterProduct);
-                // if (products?.Result == null)
-                // {
-                //     ViewBag.ErrorMessage = "Something wrong";
-                //     return View();
-                // }
-                //
-                // if (!products.IsSuccess)
-                // {
-                //     ViewBag.ErrorMessage = products.Error?.Detail ?? "Something wrong";
-                //     return View();
-                // }
-                //
-                // ViewBag.Products = products.Result.Results;
-
                 var fetchCategoryTask = FetchCategoriesAsync();
                 var fetchProductsTask = FetchProductsAsync(filter);
 

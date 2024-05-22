@@ -8,4 +8,6 @@ namespace Shoppy.WebMVC.Services.Interfaces;
 public interface IProductService
 {
     Task<BaseResult<PagingResult<FilterProductResponse>>?> FilterProductAsync(FilterProductRequest request);
+
+    Task<BaseResult<ProductDto>?> GetByIdAsync(Guid id);
 }

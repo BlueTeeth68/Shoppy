@@ -32,6 +32,16 @@ public class ProductService : IProductService
         return result;
     }
 
+    public async Task<BaseResult<ProductDto>?> GetByIdAsync(Guid id)
+    {
+        var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}{BasePath}/{id}");
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<ProductDto>>(content);
+
+        return result;
+    }
+
     private string BuildQueryString(FilterProductRequest request)
     {
         var queryStringBuilder = new StringBuilder();
