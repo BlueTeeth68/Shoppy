@@ -288,4 +288,53 @@ public class UserService : IUserService
             }
         }
     }
+
+    public async Task UpdateCartItemAsync(Guid productId, int quantity, CancellationToken cancellationToken = default)
+    {
+        //check product
+        var product = await _unitOfWork.ProductRepository
+            .GetQueryableSet().Where(p => p.Id == productId && p.Status == ProductStatus.Active)
+            .Select(p => new Product()
+            {
+                Price = p.Price,
+                Quantity = p.Quantity,
+            }).FirstOrDefaultAsync(cancellationToken: cancellationToken)
+            .ContinueWith(t => t.Result ?? throw new NotFoundException($"Product {productId} not found"),
+                cancellationToken);
+
+        //get cart 
+        var user = await _userManager.Users.Where(u => u.Id == _currentUser.UserId)
+            .Include(u => u.Cart)
+            .ThenInclude(c => c.Items)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken)
+            .ContinueWith(t => t.Result ?? throw new NotFoundException("User not found"), cancellationToken);
+
+        //check cartItem exist
+        user.Cart ??= new Cart();
+
+        //Update/add new cart item
+        var existedItem = user.Cart.Items.FirstOrDefault(i => i.ProductId == productId);
+        if (existedItem != null)
+        {
+            existedItem.Quantity = quantity;
+            if (existedItem.Quantity > product.Quantity)
+            {
+                throw new BadRequestException("Cart item quantity exceed product quantity");
+            }
+        }
+        else
+        {
+            var cartItemEntity = new CartItem()
+            {
+                ProductId = productId,
+                Quantity = quantity,
+                CreatedDateTime = DateTime.UtcNow
+            };
+
+            user.Cart.Items.Add(cartItemEntity);
+            user.Cart.TotalItem++;
+        }
+
+        await _userManager.UpdateAsync(user);
+    }
 }

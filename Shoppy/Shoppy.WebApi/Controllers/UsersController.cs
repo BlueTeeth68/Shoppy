@@ -54,6 +54,14 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
+    [HttpPatch("cart/item")]
+    [Authorize]
+    public async Task<IActionResult> UpdateCartQuantity([FromBody] UpdateCartItemCommand request)
+    {
+        await _mediator.Send(request);
+        return Ok();
+    }
+
     [HttpDelete("cart/{productId:guid}")]
     [Authorize]
     public async Task<IActionResult> RemoveFromCartAsync([FromRoute] Guid productId)

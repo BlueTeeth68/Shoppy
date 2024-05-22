@@ -4,11 +4,11 @@ using Shoppy.Application.Services.Interfaces;
 
 namespace Shoppy.Application.Features.Carts.Handlers.Command;
 
-public class RemoveCartItemHandlers: IRequestHandler<RemoveCartItemCommand>
+public class RemoveCartItemHandler: IRequestHandler<RemoveCartItemCommand>
 {
     private readonly IUserService _userService;
 
-    public RemoveCartItemHandlers(IUserService userService)
+    public RemoveCartItemHandler(IUserService userService)
     {
         _userService = userService;
     }

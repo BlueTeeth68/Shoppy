@@ -17,4 +17,5 @@ public interface IUserService
     Task AddToCartAsync(AddCartItemCommand item, CancellationToken cancellationToken = default);
 
     Task RemoveCartItemAsync(Guid productId, CancellationToken cancellationToken = default);
+    Task UpdateCartItemAsync(Guid productId, int quantity, CancellationToken cancellationToken = default);
 }
