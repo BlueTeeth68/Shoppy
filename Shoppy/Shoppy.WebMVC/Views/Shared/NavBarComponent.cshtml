@@ -42,13 +42,14 @@
                         <a asp-action="Index" asp-controller="Home" class="nav-item nav-link @Html.Raw(ViewBag.Active == 1 ? "active" : "")">Home</a>
                         @* <a asp-controller="Books" asp-action="Index" class="nav-item nav-link @Html.Raw(ViewBag.Active == 2 ? "active" : "")">Bookstore</a> *@
                         @* <a asp-controller="Books" asp-action="Detail" class="nav-item nav-link @Html.Raw(ViewBag.Active == 3 ? "active" : "")">Book Detail</a> *@
-                        <div class="nav-item dropdown ">
-                            <a href="#" class="nav-link dropdown-toggle @Html.Raw(ViewBag.Active == 4 ? "active" : "")" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
-                            <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                <a asp-controller="Cart" asp-action="Index" class="dropdown-item">Shopping Cart</a>
-                                <a asp-controller="Cart" asp-action="CheckOut" class="dropdown-item">Checkout</a>
-                            </div>
-                        </div>
+                        <a asp-controller="Order" asp-action="Index" class="nav-item nav-link @Html.Raw(ViewBag.Active == 5 ? "active" : "")">Purchase history</a>
+                        @* <div class="nav-item dropdown "> *@
+                        @*     <a href="#" class="nav-link dropdown-toggle @Html.Raw(ViewBag.Active == 4 ? "active" : "")" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a> *@
+                        @*     <div class="dropdown-menu bg-primary rounded-0 border-0 m-0"> *@
+                        @*         <a asp-controller="Cart" asp-action="Index" class="dropdown-item">Shopping Cart</a> *@
+                        @*         <a asp-controller="Cart" asp-action="CheckOut" class="dropdown-item">Checkout</a> *@
+                        @*     </div> *@
+                        @* </div> *@
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a class="btn px-0 ml-3" asp-controller="Cart" asp-action="Index">

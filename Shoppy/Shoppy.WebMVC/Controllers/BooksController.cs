@@ -12,7 +12,7 @@ public class BooksController : BaseController
     {
         _productService = productService;
     }
-    
+
     // GET
     [HttpGet]
     public async Task<IActionResult> Detail([FromRoute] Guid id)
@@ -30,7 +30,7 @@ public class BooksController : BaseController
 
             await Task.WhenAll(fetchCategoryTask, fetchProductTask, fetchCartTotalItemTask);
 
-            return fetchCategoryTask.Result ?? fetchProductTask.Result ?? View();
+            return fetchCategoryTask.Result ?? fetchProductTask.Result ?? fetchCartTotalItemTask.Result ?? View();
         }
         catch (Exception e)
         {
@@ -58,6 +58,4 @@ public class BooksController : BaseController
         ViewBag.Product = product.Result;
         return null;
     }
-
-    
 }

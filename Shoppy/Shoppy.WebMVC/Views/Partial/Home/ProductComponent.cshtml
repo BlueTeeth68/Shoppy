@@ -106,7 +106,7 @@
             <nav>
                 <ul class="pagination justify-content-center">
 
-                    <li class="page-item @(pageNumber <= 1 ? "disable" : "")">
+                    <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
                         <a class="page-link" asp-controller="Home" asp-action="Index"
                            asp-route-name="@name"
                            asp-route-categoryId="@categoryId"
@@ -139,7 +139,7 @@
                         </li>
                     }
 
-                    <li class="page-item @(pageNumber >= totalPage ? "disable" : "")">
+                    <li class="page-item @(pageNumber >= totalPage ? "disabled" : "")">
                         <a class="page-link" asp-controller="Home" asp-action="Index"
                            asp-route-name="@name"
                            asp-route-categoryId="@categoryId"

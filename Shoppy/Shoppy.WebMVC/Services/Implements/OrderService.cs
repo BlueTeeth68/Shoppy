@@ -1,6 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
+using Shoppy.SharedLibrary.Models.Responses.Orders;
 using Shoppy.WebMVC.Configurations;
 using Shoppy.WebMVC.Services.Interfaces;
 
@@ -31,6 +33,23 @@ public class OrderService : IOrderService
 
         var data = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<object>>(data);
+
+        return result;
+    }
+
+    public async Task<BaseResult<PagingResult<OrderQueryDto>>?> FilterUserOrderAsync(int page, int size, string? accessToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}{BasePath}/account?page={page}&size={size}");
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        var response = await _client.SendAsync(request);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<PagingResult<OrderQueryDto>>>(content);
 
         return result;
     }

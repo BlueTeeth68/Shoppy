@@ -31,7 +31,7 @@ public class OrdersController : ControllerBase
     [HttpGet("account")]
     [Authorize]
     public async Task<ActionResult<BaseResult<PagingResult<OrderQueryDto>>>> GetUserOrderAsync(
-        [FromRoute] GetUserOrderQuery request)
+        [FromQuery] GetUserOrderQuery request)
     {
         var data = await _mediator.Send(request);
         var result = new BaseResult<PagingResult<OrderQueryDto>>()

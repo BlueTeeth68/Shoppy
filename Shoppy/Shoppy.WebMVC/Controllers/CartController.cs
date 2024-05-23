@@ -30,7 +30,7 @@ public class CartController : BaseController
 
             await Task.WhenAll(fetchCategoryTask, fetchCartTask, fetchCartTotalItemTask);
 
-            return fetchCategoryTask.Result ?? fetchCartTask.Result ?? View();
+            return fetchCategoryTask.Result ?? fetchCartTask.Result ?? fetchCartTotalItemTask.Result ?? View();
         }
         catch (Exception e)
         {

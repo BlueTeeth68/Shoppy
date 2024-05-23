@@ -26,6 +26,10 @@ public class CreateCommandHandler : IRequestHandler<CreateOrderCommand>
         if (!_currentUser.IsAuthenticated)
             throw new ForbiddenException("User do not login");
         var cart = await _userService.GetUserCartDetailAsync();
+
+        if (cart.Items.Count == 0)
+            return;
+        
         var order = OrderMapper.CartDtoToOrder(cart);
         order.UserId = _currentUser.UserId;
         await _unitOfWork.OrderRepository.AddAsync(order, cancellationToken);
