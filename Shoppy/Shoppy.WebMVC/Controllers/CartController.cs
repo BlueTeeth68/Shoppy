@@ -61,6 +61,27 @@ public class CartController : BaseController
         }
     }
 
+    [HttpPost]
+    public async Task<IActionResult> RemoveFromCart([FromForm] Guid productId)
+    {
+        var accessToken = HttpContext.Request.Cookies["accessToken"];
+
+        try
+        {
+            var response = await _cartService.RemoveFromCartAsync(productId, accessToken);
+            if (response == null) return RedirectToAction("Index");
+
+            ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
+            return RedirectToAction("Error");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error when fetching cart.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                e.Message);
+            return RedirectToAction("Error");
+        }
+    }
+
     public IActionResult CheckOut()
     {
         return View();

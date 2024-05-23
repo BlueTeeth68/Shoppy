@@ -10,4 +10,6 @@ public interface ICartService
     Task<BaseResult<int>?> GetCartTotalItemAsync(string? accessToken);
 
     Task<BaseResult<object>?> AddToCartAsync(Guid productId, string? accessToken);
+
+    Task<BaseResult<object>?> RemoveFromCartAsync(Guid productId, string? accessToken);
 }

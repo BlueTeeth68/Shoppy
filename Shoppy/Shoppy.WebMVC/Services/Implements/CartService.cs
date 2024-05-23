@@ -86,4 +86,22 @@ public class CartService : ICartService
 
         return result;
     }
+
+    public async Task<BaseResult<object>?> RemoveFromCartAsync(Guid productId, string? accessToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_appSettings.Apis.BaseUrl}{BasePath}/{productId}");
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            // Add the bearer token to the request
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        var response = await _client.SendAsync(request);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<object>>(content);
+
+        return result;
+    }
 }
