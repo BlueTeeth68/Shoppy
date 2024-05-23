@@ -7,12 +7,12 @@ public class BooksController : BaseController
 {
     private IProductService _productService;
 
-    public BooksController(ILogger<HomeController> logger, ICategoryService categoryService,
-        IProductService productService) : base(logger, categoryService)
+    public BooksController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService,
+        IProductService productService) : base(logger, categoryService, cartService)
     {
         _productService = productService;
     }
-
+    
     // GET
     [HttpGet]
     public async Task<IActionResult> Detail([FromRoute] Guid id)
@@ -26,8 +26,9 @@ public class BooksController : BaseController
         {
             var fetchCategoryTask = FetchCategoriesAsync();
             var fetchProductTask = FetchProductAsync(id);
+            var fetchCartTotalItemTask = FetchCartTotalItemAsync();
 
-            await Task.WhenAll(fetchCategoryTask, fetchProductTask);
+            await Task.WhenAll(fetchCategoryTask, fetchProductTask, fetchCartTotalItemTask);
 
             return fetchCategoryTask.Result ?? fetchProductTask.Result ?? View();
         }
@@ -57,4 +58,6 @@ public class BooksController : BaseController
         ViewBag.Product = product.Result;
         return null;
     }
+
+    
 }

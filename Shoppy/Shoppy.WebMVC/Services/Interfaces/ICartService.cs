@@ -6,4 +6,6 @@ namespace Shoppy.WebMVC.Services.Interfaces;
 public interface ICartService
 {
     Task<BaseResult<CartDto>?> GetCartAsync(string? accessToken);
+
+    Task<BaseResult<int>?> GetCartTotalItemAsync(string? accessToken);
 }

@@ -6,12 +6,9 @@ namespace Shoppy.WebMVC.Controllers;
 
 public class CartController : BaseController
 {
-    private readonly ICartService _cartService;
-
     public CartController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService) :
-        base(logger, categoryService)
+        base(logger, categoryService, cartService)
     {
-        _cartService = cartService;
     }
 
     // GET
@@ -23,8 +20,9 @@ public class CartController : BaseController
         {
             var fetchCategoryTask = FetchCategoriesAsync();
             var fetchCartTask = FetchCartAsync(accessToken);
+            var fetchCartTotalItemTask = FetchCartTotalItemAsync();
 
-            await Task.WhenAll(fetchCategoryTask, fetchCartTask);
+            await Task.WhenAll(fetchCategoryTask, fetchCartTask, fetchCartTotalItemTask);
 
             return fetchCategoryTask.Result ?? fetchCartTask.Result ?? View();
         }

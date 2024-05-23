@@ -37,4 +37,22 @@ public class CartService : ICartService
 
         return result;
     }
+
+    public async Task<BaseResult<int>?> GetCartTotalItemAsync(string? accessToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}{BasePath}/totalItem");
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            // Add the bearer token to the request
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        var response = await _client.SendAsync(request);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<int>>(content);
+
+        return result;
+    }
 }

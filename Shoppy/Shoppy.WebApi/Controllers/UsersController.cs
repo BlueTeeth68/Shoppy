@@ -52,6 +52,20 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("cart/totalItem")]
+    [Authorize]
+    public async Task<ActionResult<BaseResult<int>>> GetCartTotalItemAsync()
+    {
+        var data = await _mediator.Send(new GetCartTotalItemQuery());
+        var result = new BaseResult<int>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
+
+        return Ok(result);
+    }
+
     [HttpPost("cart")]
     [Authorize]
     public async Task<IActionResult> AddToCartAsync([FromBody] AddCartItemCommand request)

@@ -10,7 +10,7 @@ namespace Shoppy.WebMVC.Controllers
         private readonly IProductService _productService;
 
         public HomeController(ILogger<HomeController> logger, ICategoryService categoryService,
-            IProductService productService) : base(logger, categoryService)
+            ICartService cartService, IProductService productService) : base(logger, categoryService, cartService)
         {
             _productService = productService;
         }
@@ -56,8 +56,9 @@ namespace Shoppy.WebMVC.Controllers
             {
                 var fetchCategoryTask = FetchCategoriesAsync();
                 var fetchProductsTask = FetchProductsAsync(filter);
+                var fetchCartTotalItemTask = FetchCartTotalItemAsync();
 
-                await Task.WhenAll(fetchCategoryTask, fetchProductsTask);
+                await Task.WhenAll(fetchCategoryTask, fetchProductsTask, fetchCartTotalItemTask);
 
                 return fetchCategoryTask.Result ?? fetchProductsTask.Result ?? View();
             }

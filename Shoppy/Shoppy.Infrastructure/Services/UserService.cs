@@ -215,6 +215,22 @@ public class UserService : IUserService
         return cart;
     }
 
+    public async Task<int> GetCartTotalItemAsync()
+    {
+        var userQuery = _userManager.Users;
+        var user = await userQuery.Where(u => u.Id == _currentUser.UserId)
+            .Select(u => new AppUser
+            {
+                Cart = new Cart()
+                {
+                    TotalItem = u.Cart.TotalItem
+                }
+            })
+            .FirstOrDefaultAsync()
+            .ContinueWith(t => t.Result ?? throw new NotFoundException("User not found"));
+        return user.Cart?.TotalItem ?? 0;
+    }
+
     public async Task AddToCartAsync(AddCartItemCommand item, CancellationToken cancellationToken = default)
     {
         //check product

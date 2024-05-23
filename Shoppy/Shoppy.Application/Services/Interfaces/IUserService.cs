@@ -13,6 +13,7 @@ public interface IUserService
     Task CreateUserDataAsync(int size);
 
     Task<CartDto> GetUserCartDetailAsync();
+    Task<int> GetCartTotalItemAsync();
 
     Task AddToCartAsync(AddCartItemCommand item, CancellationToken cancellationToken = default);
 

@@ -9,12 +9,14 @@ public class BaseController : Controller
 {
     protected readonly ILogger<HomeController> _logger;
     protected readonly ICategoryService _categoryService;
+    protected readonly ICartService _cartService;
 
     // GET
-    public BaseController(ILogger<HomeController> logger, ICategoryService categoryService)
+    public BaseController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService)
     {
         _logger = logger;
         _categoryService = categoryService;
+        _cartService = cartService;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -40,6 +42,29 @@ public class BaseController : Controller
         }
 
         ViewBag.Categories = categories.Result;
+        return null;
+    }
+
+    protected async Task<IActionResult?> FetchCartTotalItemAsync()
+    {
+        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        if (string.IsNullOrEmpty(accessToken))
+            return null;
+        var totalItem = await _cartService.GetCartTotalItemAsync(accessToken);
+        if (totalItem?.Result == null)
+        {
+            ViewBag.ErrorMessage = "Something wrong";
+            return RedirectToAction("Error");
+        }
+
+        if (!totalItem.IsSuccess)
+        {
+            ViewBag.ErrorMessage = totalItem.Error?.Detail ?? "Something wrong";
+            // return View();
+            return RedirectToAction("Error");
+        }
+
+        ViewBag.CartTotalItem = totalItem.Result;
         return null;
     }
 }
