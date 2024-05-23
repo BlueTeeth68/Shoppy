@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Shoppy.Application.Features.Orders.Requests.Query;
-using Shoppy.Application.Features.Orders.Results;
 using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.UnitOfWork;
+using Shoppy.SharedLibrary.Models.Responses.Orders;
 
 namespace Shoppy.Application.Features.Orders.Handlers.Query;
 
-public class GetDetailQueryHandler : IRequestHandler<GetOrderDetailQuery, OrderDetailQuery>
+public class GetDetailQueryHandler : IRequestHandler<GetOrderDetailQuery, OrderDto>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -15,18 +15,19 @@ public class GetDetailQueryHandler : IRequestHandler<GetOrderDetailQuery, OrderD
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<OrderDetailQuery> Handle(GetOrderDetailQuery request, CancellationToken cancellationToken)
+    public async Task<OrderDto> Handle(GetOrderDetailQuery request, CancellationToken cancellationToken)
     {
         var query = _unitOfWork.OrderRepository.GetQueryableSet();
 
         var result = query.Where(o => o.Id == request.Id)
-            .Select(o => new OrderDetailQuery()
+            .Select(o => new OrderDto()
             {
                 Id = o.Id,
                 Status = o.Status,
                 TotalPrice = o.TotalPrice,
                 UserId = o.UserId,
-                Items = o.Items.Select(i => new OrderItemQuery()
+                Date = o.CreatedDateTime,
+                Items = o.Items.Select(i => new OrderItemDto()
                 {
                     Price = i.Price,
                     Quantity = i.Quantity,

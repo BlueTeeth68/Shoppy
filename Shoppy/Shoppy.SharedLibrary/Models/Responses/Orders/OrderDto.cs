@@ -1,8 +1,8 @@
 ﻿using Shoppy.Domain.Constants.Enums;
 
-namespace Shoppy.Application.Features.Orders.Results;
+namespace Shoppy.SharedLibrary.Models.Responses.Orders;
 
-public class OrderDetailQuery
+public class OrderDto
 {
     public Guid Id { get; set; }
 
@@ -11,6 +11,8 @@ public class OrderDetailQuery
     public decimal TotalPrice { get; set; }
 
     public OrderStatus Status { get; set; }
+    
+    public DateTime Date { get; set; }
 
-    public ICollection<OrderItemQuery> Items { get; set; } = new List<OrderItemQuery>();
+    public ICollection<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
 }

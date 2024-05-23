@@ -153,7 +153,6 @@ public class ProductService : IProductService
 
         var baseName = Guid.NewGuid().ToString();
 
-        Product product;
         var products = new List<Product>();
 
         for (var i = 0; i < size; i++)

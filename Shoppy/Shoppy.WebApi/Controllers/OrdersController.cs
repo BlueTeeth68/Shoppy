@@ -1,9 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Orders.Requests.Command;
 using Shoppy.Application.Features.Orders.Requests.Query;
-using Shoppy.Application.Features.Orders.Results;
+using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
+using Shoppy.SharedLibrary.Models.Responses.Orders;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -19,21 +21,37 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateAsync()
     {
         await _mediator.Send(new CreateOrderCommand());
         return Ok();
     }
 
+    [HttpGet("account")]
+    [Authorize]
+    public async Task<ActionResult<BaseResult<PagingResult<OrderQueryDto>>>> GetUserOrderAsync(
+        [FromRoute] GetUserOrderQuery request)
+    {
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<PagingResult<OrderQueryDto>>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
+
+        return Ok(result);
+    }
+
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<OrderDetailQuery>> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<OrderDto>> GetByIdAsync([FromRoute] Guid id)
     {
         var data = await _mediator.Send(new GetOrderDetailQuery()
         {
             Id = id
         });
 
-        var result = new BaseResult<OrderDetailQuery>()
+        var result = new BaseResult<OrderDto>()
         {
             IsSuccess = true,
             Result = data

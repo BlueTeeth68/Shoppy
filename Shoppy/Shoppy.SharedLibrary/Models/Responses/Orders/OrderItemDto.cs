@@ -1,6 +1,8 @@
-﻿namespace Shoppy.Application.Features.Orders.Results;
+﻿using Shoppy.Domain.Constants.Enums;
 
-public class OrderItemQuery
+namespace Shoppy.SharedLibrary.Models.Responses.Orders;
+
+public class OrderItemDto
 {
     public decimal Price { get; set; }
 
