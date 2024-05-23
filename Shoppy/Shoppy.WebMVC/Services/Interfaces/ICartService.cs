@@ -12,4 +12,6 @@ public interface ICartService
     Task<BaseResult<object>?> AddToCartAsync(Guid productId, string? accessToken);
 
     Task<BaseResult<object>?> RemoveFromCartAsync(Guid productId, string? accessToken);
+    
+    Task<BaseResult<object>?> UpdateCartItemAsync(Guid productId, int quantity, string? accessToken);
 }

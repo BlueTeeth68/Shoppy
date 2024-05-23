@@ -19,6 +19,7 @@
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Total</th>
+                    <th>Update</th>
                     <th>Remove</th>
                 </tr>
                 </thead>
@@ -26,39 +27,9 @@
 
                 @foreach (var item in cart.Items)
                 {
-                    totalPrice += item.Price;
+                    totalPrice += item.Price * item.Quantity;
 
-                    <tr>
-                        <td class="text-start">
-                            <img src=@(item.ProductThumbUrl ?? "~/img/product-1.jpg") alt="" style="width: 50px;">
-                            <a asp-controller="Books" asp-action="Detail" asp-route-id="@item.ProductId" class="h6 text-decoration-none text-truncate"> @item.ProductName</a>
-                        </td>
-                        <td class="align-middle">$@item.Price</td>
-                        <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="@item.Quantity">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">$@(item.Price * item.Quantity)</td>
-                        <td class="align-middle">
-                            <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
-                                <input type="hidden" name="productId" value="@item.ProductId"/>
-                                <button class="btn btn-sm btn-danger" type="submit">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
+                    @await Html.PartialAsync("~/Views/Partial/Carts/CartItem.cshtml", item)
                 }
 
                 </tbody>

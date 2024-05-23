@@ -104,4 +104,33 @@ public class CartService : ICartService
 
         return result;
     }
+
+    public async Task<BaseResult<object>?> UpdateCartItemAsync(Guid productId, int quantity, string? accessToken)
+    {
+        var body = new AddCartItemDto
+        {
+            ProductId = productId,
+            Quantity = quantity
+        };
+        var json = JsonConvert.SerializeObject(body);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var request = new HttpRequestMessage(HttpMethod.Patch, $"{_appSettings.Apis.BaseUrl}{BasePath}/item")
+        {
+            Content = content
+        };
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            // Add the bearer token to the request
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        var response = await _client.SendAsync(request);
+
+        var data = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<object>>(data);
+
+        return result;
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shoppy.SharedLibrary.Models.Requests.Carts;
 using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces;
 
@@ -35,14 +36,9 @@ public class CartController : BaseController
         }
     }
 
-    [HttpPost]
+    [HttpPost(Name = "AddToCart")]
     public async Task<IActionResult> AddToCart([FromForm] Guid productId)
     {
-        // if (!Guid.TryParse(productId, out var id))
-        // {
-        //     return RedirectToAction("Error");
-        // }
-
         var accessToken = HttpContext.Request.Cookies["accessToken"];
 
         try
@@ -61,7 +57,7 @@ public class CartController : BaseController
         }
     }
 
-    [HttpPost]
+    [HttpPost(Name = "RemoveFromCart")]
     public async Task<IActionResult> RemoveFromCart([FromForm] Guid productId)
     {
         var accessToken = HttpContext.Request.Cookies["accessToken"];
@@ -81,6 +77,33 @@ public class CartController : BaseController
             return RedirectToAction("Error");
         }
     }
+
+    [HttpPost(Name = "UpdateCartItem")]
+    public async Task<IActionResult> UpdateCartItem([FromForm] UpdateCartItemDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction("Index", dto);
+        }
+
+        var accessToken = HttpContext.Request.Cookies["accessToken"];
+
+        try
+        {
+            var response = await _cartService.UpdateCartItemAsync(dto.ProductId, dto.Quantity, accessToken);
+            if (response == null) return RedirectToAction("Index");
+
+            ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
+            return RedirectToAction("Error");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error when fetching cart.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                e.Message);
+            return RedirectToAction("Error");
+        }
+    }
+
 
     public IActionResult CheckOut()
     {
