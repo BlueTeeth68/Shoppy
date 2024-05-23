@@ -1,23 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
-using Shoppy.WebMVC.Models;
-using System.Diagnostics;
 using Shoppy.SharedLibrary.Models.Requests.Products;
+using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService,
-            ICategoryService categoryService)
+        public HomeController(ILogger<HomeController> logger, ICategoryService categoryService,
+            IProductService productService) : base(logger, categoryService)
         {
-            _logger = logger;
             _productService = productService;
-            _categoryService = categoryService;
         }
 
         [HttpGet]
@@ -47,11 +42,11 @@ namespace Shoppy.WebMVC.Controllers
             {
                 ViewBag.SortName = filter.SortPrice;
             }
-            
+
             if (filter.Page == null || filter.Size == null)
             {
                 filter.Page = 1;
-                filter.Size = 6;
+                filter.Size = 8;
             }
 
             ViewBag.Page = filter.Page;
@@ -74,31 +69,6 @@ namespace Shoppy.WebMVC.Controllers
             }
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        private async Task<IActionResult?> FetchCategoriesAsync()
-        {
-            var categories = await _categoryService.GetAllAsync();
-            if (categories?.Result == null)
-            {
-                ViewBag.ErrorMessage = "Something wrong";
-                return RedirectToAction("Error");
-            }
-
-            if (!categories.IsSuccess)
-            {
-                ViewBag.ErrorMessage = categories.Error?.Detail ?? "Something wrong";
-                // return View();
-                return RedirectToAction("Error");
-            }
-
-            ViewBag.Categories = categories.Result;
-            return null;
-        }
 
         private async Task<IActionResult?> FetchProductsAsync(FilterProductDto filterProduct)
         {
@@ -113,6 +83,11 @@ namespace Shoppy.WebMVC.Controllers
             {
                 ViewBag.ErrorMessage = products.Error?.Detail ?? "Something wrong";
                 return RedirectToAction("Error");
+            }
+
+            foreach (var tmp in products.Result.Results)
+            {
+                tmp.Name = StringUtil.FormatProductName(tmp.Name, 30, 27);
             }
 
             ViewBag.Products = products.Result.Results;

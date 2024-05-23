@@ -42,7 +42,13 @@ public class UsersController : ControllerBase
     [Authorize]
     public async Task<ActionResult<BaseResult<CartDto>>> GetUserCartAsync()
     {
-        var result = await _mediator.Send(new GetUserCartDetailQuery());
+        var data = await _mediator.Send(new GetUserCartDetailQuery());
+        var result = new BaseResult<CartDto>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
+
         return Ok(result);
     }
 

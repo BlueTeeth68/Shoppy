@@ -4,5 +4,5 @@ public class CartDto
 {
     public int TotalItem { get; set; }
 
-    public List<CartItemDto>? Items { get; set; }
+    public List<CartItemDto> Items { get; set; } = [];
 }

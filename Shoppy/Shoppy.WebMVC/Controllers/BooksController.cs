@@ -1,21 +1,15 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Shoppy.WebMVC.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Controllers;
 
-public class BooksController : Controller
+public class BooksController : BaseController
 {
-    private ILogger<BooksController> _logger;
-    private ICategoryService _categoryService;
     private IProductService _productService;
 
-    public BooksController(ILogger<BooksController> logger, ICategoryService categoryService,
-        IProductService productService)
+    public BooksController(ILogger<HomeController> logger, ICategoryService categoryService,
+        IProductService productService) : base(logger, categoryService)
     {
-        _logger = logger;
-        _categoryService = categoryService;
         _productService = productService;
     }
 
@@ -43,31 +37,6 @@ public class BooksController : Controller
                 e.Message);
             return RedirectToAction("Error");
         }
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    private async Task<IActionResult?> FetchCategoriesAsync()
-    {
-        var categories = await _categoryService.GetAllAsync();
-        if (categories?.Result == null)
-        {
-            ViewBag.ErrorMessage = "Something wrong";
-            return View();
-        }
-
-        if (!categories.IsSuccess)
-        {
-            ViewBag.ErrorMessage = categories.Error?.Detail ?? "Something wrong";
-            return View();
-        }
-
-        ViewBag.Categories = categories.Result;
-        return null;
     }
 
     private async Task<IActionResult?> FetchProductAsync(Guid id)
