@@ -9,4 +9,6 @@ public interface IOrderService
     Task<BaseResult<object>?> CreateOrderAsync(string? accessToken);
 
     Task<BaseResult<PagingResult<OrderQueryDto>>?> FilterUserOrderAsync(int page, int size, string? accessToken);
+
+    Task<BaseResult<OrderDto>?> GetOrderByIdAsync(Guid id, string? accessToken);
 }

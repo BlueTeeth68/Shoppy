@@ -1,7 +1,9 @@
 ﻿@model Shoppy.SharedLibrary.Models.Responses.Orders.OrderQueryDto
 
 <tr>
-    <td class="align-middle">@Model.Id</td>
+    <td class="align-middle">
+        <a asp-controller="Order" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none text-truncate">@Model.Id</a>
+    </td>
     <td class="align-middle">@Model.Date</td>
     <td class="align-middle">@Model.Status</td>
     <td class="align-middle">$@Model.TotalPrice</td>

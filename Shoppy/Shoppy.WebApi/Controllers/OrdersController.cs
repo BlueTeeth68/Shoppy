@@ -44,6 +44,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult<OrderDto>> GetByIdAsync([FromRoute] Guid id)
     {
         var data = await _mediator.Send(new GetOrderDetailQuery()

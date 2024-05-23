@@ -56,7 +56,7 @@ public class AuthController : Controller
             var accessTokenCookieOptions = new CookieOptions()
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.JwtSettings.AccessExpireInMinutes)
+                Expires = DateTime.UtcNow.AddMinutes(_appSettings.JwtSettings.AccessExpireInMinutes)
             };
 
             HttpContext.Response.Cookies.Append("email", result.Result.Email ?? "", accessTokenCookieOptions);

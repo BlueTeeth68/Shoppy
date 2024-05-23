@@ -1,0 +1,11 @@
+﻿@model Shoppy.SharedLibrary.Models.Responses.Orders.OrderItemDto;
+
+<tr>
+    <td class="d-flex justify-content-start align-items-start">
+        <img class="me-3" src=@(Model.ProductThumbUrl ?? "~/img/product-1.jpg") alt="" style="width: 50px;">
+        <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.ProductId" class="h6 text-decoration-none text-truncate"> @Model.ProductName</a>
+    </td>
+    <td class="align-middle">$@Model.Price</td>
+    <td class="align-middle">@Model.Quantity</td>
+    <td class="align-middle">$@(Model.Quantity * Model.Price)</td>
+</tr>

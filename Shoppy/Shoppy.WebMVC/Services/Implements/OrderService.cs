@@ -37,9 +37,11 @@ public class OrderService : IOrderService
         return result;
     }
 
-    public async Task<BaseResult<PagingResult<OrderQueryDto>>?> FilterUserOrderAsync(int page, int size, string? accessToken)
+    public async Task<BaseResult<PagingResult<OrderQueryDto>>?> FilterUserOrderAsync(int page, int size,
+        string? accessToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}{BasePath}/account?page={page}&size={size}");
+        var request = new HttpRequestMessage(HttpMethod.Get,
+            $"{_appSettings.Apis.BaseUrl}{BasePath}/account?page={page}&size={size}");
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -50,6 +52,23 @@ public class OrderService : IOrderService
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<PagingResult<OrderQueryDto>>>(content);
+
+        return result;
+    }
+
+    public async Task<BaseResult<OrderDto>?> GetOrderByIdAsync(Guid id, string? accessToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}{BasePath}/{id}");
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        var response = await _client.SendAsync(request);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<OrderDto>>(content);
 
         return result;
     }

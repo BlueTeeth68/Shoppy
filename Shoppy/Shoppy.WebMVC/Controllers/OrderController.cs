@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Controllers;
@@ -40,7 +41,36 @@ public class OrderController : BaseController
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when fetching home page.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+            _logger.LogError("Error when fetching order list.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                e.Message);
+            return RedirectToAction("Error");
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Detail([FromRoute] Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return RedirectToAction("Error");
+        }
+
+        var accessToken = HttpContext.Request.Cookies["accessToken"];
+
+        try
+        {
+            var fetchCategoryTask = FetchCategoriesAsync();
+
+            var fetchCartTotalItemTask = FetchCartTotalItemAsync();
+            var fetchOrderTask = FetchOrderDetailAsync(id, accessToken);
+
+            await Task.WhenAll(fetchCategoryTask, fetchCartTotalItemTask, fetchOrderTask);
+
+            return fetchCategoryTask.Result ?? fetchOrderTask.Result ?? fetchCartTotalItemTask.Result ?? View();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error when fetching order detail.\nDate: {}\nDetail: {}", DateTime.UtcNow,
                 e.Message);
             return RedirectToAction("Error");
         }
@@ -63,6 +93,30 @@ public class OrderController : BaseController
 
         ViewBag.OrderList = orders.Result.Results;
         ViewBag.TotalPage = orders.Result.TotalPages;
+        return null;
+    }
+
+    private async Task<IActionResult?> FetchOrderDetailAsync(Guid id, string? accessToken)
+    {
+        var order = await _orderService.GetOrderByIdAsync(id, accessToken);
+        if (order?.Result == null)
+        {
+            ViewBag.ErrorMessage = "Something wrong";
+            return RedirectToAction("Error");
+        }
+
+        if (!order.IsSuccess)
+        {
+            ViewBag.ErrorMessage = order.Error?.Detail ?? "Something wrong";
+            return RedirectToAction("Error");
+        }
+
+        foreach (var item in order.Result.Items)
+        {
+            item.ProductName = StringUtil.FormatProductName(item.ProductName, 40, 37);
+        }
+
+        ViewBag.Order = order.Result;
         return null;
     }
 }
