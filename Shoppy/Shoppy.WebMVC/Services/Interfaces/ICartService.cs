@@ -8,4 +8,6 @@ public interface ICartService
     Task<BaseResult<CartDto>?> GetCartAsync(string? accessToken);
 
     Task<BaseResult<int>?> GetCartTotalItemAsync(string? accessToken);
+
+    Task<BaseResult<object>?> AddToCartAsync(Guid productId, string? accessToken);
 }

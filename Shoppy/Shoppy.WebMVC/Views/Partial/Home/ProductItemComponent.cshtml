@@ -6,25 +6,19 @@
 
             <img class="img-fluid w-100" src=@(Model.ProductThumbUrl ?? "~/img/product-1.jpg") alt="">
 
-            <div class="product-action">
-                <a class="btn btn-outline-dark btn-square" href="">
-                    <i class="fa fa-shopping-cart"></i>
-                </a>
-                @* <a class="btn btn-outline-dark btn-square" href=""> *@
-                @*     <i class="far fa-heart"></i> *@
-                @* </a> *@
-                @* <a class="btn btn-outline-dark btn-square" href=""> *@
-                @*     <i class="fa fa-sync-alt"></i> *@
-                @* </a> *@
-                @* <a class="btn btn-outline-dark btn-square" href=""> *@
-                @*     <i class="fa fa-search"></i> *@
-                @* </a> *@
-            </div>
+            <form asp-controller="Cart" asp-action="AddToCart" method="post" id="@Model.Id">
+                <div class="product-action">
+                    <input type="hidden" name="productId" value="@Model.Id"/>
+                    <button class="btn btn-outline-dark btn-square" type="submit">
+                        <i class="fa fa-shopping-cart"></i>
+                    </button>
+                </div>
+            </form>
         </div>
         <div class="text-center py-4">
-            <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none text-truncate">@Model?.Name</a>
+            <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none text-truncate">@Model.Name</a>
             <div class="d-flex align-items-center justify-content-center mt-2">
-                <h5>$@Model?.Price</h5>
+                <h5>$@Model.Price</h5>
                 @* <h6 class="text-muted ml-2"> *@
                 @*     <del>$123.00</del> *@
                 @* </h6> *@

@@ -26,8 +26,9 @@
                     foreach (var item in cart.Items)
                     {
                         <tr>
-                            <td class="align-middle">
-                                <img src=@(item.ProductThumbUrl ?? "~/img/product-1.jpg") alt="" style="width: 50px;">@item.ProductName
+                            <td class="text-start">
+                                <img src=@(item.ProductThumbUrl ?? "~/img/product-1.jpg") alt="" style="width: 50px;">
+                                <a asp-controller="Books" asp-action="Detail" asp-route-id="@item.ProductId" class="h6 text-decoration-none text-truncate"> @item.ProductName</a>
                             </td>
                             <td class="align-middle">$@item.Price</td>
                             <td class="align-middle">

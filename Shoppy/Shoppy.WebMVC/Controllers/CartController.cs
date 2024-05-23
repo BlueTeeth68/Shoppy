@@ -12,6 +12,7 @@ public class CartController : BaseController
     }
 
     // GET
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         var accessToken = HttpContext.Request.Cookies["accessToken"];
@@ -25,6 +26,32 @@ public class CartController : BaseController
             await Task.WhenAll(fetchCategoryTask, fetchCartTask, fetchCartTotalItemTask);
 
             return fetchCategoryTask.Result ?? fetchCartTask.Result ?? View();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error when fetching cart.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                e.Message);
+            return RedirectToAction("Error");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddToCart([FromForm] Guid productId)
+    {
+        // if (!Guid.TryParse(productId, out var id))
+        // {
+        //     return RedirectToAction("Error");
+        // }
+
+        var accessToken = HttpContext.Request.Cookies["accessToken"];
+
+        try
+        {
+            var response = await _cartService.AddToCartAsync(productId, accessToken);
+            if (response == null) return RedirectToAction("Index");
+
+            ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
+            return RedirectToAction("Error");
         }
         catch (Exception e)
         {

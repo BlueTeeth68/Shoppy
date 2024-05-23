@@ -1,6 +1,8 @@
 ﻿using System.Net.Http.Headers;
+using System.Text;
 using Newtonsoft.Json;
 using Shoppy.SharedLibrary.Models.Base;
+using Shoppy.SharedLibrary.Models.Requests.Carts;
 using Shoppy.SharedLibrary.Models.Responses.Carts;
 using Shoppy.WebMVC.Configurations;
 using Shoppy.WebMVC.Services.Interfaces;
@@ -52,6 +54,35 @@ public class CartService : ICartService
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<int>>(content);
+
+        return result;
+    }
+
+    public async Task<BaseResult<object>?> AddToCartAsync(Guid productId, string? accessToken)
+    {
+        var body = new AddCartItemDto
+        {
+            ProductId = productId,
+            Quantity = 1
+        };
+        var json = JsonConvert.SerializeObject(body);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_appSettings.Apis.BaseUrl}{BasePath}")
+        {
+            Content = content
+        };
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            // Add the bearer token to the request
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        var response = await _client.SendAsync(request);
+
+        var data = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<object>>(data);
 
         return result;
     }
