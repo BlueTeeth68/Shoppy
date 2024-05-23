@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shoppy.Application.Features.Categories.Requests.Query;
 using Shoppy.Application.Features.Orders.Requests.Command;
 using Shoppy.Application.Features.Orders.Requests.Query;
 using Shoppy.Application.Features.Orders.Results;
@@ -20,15 +19,10 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseResult<Guid>>> CreateAsync([FromBody] CreateOrderCommand request)
+    public async Task<IActionResult> CreateAsync()
     {
-        var data = await _mediator.Send(request);
-        var result = new BaseResult<Guid>()
-        {
-            IsSuccess = true,
-            Result = data
-        };
-        return Created(nameof(CreateAsync), result);
+        await _mediator.Send(new CreateOrderCommand());
+        return Ok();
     }
 
     [HttpGet("{id:guid}")]

@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Common\Base\" />
       <Folder Include="Features\Authentication\Handlers\Query\" />
       <Folder Include="Features\Authentication\Requests\Query\" />
       <Folder Include="Features\Authentication\Results\Query\" />

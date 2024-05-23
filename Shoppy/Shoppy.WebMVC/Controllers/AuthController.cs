@@ -122,7 +122,7 @@ public class AuthController : Controller
     {
         foreach (var option in options)
         {
-            HttpContext.Response.Cookies.Append(option.Key, option.Value?.ToString() ?? "", cookieOptions);
+            HttpContext.Response.Cookies.Append(option.Key, option.Value.ToString() ?? "", cookieOptions);
         }
 
         return Task.CompletedTask;
@@ -133,7 +133,7 @@ public class AuthController : Controller
         var accessTokenCookieOptions = new CookieOptions()
         {
             HttpOnly = true,
-            Expires = DateTime.UtcNow.AddHours(_appSettings.JwtSettings.AccessExpireInMinutes)
+            Expires = DateTime.UtcNow.AddMinutes(_appSettings.JwtSettings.AccessExpireInMinutes)
         };
 
         var refreshTokenCookieOptions = new CookieOptions()

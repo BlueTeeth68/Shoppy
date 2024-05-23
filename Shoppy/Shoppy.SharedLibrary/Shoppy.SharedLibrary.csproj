@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Shoppy.Domain\Shoppy.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Requests\Orders\" />
+  </ItemGroup>
+
 </Project>

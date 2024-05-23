@@ -353,4 +353,28 @@ public class UserService : IUserService
 
         await _userManager.UpdateAsync(user);
     }
+
+    public async Task RemoveCartAsync(CancellationToken cancellationToken = default)
+    {
+        var user = await _userManager.Users.Where(u => u.Id == _currentUser.UserId)
+            .Select(u => new AppUser()
+            {
+                CartId = u.CartId
+            }).FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        if (user == null)
+            throw new NotFoundException("User not found");
+
+        if (user.CartId.HasValue)
+        {
+            await _unitOfWork.CartItemRepository.GetQueryableSet()
+                .Where(i => i.CartId == user.CartId.Value)
+                .ExecuteDeleteAsync(cancellationToken);
+
+            await _unitOfWork.CartRepository.GetQueryableSet()
+                .Where(c => c.Id == user.CartId.Value)
+                .ExecuteUpdateAsync(c => c.SetProperty(cart => cart.TotalItem, 0),
+                    cancellationToken: cancellationToken);
+        }
+    }
 }

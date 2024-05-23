@@ -7,9 +7,13 @@ namespace Shoppy.WebMVC.Controllers;
 
 public class CartController : BaseController
 {
-    public CartController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService) :
+    private readonly IOrderService _orderService;
+
+    public CartController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService,
+        IOrderService orderService) :
         base(logger, categoryService, cartService)
     {
+        _orderService = orderService;
     }
 
     // GET
@@ -105,9 +109,25 @@ public class CartController : BaseController
     }
 
 
-    public IActionResult CheckOut()
+    [HttpPost]
+    public async Task<IActionResult> CheckOut()
     {
-        return View();
+        var accessToken = HttpContext.Request.Cookies["accessToken"];
+
+        try
+        {
+            var response = await _orderService.CreateOrderAsync(accessToken);
+            if (response == null || response.IsSuccess) return RedirectToAction("Index");
+
+            ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
+            return RedirectToAction("Error");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error when fetching cart.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                e.Message);
+            return RedirectToAction("Error");
+        }
     }
 
     private async Task<IActionResult?> FetchCartAsync(string? accessToken)
