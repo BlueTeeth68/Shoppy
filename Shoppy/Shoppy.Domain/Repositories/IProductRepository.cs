@@ -7,4 +7,6 @@ namespace Shoppy.Domain.Repositories;
 public interface IProductRepository: IBaseRepository<Product, Guid>
 {
     Task<bool> ExistByExpressionAsync(Expression<Func<Product, bool>> expression, CancellationToken cancellationToken = default);
+
+    Task UpdateAvgRateAsync(Guid id, decimal? value);
 }

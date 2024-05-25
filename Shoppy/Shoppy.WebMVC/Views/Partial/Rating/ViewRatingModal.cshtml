@@ -1,0 +1,43 @@
+﻿@model Shoppy.SharedLibrary.Models.Responses.Orders.RatingDto
+
+<!-- Button trigger modal -->
+<div data-bs-toggle="modal" data-bs-target="#view_@(Model.Id)">
+    <button type="button" class="btn btn-primary">
+        View review
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="view_@(Model.Id)" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rate product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @* Rate section *@
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="stars">
+                                <i class="fa-solid fa-star @(Model.RateValue >= 1 ? "view_star" : "star")"></i>
+                                <i class="fa-solid fa-star @(Model.RateValue >= 2 ? "view_star" : "star")"></i>
+                                <i class="fa-solid fa-star @(Model.RateValue >= 3 ? "view_star" : "star")"></i>
+                                <i class="fa-solid fa-star @(Model.RateValue >= 4 ? "view_star" : "star")"></i>
+                                <i class="fa-solid fa-star @(Model.RateValue >= 5 ? "view_star" : "star")"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-form-label text-start" for="view_comment_@(Model.Id)">Comment:</label>
+                    <textarea class="form-control" id="view_comment_@(Model.Id)" disabled="disabled">@(Model.Comment)</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

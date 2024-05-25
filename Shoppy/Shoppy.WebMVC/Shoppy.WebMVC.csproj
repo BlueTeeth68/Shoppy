@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Middleware\" />
     <Folder Include="Views\Partial\Books\" />
     <Folder Include="wwwroot\img\mordernize\" />
   </ItemGroup>

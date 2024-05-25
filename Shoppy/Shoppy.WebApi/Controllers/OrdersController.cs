@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Orders.Requests.Command;
 using Shoppy.Application.Features.Orders.Requests.Query;
+using Shoppy.Application.Features.ProductRatings.Request.Command;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Responses.Orders;
@@ -45,7 +46,7 @@ public class OrdersController : ControllerBase
 
     [HttpGet("{id:guid}")]
     [Authorize]
-    public async Task<ActionResult<OrderDto>> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<BaseResult<OrderDto>>> GetByIdAsync([FromRoute] Guid id)
     {
         var data = await _mediator.Send(new GetOrderDetailQuery()
         {
@@ -58,5 +59,13 @@ public class OrdersController : ControllerBase
             Result = data
         };
         return Ok(result);
+    }
+
+    [HttpPost("{id:guid}/rating")]
+    [Authorize]
+    public async Task<IActionResult> AddRatingAsync([FromBody] CreateRatingCommand request)
+    {
+        await _mediator.Send(request);
+        return Ok();
     }
 }

@@ -59,10 +59,14 @@ public class AuthController : Controller
                 Expires = DateTime.UtcNow.AddMinutes(_appSettings.JwtSettings.AccessExpireInMinutes)
             };
 
-            HttpContext.Response.Cookies.Append("email", result.Result.Email ?? "", accessTokenCookieOptions);
-            HttpContext.Response.Cookies.Append("accessToken", result.Result.AccessToken,
-                accessTokenCookieOptions);
-            HttpContext.Response.Cookies.Append("fullName", result.Result.FullName, accessTokenCookieOptions);
+            var accessOptions = new Dictionary<string, object>()
+            {
+                { "email", result.Result.Email ?? "" },
+                { "accessToken", result.Result.AccessToken },
+                { "fullName", result.Result.FullName }
+            };
+
+            await AddCookieOptionsAsync(accessOptions, accessTokenCookieOptions);
 
             return RedirectToAction("Index", "Home");
         }

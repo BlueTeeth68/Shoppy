@@ -5,5 +5,6 @@ namespace Shoppy.Domain.Repositories;
 
 public interface IOrderItemRepository: IBaseRepository<OrderItem, Guid>
 {
+    Task<List<OrderItem>> GetProductOrderDetailAsync(Guid productId);
     
 }

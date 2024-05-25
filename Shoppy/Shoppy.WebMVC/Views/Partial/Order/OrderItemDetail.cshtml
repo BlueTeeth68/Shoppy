@@ -8,4 +8,10 @@
     <td class="align-middle">$@Model.Price</td>
     <td class="align-middle">@Model.Quantity</td>
     <td class="align-middle">$@(Model.Quantity * Model.Price)</td>
+    <td class="align-middle">
+        @(Model.RatingDto != null
+            ? await Html.PartialAsync("~/Views/Partial/Rating/ViewRatingModal.cshtml", Model.RatingDto)
+            : await Html.PartialAsync("~/Views/Partial/Rating/RatingModal.cshtml", Model.Id.ToString())
+        )
+    </td>
 </tr>

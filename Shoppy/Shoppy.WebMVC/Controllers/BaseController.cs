@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Shoppy.WebMVC.ExceptionHandlers;
 using Shoppy.WebMVC.Models;
 using Shoppy.WebMVC.Services.Interfaces;
 
@@ -66,5 +67,16 @@ public class BaseController : Controller
 
         ViewBag.CartTotalItem = totalItem.Result;
         return null;
+    }
+
+    protected string GetAccessTokenAsync()
+    {
+        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            throw new NotLoginException("User do not login");
+        }
+
+        return accessToken;
     }
 }

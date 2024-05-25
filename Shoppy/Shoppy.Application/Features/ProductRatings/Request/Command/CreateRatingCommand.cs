@@ -1,12 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using Shoppy.SharedLibrary.Models.Requests.Rating;
 
 namespace Shoppy.Application.Features.ProductRatings.Request.Command;
 
-public record CreateRatingCommand
+public class CreateRatingCommand : AddRatingDto, IRequest
 {
-    [Required] [Range(0.5, 5)] public int RateValue { get; set; }
-
-    [StringLength(250)] public string? Comment { get; set; }
-
-    public Guid ProductId { get; set; }
 }

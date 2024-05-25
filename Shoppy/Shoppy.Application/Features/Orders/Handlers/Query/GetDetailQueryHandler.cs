@@ -29,11 +29,21 @@ public class GetDetailQueryHandler : IRequestHandler<GetOrderDetailQuery, OrderD
                 Date = o.CreatedDateTime,
                 Items = o.Items.Select(i => new OrderItemDto()
                 {
+                    Id = i.Id,
                     Price = i.Price,
                     Quantity = i.Quantity,
+                    IsReview = i.IsReviewed,
                     ProductThumbUrl = i.Product.ProductThumbUrl,
                     ProductName = i.Product.Name,
-                    ProductId = i.ProductId
+                    ProductId = i.ProductId,
+                    RatingDto = i.ProductRating != null
+                        ? new RatingDto()
+                        {
+                            Id = i.ProductRating.Id,
+                            RateValue = i.ProductRating.RateValue,
+                            Comment = i.ProductRating.Comment
+                        }
+                        : null
                 }).ToList()
             }).FirstOrDefault();
 

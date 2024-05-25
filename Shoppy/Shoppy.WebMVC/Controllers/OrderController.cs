@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shoppy.SharedLibrary.Models.Requests.Rating;
 using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces;
 
@@ -28,7 +29,7 @@ public class OrderController : BaseController
         ViewBag.Page = page;
         ViewBag.Size = size;
 
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        var accessToken = GetAccessTokenAsync();
         try
         {
             var fetchCategoryTask = FetchCategoriesAsync();
@@ -55,7 +56,9 @@ public class OrderController : BaseController
             return RedirectToAction("Error");
         }
 
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        ViewBag.OrderId = id;
+
+        var accessToken = GetAccessTokenAsync();
 
         try
         {
@@ -71,6 +74,29 @@ public class OrderController : BaseController
         catch (Exception e)
         {
             _logger.LogError("Error when fetching order detail.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                e.Message);
+            return RedirectToAction("Error");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddReview(AddRatingDto dto, Guid orderId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction("Detail", new { id = orderId });
+        }
+
+        var accessToken = GetAccessTokenAsync();
+
+        try
+        {
+            var result =  await AddReviewAsync(dto, accessToken);
+            return result ?? RedirectToAction("Detail", new { id = orderId });
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error when add review.\nDate: {}\nDetail: {}", DateTime.UtcNow,
                 e.Message);
             return RedirectToAction("Error");
         }
@@ -118,5 +144,14 @@ public class OrderController : BaseController
 
         ViewBag.Order = order.Result;
         return null;
+    }
+
+    private async Task<IActionResult?> AddReviewAsync(AddRatingDto dto, string? accessToken)
+    {
+        var data = await _orderService.AddReviewAsync(dto, accessToken);
+        if (data is not { IsSuccess: false }) return null;
+
+        ViewBag.ErrorMessage = data.Error?.Detail ?? "Something wrong";
+        return RedirectToAction("Error");
     }
 }

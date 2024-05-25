@@ -39,5 +39,7 @@ public class Product : BaseEntity<Guid>, IAggregateRoot
 
     public virtual ProductCategory Category { get; set; } = null!;
 
-    public virtual ICollection<ProductImage> Images { get; set; } = new Collection<ProductImage>();
+    public virtual ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+
+    public virtual ICollection<OrderItem> OrderDetails { get; set; } = new List<OrderItem>();
 }

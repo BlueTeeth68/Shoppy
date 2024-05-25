@@ -16,10 +16,15 @@ public class ProductRepository : BaseRepository<Product, Guid>, IProductReposito
     public async Task<bool> ExistByExpressionAsync(Expression<Func<Product, bool>> expression,
         CancellationToken cancellationToken = default)
     {
-        var query = DbSet;
         var result = await DbSet.Where(expression)
             .Select(p => p.Id)
             .FirstOrDefaultAsync(cancellationToken);
         return result != Guid.Empty;
+    }
+
+    public async Task UpdateAvgRateAsync(Guid id, decimal? value)
+    {
+        var result = await DbSet.Where(p => p.Id == id)
+            .ExecuteUpdateAsync(p => p.SetProperty(product => product.AvgRate, value));
     }
 }

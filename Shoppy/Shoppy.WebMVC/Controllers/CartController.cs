@@ -20,7 +20,7 @@ public class CartController : BaseController
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        var accessToken = GetAccessTokenAsync();
 
         try
         {
@@ -43,7 +43,7 @@ public class CartController : BaseController
     [HttpPost(Name = "AddToCart")]
     public async Task<IActionResult> AddToCart([FromForm] Guid productId)
     {
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        var accessToken = GetAccessTokenAsync();
 
         try
         {
@@ -64,7 +64,7 @@ public class CartController : BaseController
     [HttpPost(Name = "RemoveFromCart")]
     public async Task<IActionResult> RemoveFromCart([FromForm] Guid productId)
     {
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        var accessToken = GetAccessTokenAsync();
 
         try
         {
@@ -90,7 +90,7 @@ public class CartController : BaseController
             return RedirectToAction("Index", dto);
         }
 
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        var accessToken = GetAccessTokenAsync();
 
         try
         {
@@ -112,7 +112,7 @@ public class CartController : BaseController
     [HttpPost]
     public async Task<IActionResult> CheckOut()
     {
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
+        var accessToken = GetAccessTokenAsync();
 
         try
         {

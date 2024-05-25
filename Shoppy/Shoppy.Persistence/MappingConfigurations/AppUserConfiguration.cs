@@ -26,10 +26,6 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne()
             .IsRequired(false);
 
-        builder.HasMany<ProductRating>()
-            .WithOne()
-            .HasForeignKey(pr => pr.UserId);
-
         builder.HasMany<Order>()
             .WithOne()
             .HasForeignKey(o => o.UserId);

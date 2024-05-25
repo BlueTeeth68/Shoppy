@@ -1,4 +1,5 @@
 using Shoppy.WebMVC.Configurations;
+using Shoppy.WebMVC.Middleware;
 using Shoppy.WebMVC.Services.Implements;
 using Shoppy.WebMVC.Services.Interfaces;
 
@@ -37,6 +38,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+//middleware
+
+app.UseMiddleware<LoginMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
