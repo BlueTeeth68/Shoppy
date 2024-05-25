@@ -35,6 +35,15 @@ public static class PresentationExtensions
         });
 
         services.AddAuthorization();
+        
+        services.AddCors(options =>
+            {
+                options.AddPolicy(name: "public_policy",
+                    //Define cors URL 
+                    policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                );
+            }
+        );
 
         services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

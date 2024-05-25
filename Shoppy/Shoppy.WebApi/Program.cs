@@ -41,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("public_policy");
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

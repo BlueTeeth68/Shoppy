@@ -5,7 +5,7 @@ import productImg2 from "../../assets/images/products/s5.jpg";
 import productImg3 from "../../assets/images/products/s7.jpg";
 import productImg4 from "../../assets/images/products/s11.jpg";
 
-export function Index() {
+export function Dashboard() {
     return (<>
         <Sidebar />
         {/* < !--Main wrapper-- > */}
@@ -13,6 +13,7 @@ export function Index() {
             {/* <!--  Header Start --> */}
             <Header />
             {/* <!--  Header End --> */}
+
             <div className="container-fluid">
                 {/* <!--  Row 1 --> */}
                 <div className="row">
