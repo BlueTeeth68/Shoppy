@@ -13,8 +13,6 @@ public class Product : BaseEntity<Guid>, IAggregateRoot
 
     [StringLength(250)] public string? ProductThumbUrl { get; set; }
 
-    [StringLength(100)] public string Sku { get; set; } = null!;
-
     [StringLength(100)] public string? AuthorName { get; set; }
 
     [StringLength(100)] public string? Publisher { get; set; }

@@ -11,8 +11,6 @@ public record UpdateProductCommand: IRequest
     
     public string? Description { get; init; }
 
-    [MaxLength(100)] public string? Sku { get; init; }
-
     [MaxLength(100)] public string? AuthorName { get; init; }
 
     [MaxLength(100)] public string? Publisher { get; init; }

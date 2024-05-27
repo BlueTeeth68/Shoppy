@@ -12,8 +12,6 @@ public class ProductDto
 
     public string? ProductThumbUrl { get; set; }
 
-    public string? Sku { get; set; } = null!;
-
     public string? AuthorName { get; set; }
 
     public string? Publisher { get; set; }

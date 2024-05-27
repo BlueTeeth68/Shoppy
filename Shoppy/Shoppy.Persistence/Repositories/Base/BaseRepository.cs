@@ -12,7 +12,7 @@ namespace Shoppy.Persistence.Repositories.Base;
 public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
     where T : BaseEntity<TKey>, IAggregateRoot
 {
-    private AppDbContext _dbContext;
+    protected AppDbContext _dbContext;
 
     protected ILogger<T> Logger;
 

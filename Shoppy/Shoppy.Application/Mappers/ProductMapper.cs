@@ -12,7 +12,6 @@ public static class ProductMapper
         {
             Name = dto.Name,
             Description = dto.Description,
-            Sku = dto.Sku,
             AuthorName = dto.AuthorName,
             Publisher = dto.Publisher,
             NumberOfPage = dto.NumberOfPage,
@@ -30,7 +29,6 @@ public static class ProductMapper
             Id = entity.Id,
             Name = entity.Name,
             Description = entity.Description,
-            Sku = entity.Sku,
             AuthorName = entity.AuthorName,
             Publisher = entity.Publisher,
             NumberOfPage = entity.NumberOfPage,
@@ -56,11 +54,6 @@ public static class ProductMapper
         if (!string.IsNullOrEmpty(dto.Description))
         {
             entity.Description = dto.Description;
-        }
-
-        if (!string.IsNullOrEmpty(dto.Sku))
-        {
-            entity.Sku = dto.Sku;
         }
 
         if (!string.IsNullOrEmpty(dto.AuthorName))

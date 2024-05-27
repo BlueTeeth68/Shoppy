@@ -33,6 +33,7 @@ public class CreateCommandHandler : IRequestHandler<CreateOrderCommand>
         var order = OrderMapper.CartDtoToOrder(cart);
         order.UserId = _currentUser.UserId;
         await _unitOfWork.OrderRepository.AddAsync(order, cancellationToken);
+        
         await _unitOfWork.SaveChangeAsync();
         await _userService.RemoveCartAsync(cancellationToken);
     }

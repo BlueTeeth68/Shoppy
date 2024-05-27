@@ -66,7 +66,7 @@ public class ProductService : IProductService
             }
 
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q =>
-                q.OrderByDescending(u => u.UpdatedDateTime);
+                q.OrderByDescending(u => u.CreatedDateTime);
 
             if (filter.SortName != null && filter.SortName.Trim().ToLower().Equals("asc"))
             {
@@ -162,7 +162,6 @@ public class ProductService : IProductService
                 Id = Guid.NewGuid(),
                 Name = $"Product_{baseName}",
                 Quantity = 1000,
-                Sku = $"{baseName}_{i}",
                 ProductThumbUrl = "https://m.media-amazon.com/images/I/81XWahQULEL._SY425_.jpg",
                 CreatedDateTime = DateTime.UtcNow,
                 Price = 15,

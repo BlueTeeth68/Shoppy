@@ -2,6 +2,7 @@ import { Chip, Grid } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import PropTypes from 'prop-types';
 import "./productList.css";
+import defaultBookImg from "./../../assets/images/logos/default_book_img.png";
 
 const columns = (convertStatus) => [
     {
@@ -15,7 +16,7 @@ const columns = (convertStatus) => [
             return (
                 <Grid container spacing={0} className="my-2">
                     <Grid item xs={4}>
-                        <img src={params.value.productThumbUrl} className="rounded float-start productList-thumb" alt="Product image" />
+                        <img src={params.value.productThumbUrl ?? defaultBookImg} className="rounded float-start productList-thumb" alt="Product image" />
                     </Grid>
                     <Grid item xs={8}>
                         <p className="mb-0">{params.value.name}</p>

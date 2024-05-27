@@ -9,11 +9,6 @@ public class CreateProductCommand : IRequest<Guid>
     [StringLength(250)]public string Name { get; init; } = null!;
 
     public string? Description { get; init; }
-
-    [Required]
-    [MaxLength(100)]
-    public string Sku { get; init; } = null!;
-
     [MaxLength(100)]
     public string? AuthorName { get; init; }
 

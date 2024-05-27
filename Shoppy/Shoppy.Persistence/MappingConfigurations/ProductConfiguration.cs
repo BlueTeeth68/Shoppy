@@ -27,9 +27,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         #region Create index
 
-        builder.HasIndex(p => p.Sku)
-            .IsUnique();
-
         builder.HasIndex(p => p.IsDelete);
 
         builder.HasIndex(p => p.Name);
@@ -47,7 +44,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 Id = new Guid("9243d741-a350-4067-bb29-395e9becf57e"),
                 Name = "Economix",
                 CreatedDateTime = DateTime.UtcNow,
-                Sku = "9243d741-a350-4067-bb29-395e9becf57e",
                 Price = 10,
                 Quantity = 1000,
                 NumberOfPage = 310,
@@ -62,7 +58,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 Id = new Guid("e21f3a87-20d5-420e-ba33-9108df996747"),
                 Name = "Outliers",
                 CreatedDateTime = DateTime.UtcNow,
-                Sku = "e21f3a87-20d5-420e-ba33-9108df996747",
                 Price = 10,
                 Quantity = 1000,
                 NumberOfPage = 416,

@@ -19,3 +19,13 @@ export const filterProductListApi = async (filter) => {
     const response = await instance.get(`products?${queryString}`);
     return response.data;
 };
+
+export const createApi = async (data) => {
+    const response = await instance.post(`products`, data);
+    return response.data;
+}
+
+export const getCategoriesApi = async () => {
+    const response = await instance.get(`categories`);
+    return response.data;
+}

@@ -22,12 +22,12 @@ public class UpdateCommandHandler : IRequestHandler<UpdateProductCommand>
         if (entity is null)
             throw new NotFoundException("Product has been deleted.");
 
-        if (!string.IsNullOrEmpty(request.Sku))
-        {
-            if (await _unitOfWork.ProductRepository.ExistByExpressionAsync(c => c.Sku == request.Sku,
-                    cancellationToken))
-                throw new ConflictException("Product sku has been existed");
-        }
+        // if (!string.IsNullOrEmpty(request.Sku))
+        // {
+        //     if (await _unitOfWork.ProductRepository.ExistByExpressionAsync(c => c.Sku == request.Sku,
+        //             cancellationToken))
+        //         throw new ConflictException("Product sku has been existed");
+        // }
 
         if (request.CategoryId != null)
         {
