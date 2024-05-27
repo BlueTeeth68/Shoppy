@@ -5,8 +5,7 @@ import {
     UnauthenticatedPages,
 } from "../../services/auth/authPage";
 
-// eslint-disable-next-line react/prop-types
-const PrivateRoute = ({ page, component: Component }) => {
+const PrivateRoute = ({ page: page, component: Component }) => {
     const location = useLocation();
 
     const userString = localStorage.getItem("user");

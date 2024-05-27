@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import logo from "../../assets/images/logos/dark-logo.svg";
+import { Book, CreateNewFolder, PeopleAlt } from "@mui/icons-material";
 
 export function Sidebar() {
 
@@ -22,43 +24,37 @@ export function Sidebar() {
                             <span className="hide-menu">Home</span>
                         </li>
                         <li className="sidebar-item">
-                            <a className="sidebar-link active" href="./index.html" aria-expanded="false">
+                            <Link to={"/home"} className="sidebar-link active" aria-expanded="false">
                                 <span>
                                     <i className="ti ti-layout-dashboard"></i>
                                 </span>
                                 <span className="hide-menu">Dashboard</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-small-cap">
                             <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span className="hide-menu">MANAGEMENT</span>
                         </li>
                         <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
-                                <span>
-                                    <i className="ti ti-article"></i>
-                                </span>
+                            <Link to={"/user"} className="sidebar-link" aria-expanded="false">
+                            <PeopleAlt />
                                 <span className="hide-menu">User</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
-                                <span>
-                                    <i className="ti ti-article"></i>
-                                </span>
+                            <Link to={"/category"} className="sidebar-link" aria-expanded="false">
+                                <CreateNewFolder />
                                 <span className="hide-menu">Category</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="sidebar-item">
-                            <a className="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
-                                <span>
-                                    <i className="ti ti-article"></i>
-                                </span>
+                            <Link to={"/books"} className="sidebar-link" aria-expanded="false">
+                                <Book />
                                 <span className="hide-menu">Book</span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
-                    
+
                 </nav>
                 {/* <!-- End Sidebar navigation --> */}
             </div>
