@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Book, CreateNewFolder, PeopleAlt } from "@mui/icons-material";
+import PropTypes from 'prop-types';
 
-export function Sidebar() {
+export function Sidebar({ activeMenu }) {
 
     return (
         <aside className="left-sidebar">
@@ -26,7 +27,7 @@ export function Sidebar() {
                             <span className="hide-menu">Home</span>
                         </li>
                         <li className="sidebar-item">
-                            <Link to={"/home"} className="sidebar-link active" aria-expanded="false">
+                            <Link to={"/home"} className={`sidebar-link ${activeMenu === 1 ? "active" : ""}`} aria-expanded="false">
                                 <span>
                                     <i className="ti ti-layout-dashboard"></i>
                                 </span>
@@ -38,19 +39,19 @@ export function Sidebar() {
                             <span className="hide-menu">MANAGEMENT</span>
                         </li>
                         <li className="sidebar-item">
-                            <Link to={"/user"} className="sidebar-link" aria-expanded="false">
+                            <Link to={"/users"} className={`sidebar-link ${activeMenu === 2 ? "active" : ""}`} aria-expanded="false">
                                 <PeopleAlt />
                                 <span className="hide-menu">User</span>
                             </Link>
                         </li>
                         <li className="sidebar-item">
-                            <Link to={"/category"} className="sidebar-link" aria-expanded="false">
+                            <Link to={"/categories"} className={`sidebar-link ${activeMenu === 3 ? "active" : ""}`} aria-expanded="false">
                                 <CreateNewFolder />
                                 <span className="hide-menu">Category</span>
                             </Link>
                         </li>
                         <li className="sidebar-item">
-                            <Link to={"/books"} className="sidebar-link" aria-expanded="false">
+                            <Link to={"/books"} className={`sidebar-link ${activeMenu === 4 ? "active" : ""}`} aria-expanded="false">
                                 <Book />
                                 <span className="hide-menu">Book</span>
                             </Link>
@@ -63,4 +64,8 @@ export function Sidebar() {
             {/* <!-- End Sidebar scroll--> */}
         </aside>
     );
+}
+
+Sidebar.propTypes = {
+    activeMenu: PropTypes.number
 }

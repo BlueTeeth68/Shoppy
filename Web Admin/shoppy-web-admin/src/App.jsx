@@ -5,6 +5,7 @@ import "react-toastify/ReactToastify.css";
 import PrivateRoute from './components/auth/PrivateRoute';
 import { Dashboard } from './screens/dashboard';
 import { Product } from './screens/product';
+import { User } from './screens/user';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             {/* Admin pages */}
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="home" element={<PrivateRoute page="dashboard" component={<Dashboard />} />} />
+            <Route path="users" element={<PrivateRoute page="users" component={<User />} />} />
             <Route path="books" element={<PrivateRoute page="books" component={<Product />} />} />
 
             <Route path='*' element={<Login />} />

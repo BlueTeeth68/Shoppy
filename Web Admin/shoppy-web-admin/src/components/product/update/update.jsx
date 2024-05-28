@@ -93,6 +93,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
     }
 
     const handleClose = () => {
+        setProduct(null);
         setOpen(false);
     }
 
@@ -121,7 +122,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
     return (<>
         {/* < !--Button trigger modal-- > */}
         <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 2 }}
             open={isLoading}
         >
             <CircularProgress color="primary" />
@@ -129,6 +130,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
         {product &&
             <Dialog
                 open={open}
+                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 onClose={handleClose}
                 maxWidth="md"
                 fullWidth>

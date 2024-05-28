@@ -96,7 +96,7 @@ export function Product() {
 
     return (
         <>
-            <Sidebar />
+            <Sidebar activeMenu={4}/>
             <div className="body-wrapper">
                 <Header />
                 <div className="container-fluid">

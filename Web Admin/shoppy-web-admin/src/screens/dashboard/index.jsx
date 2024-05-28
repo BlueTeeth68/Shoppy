@@ -7,7 +7,7 @@ import productImg4 from "../../assets/images/products/s11.jpg";
 
 export function Dashboard() {
     return (<>
-        <Sidebar />
+        <Sidebar activeMenu={1}/>
         {/* < !--Main wrapper-- > */}
         <div className="body-wrapper">
             {/* <!--  Header Start --> */}
