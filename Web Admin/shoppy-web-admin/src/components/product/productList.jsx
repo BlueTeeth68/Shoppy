@@ -3,8 +3,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import PropTypes from 'prop-types';
 import "./productList.css";
 import defaultBookImg from "./../../assets/images/logos/default_book_img.png";
+import { UpdateProduct } from "./update/update";
+import { useState } from "react";
 
-const columns = (convertStatus) => [
+const columns = (convertStatus, setCurrentId, setOpen) => [
     {
         //product is {pictureUrl, name}
         field: "product",
@@ -26,14 +28,14 @@ const columns = (convertStatus) => [
         },
         sortable: false,
     },
-    {
-        field: "description",
-        headerName: "Description",
-        headerAlign: "center",
-        flex: 2,
-        align: "center",
-        sortable: false,
-    },
+    // {
+    //     field: "description",
+    //     headerName: "Description",
+    //     headerAlign: "center",
+    //     flex: 2,
+    //     align: "center",
+    //     sortable: false,
+    // },
 
     {
         field: "price",
@@ -88,6 +90,42 @@ const columns = (convertStatus) => [
         },
         sortable: false,
     },
+    {
+        field: "id",
+        headerName: "Action",
+        headerAlign: "center",
+        align: "center",
+        minWidth: 150,
+        flex: 3,
+        renderCell: (params) => {
+            const data = params.value;
+            return (<>
+                {data && (
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-evenly"
+                        alignItems="center">
+                        <button type="button" title="View" className="btn btn-secondary">
+                            <i className="fa-solid fa-eye"></i>
+                        </button>
+                        <button type="button" onClick={() => {
+                            //log
+                            console.log(`Current id: ${data}`)
+                            setCurrentId(data);
+                            setOpen(true);
+                        }} className="btn btn-primary" title="Update" data-bs-toggle="modal"  >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
+
+                    </Grid>
+                )
+                }
+            </>
+            );
+        },
+        sortable: false,
+    },
 ];
 
 const convertStatus = (value) => {
@@ -101,60 +139,65 @@ export default function ProductList({
     page,
     size,
     totalPage,
-    setPageOption
+    setPageOption,
+    categoryList,
 
 }) {
+
+    // const [currentProduct, setCurrentProduct] = useState();
+    const [currentId, setCurrentId] = useState();
+    const [open, setOpen] = useState(false);
+
     const isDataEmpty = data?.length === 0;
 
-    //log
-    console.log("Call product list");
-    console.log(`product list Size: ${size}`)
-
     return (
-        <div style={{ minHeight: 400, width: "100%" }}>
-            {isDataEmpty ? (
-                <h3 style={{ textAlign: "center" }}>
-                    There is no product in the system
-                </h3>
-            ) : (
-                <DataGrid
-                    rows={data.map((product) => ({
-                        id: product.id,
-                        product: { name: product.name, productThumbUrl: product.productThumbUrl },
-                        description: product.description,
-                        price: product.price,
-                        avgRate: product.avgRate,
-                        quantity: product.quantity,
-                        numberOfSale: product.numberOfSale,
-                        status: product.status,
-                    }))}
+        <>
+            <div style={{ minHeight: "50vh", width: "100%" }}>
+                {isDataEmpty ? (
+                    <h3 style={{ textAlign: "center" }}>
+                        There is no product in the system
+                    </h3>
+                ) : (
+                    <DataGrid
+                        rows={data.map((product) => ({
+                            id: product.id,
+                            product: { name: product.name, productThumbUrl: product.productThumbUrl },
+                            description: product.description,
+                            price: product.price,
+                            avgRate: product.avgRate,
+                            quantity: product.quantity,
+                            numberOfSale: product.numberOfSale,
+                            status: product.status
+                        }))}
 
-                    getRowHeight={() => "auto"}
-                    columns={columns(convertStatus)}
-                    initialState={{
-                        pagination: {
-                            paginationModel: { page: page - 1, pageSize: size },
-                        },
-                    }}
-                    pagination
-                    paginationMode="server"
-                    paginationModel={{ page: page - 1 || 0, pageSize: size || 10 }}
-                    onPaginationModelChange={(newPage) => {
-                        setPageOption({
-                            page: newPage.page + 1,
-                            size: newPage.pageSize
-                        })
-                    }}
-                    rowSelection={false}
-                    disableColumnMenu={true}
-                    rowCount={totalPage}
+                        getRowHeight={() => "auto"}
+                        columns={columns(convertStatus, setCurrentId, setOpen)}
+                        initialState={{
+                            pagination: {
+                                paginationModel: { page: page - 1, pageSize: size },
+                            },
+                        }}
+                        pagination
+                        paginationMode="server"
+                        paginationModel={{ page: page - 1 || 0, pageSize: size || 10 }}
+                        onPaginationModelChange={(newPage) => {
+                            setPageOption({
+                                page: newPage.page + 1,
+                                size: newPage.pageSize
+                            })
+                        }}
+                        rowSelection={false}
+                        disableColumnMenu={true}
+                        rowCount={totalPage}
 
+                        pageSizeOptions={[10, 20, 30]}
+                    />
+                )}
+            </div>
 
-                    pageSizeOptions={[10, 20, 30]}
-                // checkboxSelection
-                />
-            )}
-        </div>
+            {currentId &&
+                <UpdateProduct categoryList={categoryList} productId={currentId} open={open} setOpen={setOpen} />}
+        </>
     );
 }
 
@@ -163,5 +206,6 @@ ProductList.propTypes = {
     page: PropTypes.number,
     size: PropTypes.number,
     totalPage: PropTypes.number,
-    setPageOption: PropTypes.func
+    setPageOption: PropTypes.func,
+    categoryList: PropTypes.array
 }

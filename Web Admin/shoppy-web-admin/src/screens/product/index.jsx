@@ -9,9 +9,6 @@ import { AddNewProduct } from "../../components/product/create/create";
 
 export function Product() {
 
-    //log
-    console.log("Call product screen");
-
     //useState
     // const [name, setName] = useState();
     // const [status, setStatus] = useState();
@@ -107,7 +104,7 @@ export function Product() {
                     <div className="container-fluid">
                         <div className="card" style={{minHeight: "50vh"}}>
                             {isLoading ? (
-                                <Box sx={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                                <Box className="mt-3" sx={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
                                     <CircularProgress />
                                 </Box>
                             ) : (
@@ -128,7 +125,8 @@ export function Product() {
                                                 page={pageOption.page}
                                                 size={pageOption.size}
                                                 totalPage={data.totalPages}
-                                                setPageOption={setPageOption} />
+                                                setPageOption={setPageOption} 
+                                                categoryList={categories}/>
                                         }
                                     </div>
                                 </>

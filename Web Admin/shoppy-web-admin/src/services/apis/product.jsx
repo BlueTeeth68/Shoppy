@@ -10,11 +10,7 @@ export const filterProductListApi = async (filter) => {
     const pageParam = `page=${filter.page ?? 1}&`;
     const sizeParam = `size=${filter.size ?? 10}`;
 
-    // Construct the full query string
     const queryString = `${nameParam}${statusParam}${categoryIdParam}${sortNameParam}${sortPriceParam}${pageParam}${sizeParam}`;
-
-    // Log the constructed URI for debugging
-    console.log(`Constructed filter URI: products?${queryString}`);
 
     const response = await instance.get(`products?${queryString}`);
     return response.data;
@@ -27,5 +23,14 @@ export const createApi = async (data) => {
 
 export const getCategoriesApi = async () => {
     const response = await instance.get(`categories`);
+    return response.data;
+}
+export const updateApi = async ({ id, data }) => {
+    const response = await instance.put(`products/${id}`, data);
+    return response.data;
+}
+
+export const getByIdApi = async (id) => {
+    const response = await instance.get(`products/${id}`);
     return response.data;
 }

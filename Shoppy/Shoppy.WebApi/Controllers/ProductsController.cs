@@ -62,6 +62,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    // [Authorize(Roles = $"{RoleConstant.AdminRole}")]
     public async Task<ActionResult<BaseResult<object>>> UpdateAsync([FromRoute] Guid id,
         [FromBody] UpdateProductCommand request)
     {

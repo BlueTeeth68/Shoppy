@@ -31,13 +31,13 @@ public class UpdateCommandHandler : IRequestHandler<UpdateProductCommand>
 
         if (request.CategoryId != null)
         {
-            if (await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == request.CategoryId,
+            if (!await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == request.CategoryId,
                     cancellationToken))
                 throw new NotFoundException("Product category does not exist");
         }
         
         ProductMapper.UpdateProductToEntity(request, ref entity);
-        await _unitOfWork.ProductRepository.AddAsync(entity, cancellationToken);
+        await _unitOfWork.ProductRepository.UpdateAsync(entity, cancellationToken);
         await _unitOfWork.SaveChangeAsync();
     }
 }

@@ -7,30 +7,13 @@ import { ToastContainer, toast } from "react-toastify";
 import PropTypes from 'prop-types';
 import { Backdrop, CircularProgress, Typography } from "@mui/material";
 
-
 export function AddNewProduct({ categoryList }) {
-
-    //log
-    console.log(`Category list: ${JSON.stringify(categoryList, null, 2)}`);
 
     const [isLoading, setIsLoading] = useState(false);
 
     //notification
     const notifyFail = (message) =>
         toast.error(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeButton: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-        });
-
-    const notifySuccess = (message) =>
-        toast.success(message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: false,
@@ -60,10 +43,11 @@ export function AddNewProduct({ categoryList }) {
 
             await createApi(createData);
 
-            notifySuccess("Add book success");
+            // notifySuccess("Add book success");
+            window.location.reload();
         } catch (error) {
             //log
-            console.log(`Error when login: ${JSON.stringify(error, null, 2)}`);
+            console.log(`Error when create new product: ${JSON.stringify(error, null, 2)}`);
 
             let message;
             if (error.response) {
@@ -103,7 +87,7 @@ export function AddNewProduct({ categoryList }) {
 
     return (<>
         {/* < !--Button trigger modal-- > */}
-        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNew">
+        <button type="button" className="btn btn-primary admin-btn" data-bs-toggle="modal" data-bs-target="#addNew">
             <i className="fa-solid fa-circle-plus"></i> Create
         </button>
 
@@ -130,14 +114,13 @@ export function AddNewProduct({ categoryList }) {
                             initialValues={{
                                 name: "",
                                 description: "",
-                                sku: "",
                                 authorName: undefined,
                                 publisher: undefined,
                                 numberOfPage: undefined,
                                 dateOfPublication: undefined,
                                 price: 10,
                                 quantity: 1000,
-                                categoryId: "",
+                                categoryId: categoryList[0]?.id ?? "",
 
                             }}
                         >
@@ -184,7 +167,7 @@ export function AddNewProduct({ categoryList }) {
                                         controlId="validationAuthorName"
                                         className="position-relative mb-3"
                                     >
-                                        <Form.Label className="form-label">authorName</Form.Label>
+                                        <Form.Label className="form-label">Author name</Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="authorName"
@@ -202,7 +185,7 @@ export function AddNewProduct({ categoryList }) {
                                         controlId="validationPublisher"
                                         className="position-relative mb-3"
                                     >
-                                        <Form.Label className="form-label">publisher</Form.Label>
+                                        <Form.Label className="form-label">Publisher</Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="publisher"
@@ -315,7 +298,6 @@ export function AddNewProduct({ categoryList }) {
                                             {errors.categoryId}
                                         </Form.Control.Feedback>
                                     </Form.Group>
-
                                 </Form>
                             )}
                         </Formik>

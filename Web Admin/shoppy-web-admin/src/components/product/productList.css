@@ -3,3 +3,7 @@ img.productList-thumb {
     height: 50px;
     border-radius: 5px !important;
 }
+
+.admin-btn {
+    font-size: 14px;
+}
