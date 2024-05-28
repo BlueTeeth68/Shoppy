@@ -25,7 +25,7 @@ public static class CategoryMapper
             entity.Name = StringUtils.FormatName(dto.Name);
         }
 
-        if (string.IsNullOrEmpty(dto.Description))
+        if (!string.IsNullOrEmpty(dto.Description))
         {
             entity.Description = dto.Description;
         }

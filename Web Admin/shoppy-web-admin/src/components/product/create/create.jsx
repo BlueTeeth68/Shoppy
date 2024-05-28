@@ -6,8 +6,11 @@ import { createApi } from "../../../services/apis/product";
 import { ToastContainer, toast } from "react-toastify";
 import PropTypes from 'prop-types';
 import { Backdrop, CircularProgress, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export function AddNewProduct({ categoryList }) {
+
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -49,11 +52,16 @@ export function AddNewProduct({ categoryList }) {
             //log
             console.log(`Error when create new product: ${JSON.stringify(error, null, 2)}`);
 
+            if (error?.status === 401 || error?.response?.status === 401) {
+                localStorage.clear();
+                navigate("/auth/login");
+            }
+
             let message;
-            if (error.response) {
-                message = error.response?.data?.error?.detail || "Something wrong.";
+            if (error?.response?.message) {
+                message = error.response?.data?.error?.detail ?? "Something wrong";
             } else {
-                message = error.message || "Something wrong.";
+                message = error?.message ?? "Something wrong";
             }
             notifyFail(message);
         } finally {
@@ -88,7 +96,7 @@ export function AddNewProduct({ categoryList }) {
     return (<>
         {/* < !--Button trigger modal-- > */}
         <button type="button" className="btn btn-primary admin-btn" data-bs-toggle="modal" data-bs-target="#addNew">
-            <i className="fa-solid fa-circle-plus"></i> Create
+            <i className="fa-solid fa-circle-plus me-2"></i>Create
         </button>
 
         <Backdrop

@@ -3,18 +3,15 @@ import { Header } from "../../components/header/header";
 import { Sidebar } from "../../components/sidebar/sidebar";
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { filterUserListApi } from "../../services/apis/user";
-import UserList from "../../components/user/userList";
 import { useNavigate } from "react-router-dom";
+import { getCategoriesApi } from "../../services/apis/category";
+import CategoryList from "../../components/category/categoryList";
+import { AddNewCategory } from "../../components/category/create/create";
 
 
-export function User() {
+export function Category() {
 
     const navigate = useNavigate();
-
-    const [pageOption, setPageOption] = useState({
-        page: 1, size: 10
-    });
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +35,10 @@ export function User() {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const data = await filterUserListApi({
-                    page: pageOption.page, size: pageOption.size
-                });
+                const data = await getCategoriesApi();
 
-                setData(data?.result || {});
+                setData(data?.result || []);
+
             } catch (error) {
                 //log
                 console.log(`Error: ${JSON.stringify(error, null, 2)}`);
@@ -56,7 +52,7 @@ export function User() {
                 if (error?.response?.message) {
                     message = error.response?.data?.error?.detail ?? "Something wrong";
                 } else {
-                    message = error?.message ?? "Something wrong";
+                    message = error?.message;
                 }
                 notifyFail(message);
             } finally {
@@ -64,26 +60,25 @@ export function User() {
             }
         };
         fetchData();
-    }, [pageOption, navigate]);
-
+    }, [navigate]);
 
     return (<>
-        <Sidebar activeMenu={2} />
+        <Sidebar activeMenu={3} />
         <div className="body-wrapper">
             <Header />
             <div className="container-fluid">
                 <ToastContainer />
                 <div className="container-fluid">
                     <div className="card" style={{ minHeight: "50vh" }}>
-
                         <>
                             <div className="card-title">
                                 <Grid container
                                     px={4}
                                     direction="row"
-                                    justifyContent="start"
+                                    justifyContent="space-between"
                                     alignItems="center" >
-                                    <Typography variant="h4" className="my-0 mt-3">Users</Typography>
+                                    <Typography variant="h4" className="my-0 mt-3">Category</Typography>
+                                    <AddNewCategory />
                                 </Grid>
                             </div>
                             {isLoading ? (
@@ -92,15 +87,12 @@ export function User() {
                                 </Box>
                             ) : (
                                 <div className="card-body">
-                                    {data?.results &&
-                                        <UserList
-                                            data={data?.results}
-                                            page={pageOption.page}
-                                            size={pageOption.size}
-                                            totalPage={data.totalPages}
-                                            setPageOption={setPageOption} />
+                                    {data &&
+                                        <CategoryList
+                                            data={data} />
                                     }
-                                </div>)}
+                                </div>
+                            )}
                         </>
                     </div>
                 </div>

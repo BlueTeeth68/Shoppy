@@ -1,4 +1,4 @@
-import { Chip, Grid } from "@mui/material";
+import { Chip, Grid, Rating } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import PropTypes from 'prop-types';
 import "./productList.css";
@@ -53,6 +53,13 @@ const columns = (convertStatus, setCurrentId, setOpen) => [
         flex: 3,
         align: "center",
         sortable: false,
+        renderCell: (params) => {
+            const data = params.value;
+            return (<Rating name="read-only" value={data} readOnly />
+            );
+        },
+
+
     },
 
     {
@@ -196,7 +203,7 @@ export default function ProductList({
             </div>
 
             {currentId &&
-                <UpdateProduct categoryList={categoryList} productId={currentId} open={open} setOpen={setOpen} />}
+                <UpdateProduct categoryList={categoryList} productId={currentId} open={open} setOpen={setOpen} setProductId={setCurrentId} />}
         </>
     );
 }

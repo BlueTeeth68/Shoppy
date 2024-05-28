@@ -12,4 +12,4 @@ export const PublicPages = [];
 export const ErrorPages = ["not-found"];
 
 //Lưu đường dẫn các trang mà admin được truy cập
-export const AdminPages = ["home", "dashboard", "books", "users"];
+export const AdminPages = ["home", "dashboard", "books", "users", "categories"];

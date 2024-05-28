@@ -96,40 +96,40 @@ export function Product() {
 
     return (
         <>
-            <Sidebar activeMenu={4}/>
+            <Sidebar activeMenu={4} />
             <div className="body-wrapper">
                 <Header />
                 <div className="container-fluid">
                     <ToastContainer />
                     <div className="container-fluid">
-                        <div className="card" style={{minHeight: "50vh"}}>
+                        <div className="card" style={{ minHeight: "50vh" }}>
+
+                            <div className="card-title">
+                                <Grid container
+                                    px={4}
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="center" >
+                                    <Typography variant="h4" className="my-0 mt-3">Books</Typography>
+                                    <AddNewProduct categoryList={categories ?? []} />
+                                </Grid>
+                            </div>
                             {isLoading ? (
                                 <Box className="mt-3" sx={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
                                     <CircularProgress />
                                 </Box>
                             ) : (
-                                <>
-                                    <div className="card-title">
-                                        <Grid container
-                                            px={4}
-                                            direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="center" >
-                                            <Typography variant="h4" className="my-0 mt-3">Books</Typography>
-                                            <AddNewProduct categoryList={categories ?? []} />
-                                        </Grid>
-                                    </div>
-                                    <div className="card-body">
-                                        {data?.results &&
-                                            <ProductList data={data?.results}
-                                                page={pageOption.page}
-                                                size={pageOption.size}
-                                                totalPage={data.totalPages}
-                                                setPageOption={setPageOption} 
-                                                categoryList={categories}/>
-                                        }
-                                    </div>
-                                </>
+                                <div className="card-body">
+                                    {data?.results &&
+                                        <ProductList data={data?.results}
+                                            page={pageOption.page}
+                                            size={pageOption.size}
+                                            totalPage={data.totalPages}
+                                            setPageOption={setPageOption}
+                                            categoryList={categories} />
+                                    }
+                                </div>
+
                             )}
                         </div>
                     </div>

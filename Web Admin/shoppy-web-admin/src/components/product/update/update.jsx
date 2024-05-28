@@ -6,9 +6,12 @@ import { getByIdApi, updateApi } from "../../../services/apis/product";
 import { ToastContainer, toast } from "react-toastify";
 import PropTypes from 'prop-types';
 import { Backdrop, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 
-export function UpdateProduct({ categoryList, open, setOpen, productId }) {
+export function UpdateProduct({ categoryList, open, setOpen, productId, setProductId }) {
+
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
     const [product, setProduct] = useState();
@@ -35,6 +38,9 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
 
                 var data = await getByIdApi(productId);
 
+                //log
+                console.log(`Updaet product: ${JSON.stringify(data, null, 2)}`)
+
                 setProduct(data?.result);
 
             } catch (error) {
@@ -42,7 +48,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
                 console.log(`Error when get book detail : ${JSON.stringify(error, null, 2)}`);
 
                 let message;
-                if (error.response) {
+                if (error.response?.message) {
                     message = error.response?.data?.error?.detail || "Something wrong.";
                 } else {
                     message = error.message || "Something wrong.";
@@ -81,10 +87,15 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
             console.log(`Error when update book : ${JSON.stringify(error, null, 2)}`);
 
             let message;
-            if (error.response) {
-                message = error.response?.data?.error?.detail || "Something wrong.";
+            if (error?.status === 401 || error?.response?.status === 401) {
+                localStorage.clear();
+                navigate("/auth/login");
+            }
+
+            if (error?.response?.message) {
+                message = error.response?.data?.error?.detail ?? "Something wrong";
             } else {
-                message = error.message || "Something wrong.";
+                message = error?.message;
             }
             notifyFail(message);
         } finally {
@@ -94,6 +105,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
 
     const handleClose = () => {
         setProduct(null);
+        setProductId(null);
         setOpen(false);
     }
 
@@ -148,7 +160,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId }) {
                             authorName: product.authorName,
                             publisher: product.publisher,
                             numberOfPage: product.numberOfPage,
-                            dateOfPublication: product.dateOfPublication,
+                            dateOfPublication: product.dateOfPublication ? new Date(product.dateOfPublication + 'Z')?.toISOString().slice(0, 10) : "",
                             price: product.price,
                             quantity: product.quantity,
                             categoryId: product.categoryId,
@@ -350,5 +362,6 @@ UpdateProduct.propTypes = {
     categoryList: PropTypes.array.isRequired,
     productId: PropTypes.string.isRequired,
     open: PropTypes.bool,
-    setOpen: PropTypes.func
+    setOpen: PropTypes.func,
+    setProductId: PropTypes.func
 }

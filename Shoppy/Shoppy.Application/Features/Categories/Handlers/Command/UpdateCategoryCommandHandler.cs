@@ -1,5 +1,4 @@
-﻿using System.Data;
-using MediatR;
+﻿using MediatR;
 using Shoppy.Application.Features.Categories.Requests.Command;
 using Shoppy.Application.Mappers;
 using Shoppy.Domain.Exceptions;
@@ -20,7 +19,7 @@ public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryComman
     {
         var entity = await _unitOfWork.ProductCategoryRepository.GetUpdateByIdAsync(request.Id, cancellationToken);
         if (entity is null)
-            throw new NotFoundException($"Category not found");
+            throw new NotFoundException("Category not found");
 
         CategoryMapper.UpdateCategoryCommandToEntity(request, ref entity);
         entity.UpdatedDateTime = DateTime.UtcNow;
