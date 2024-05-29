@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shoppy.Application.Features.Products.Requests.Command;
 using Shoppy.Application.Features.Products.Requests.Query;
 using Shoppy.Application.Features.Products.Results.Query;
+using Shoppy.Application.Mappers;
 using Shoppy.Application.Services.Interfaces;
 using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities;
@@ -17,11 +19,14 @@ public class ProductService : IProductService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<ProductService> _logger;
+    private readonly IFileService _fileService;
+    private const string ImageFolder = "images/product/thumbImage";
 
-    public ProductService(IUnitOfWork unitOfWork, ILogger<ProductService> logger)
+    public ProductService(IUnitOfWork unitOfWork, ILogger<ProductService> logger, IFileService fileService)
     {
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _fileService = fileService;
     }
 
     public async Task<PagingResult<FilterProductResult>> FilterProductAsync(FilterProductQuery filter)
@@ -146,7 +151,8 @@ public class ProductService : IProductService
 
     public async Task SeedDataAsync(int size, Guid categoryId, CancellationToken cancellationToken = default)
     {
-        if (!await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == categoryId, cancellationToken))
+        if (!await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == categoryId,
+                cancellationToken))
         {
             throw new BadRequestException("Category does not exist");
         }
@@ -181,5 +187,82 @@ public class ProductService : IProductService
             _logger.LogError("Error seeding data: {}", e.Message);
             throw new Exception("Error when seed product data");
         }
+    }
+
+    public async Task<string> UpdateProductThumbAsync(UpdateProductImageCommand request,
+        CancellationToken cancellationToken = default)
+    {
+        var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, cancellationToken);
+        if (product == null)
+        {
+            throw new NotFoundException($"Product {request.Id} not found");
+        }
+
+        var fileName = $"product_{product.Id}";
+
+        var uploadedFile = await _fileService.UploadImageAsync(request.File, ImageFolder, fileName);
+
+        product.ProductThumbUrl = uploadedFile;
+
+        await _unitOfWork.ProductRepository.UpdateAsync(product, cancellationToken);
+        await _unitOfWork.SaveChangeAsync();
+
+        return product.ProductThumbUrl;
+    }
+
+    public async Task<Guid> CreateAsync(CreateProductCommand request, CancellationToken cancellationToken = default)
+    {
+        var entity = ProductMapper.CreateProductCommandToProduct(request);
+
+        var category =
+            await _unitOfWork.ProductCategoryRepository.GetByIdAsync(entity.CategoryId, cancellationToken,
+                disableTracking: true);
+        if (category == null)
+        {
+            throw new BadRequestException($"Product category {category} does not exist.");
+        }
+
+        entity.Id = Guid.NewGuid();
+
+        var fileName = $"product_{entity.Id}";
+
+        var uploadedFile = await _fileService.UploadImageAsync(request.ProductThumb, ImageFolder, fileName);
+
+        entity.ProductThumbUrl = uploadedFile;
+        entity.Status = ProductStatus.Active;
+        entity.CreatedDateTime = DateTime.UtcNow;
+
+        await _unitOfWork.ProductRepository.AddAsync(entity, cancellationToken);
+
+        await _unitOfWork.SaveChangeAsync();
+
+        return entity.Id;
+    }
+
+    public async Task UpdateAsync(UpdateProductCommand request, CancellationToken cancellationToken = default)
+    {
+        var entity = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, cancellationToken);
+
+        if (entity is null)
+            throw new NotFoundException("Product has been deleted.");
+        if (request.CategoryId != null)
+        {
+            if (!await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == request.CategoryId,
+                    cancellationToken))
+                throw new NotFoundException("Product category does not exist");
+        }
+
+        ProductMapper.UpdateProductToEntity(request, ref entity);
+
+        if (request.ProductThumb != null)
+        {
+            var fileName = $"product_{entity.Id}";
+
+            var uploadedFile = await _fileService.UploadImageAsync(request.ProductThumb, ImageFolder, fileName);
+            entity.ProductThumbUrl = uploadedFile;
+        }
+
+        await _unitOfWork.ProductRepository.UpdateAsync(entity, cancellationToken);
+        await _unitOfWork.SaveChangeAsync();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Shoppy.Domain.Entities.Base;
+﻿using Shoppy.Domain.Entities.Base;
 
 namespace Shoppy.Domain.Repositories.Base;
 
@@ -27,8 +26,4 @@ public interface IBaseRepository<TEntity, in TKey> : IConcurrencyHandler<TEntity
     void Delete(TEntity entity);
 
     Task BulkInsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
-
-    Task BulkUpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken= default);
-
-    Task BulkDeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken= default);
 }

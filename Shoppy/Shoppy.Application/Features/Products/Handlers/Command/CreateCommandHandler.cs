@@ -1,41 +1,23 @@
 ﻿using MediatR;
 using Shoppy.Application.Features.Products.Requests.Command;
-using Shoppy.Application.Mappers;
-using Shoppy.Domain.Constants.Enums;
-using Shoppy.Domain.Exceptions;
-using Shoppy.Domain.Repositories.UnitOfWork;
+using Shoppy.Application.Services.Interfaces;
 
 namespace Shoppy.Application.Features.Products.Handlers.Command;
 
 public class CreateCommandHandler : IRequestHandler<CreateProductCommand, Guid>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IProductService _productService;
 
-    public CreateCommandHandler(IUnitOfWork unitOfWork)
+    public CreateCommandHandler(IProductService productService)
     {
-        _unitOfWork = unitOfWork;
+        _productService = productService;
     }
+
 
     public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
+        var id = await _productService.CreateAsync(request, cancellationToken);
 
-        var entity = ProductMapper.CreateProductCommandToProduct(request);
-
-        var category =
-            await _unitOfWork.ProductCategoryRepository.GetByIdAsync(entity.CategoryId, cancellationToken,
-                disableTracking: true);
-        if (category == null)
-        {
-            throw new BadRequestException($"Product category {category} does not exist.");
-        }
-
-        entity.Status = ProductStatus.Active;
-        entity.CreatedDateTime = DateTime.UtcNow;
-
-        await _unitOfWork.ProductRepository.AddAsync(entity, cancellationToken);
-
-        await _unitOfWork.SaveChangeAsync();
-
-        return entity.Id;
+        return id;
     }
 }

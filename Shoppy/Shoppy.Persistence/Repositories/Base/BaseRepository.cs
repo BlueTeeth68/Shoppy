@@ -1,10 +1,7 @@
-﻿using System.Linq.Expressions;
-using EFCore.BulkExtensions;
+﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Shoppy.Domain.Constants;
 using Shoppy.Domain.Entities.Base;
-using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
 
 namespace Shoppy.Persistence.Repositories.Base;
@@ -102,15 +99,5 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
     public async Task BulkInsertAsync(IEnumerable<T> entities, CancellationToken cancellationToken=default)
     {
         await _dbContext.BulkInsertAsync(entities, cancellationToken: cancellationToken);
-    }
-
-    public async Task BulkUpdateAsync(IEnumerable<T> entities, CancellationToken cancellationToken= default)
-    {
-        await _dbContext.BulkUpdateAsync(entities, cancellationToken: cancellationToken);
-    }
-
-    public async Task BulkDeleteAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
-    {
-        await _dbContext.BulkDeleteAsync(entities, cancellationToken: cancellationToken);
     }
 }

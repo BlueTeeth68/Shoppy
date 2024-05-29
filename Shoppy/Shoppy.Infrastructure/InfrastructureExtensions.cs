@@ -15,12 +15,15 @@ public static class InfrastructureExtensions
     {
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
 
+        services.Configure<FireBaseSetting>(configuration.GetSection(FireBaseSetting.SectionName));
+
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IFileService, FileService>();
 
         return services;
     }

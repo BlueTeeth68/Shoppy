@@ -24,7 +24,7 @@ public class ProductsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = $"{RoleConstant.AdminRole}")]
-    public async Task<ActionResult<BaseResult<Guid>>> AddAsync([FromBody] CreateProductCommand request)
+    public async Task<ActionResult<BaseResult<Guid>>> AddAsync([FromForm] CreateProductCommand request)
     {
         var data = await _mediator.Send(request);
         var result = new BaseResult<Guid>()
@@ -62,9 +62,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    // [Authorize(Roles = $"{RoleConstant.AdminRole}")]
+    [Authorize(Roles = $"{RoleConstant.AdminRole}")]
     public async Task<ActionResult<BaseResult<object>>> UpdateAsync([FromRoute] Guid id,
-        [FromBody] UpdateProductCommand request)
+        [FromForm] UpdateProductCommand request)
     {
         if (id != request.Id)
             throw new BadRequestException("Id do not match");
@@ -73,6 +73,20 @@ public class ProductsController : ControllerBase
         {
             IsSuccess = true
         });
+    }
+
+    [HttpPatch("{id:guid}")]
+    [Authorize(Roles = $"{RoleConstant.AdminRole}")]
+    public async Task<ActionResult<BaseResult<string>>> UpdateProductThumbAsync(
+        [FromForm] UpdateProductImageCommand request)
+    {
+        var data = await _mediator.Send(request);
+        var result = new BaseResult<string>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
+        return Ok(result);
     }
 
     [HttpDelete("{id:guid}")]

@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Shoppy.Application.Features.Products.Requests.Command;
 
-public record UpdateProductCommand: IRequest
+public record UpdateProductCommand: IRequest, IRequest<string>
 {
     public Guid Id { get; init; }
     
     [StringLength(250)] public string? Name { get; init; }
+    
+    public IFormFile? ProductThumb { get; set; } 
     
     public string? Description { get; init; }
 

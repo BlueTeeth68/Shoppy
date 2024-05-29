@@ -2,7 +2,6 @@ using Shoppy.Application;
 using Shoppy.Domain.Identity;
 using Shoppy.Infrastructure;
 using Shoppy.Infrastructure.Identity;
-using Shoppy.Infrastructure.Web.Authentication;
 using Shoppy.Persistence;
 using Shoppy.WebAPI;
 using Shoppy.WebAPI.ConfigurationOptions;
@@ -33,7 +32,7 @@ services.AddScoped<ICurrentUser, CurrentUser>();
 var app = builder.Build();
 
 //use Global exception
-app.UseExceptionHandler(options => { });
+app.UseExceptionHandler(_ => { });
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

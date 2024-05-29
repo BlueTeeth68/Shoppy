@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Shoppy.Application.Features.Products.Requests.Command;
 
@@ -9,6 +10,10 @@ public class CreateProductCommand : IRequest<Guid>
     [StringLength(250)]public string Name { get; init; } = null!;
 
     public string? Description { get; init; }
+
+    [Required]
+    public IFormFile ProductThumb { get; init; } = null!;
+    
     [MaxLength(100)]
     public string? AuthorName { get; init; }
 
