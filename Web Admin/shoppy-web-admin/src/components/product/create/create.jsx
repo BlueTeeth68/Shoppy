@@ -75,6 +75,17 @@ export function AddNewProduct({ categoryList }) {
             .trim()
             .max(250, "Name is too long"),
         description: yup.string(),
+        productThumb: yup.mixed()
+            .test('fileRequired', 'Product thumbnail is required', (value) => {
+                return value instanceof File;
+            })
+            .test('fileSize', 'File size should be less than 5MB', (value) => {
+                return value && value.size <= 5 * 1024 * 1024;
+            })
+            .test('fileType', 'Only image files are allowed', (value) => {
+                return value && ['image/jpeg', 'image/png', 'image/jpg', 'image/svg', 'image/webp', 'image/heic', 'image/gif'].includes(value.type);
+            })
+            .required('Product thumbnail is required'),
         authorName: yup.string()
             .max(100, "Too long"),
         publisher: yup.string()
@@ -112,7 +123,7 @@ export function AddNewProduct({ categoryList }) {
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" ><Typography variant="h4">Add new</Typography> </h5>
+                        <p className="modal-title" ><Typography variant="h4">Add new</Typography> </p>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
@@ -129,10 +140,11 @@ export function AddNewProduct({ categoryList }) {
                                 price: 10,
                                 quantity: 1000,
                                 categoryId: categoryList[0]?.id ?? "",
+                                productThumb: undefined
 
                             }}
                         >
-                            {({ handleSubmit, handleChange, values, touched, errors }) => (
+                            {({ handleSubmit, handleChange, setFieldValue, values, touched, errors }) => (
                                 <Form id="addNewForm" onSubmit={handleSubmit}>
                                     <Form.Group
                                         controlId="validateName"
@@ -168,6 +180,26 @@ export function AddNewProduct({ categoryList }) {
                                         />
                                         <Form.Control.Feedback type="invalid" className="d-block text-danger">
                                             {errors.description}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+
+                                    <Form.Group
+                                        controlId="validationProductThumb"
+                                        className="position-relative mb-3"
+                                    >
+                                        <Form.Label className="form-label">Product Thumbnail</Form.Label>
+                                        <Form.Control
+                                            type="file"
+                                            name="productThumb"
+                                            placeholder="Choose product thumbnail"
+                                            onChange={(event) => {
+                                                setFieldValue('productThumb', event.currentTarget.files[0]);
+                                            }}
+                                            isValid={touched.productThumb && !errors.productThumb}
+                                            isInvalid={touched.productThumb && !!errors.productThumb}
+                                        />
+                                        <Form.Control.Feedback type="invalid" className="d-block text-danger">
+                                            {errors.productThumb}
                                         </Form.Control.Feedback>
                                     </Form.Group>
 
@@ -255,6 +287,7 @@ export function AddNewProduct({ categoryList }) {
                                             type="number"
                                             name="price"
                                             min={0}
+                                            step={0.1}
                                             placeholder="Input price"
                                             value={values.price}
                                             onChange={handleChange}

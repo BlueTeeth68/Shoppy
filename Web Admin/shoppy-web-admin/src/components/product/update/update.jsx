@@ -37,10 +37,6 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
             try {
 
                 var data = await getByIdApi(productId);
-
-                //log
-                console.log(`Updaet product: ${JSON.stringify(data, null, 2)}`)
-
                 setProduct(data?.result);
 
             } catch (error) {
@@ -65,7 +61,8 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
     const handleSubmit = async (values) => {
         setIsLoading(true);
         const { id, name, description, authorName, publisher, numberOfPage,
-            dateOfPublication, price, quantity, categoryId
+            dateOfPublication, price, quantity, categoryId,
+            productThumb
         } = values;
         try {
             const updateData = {
@@ -75,7 +72,8 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
                 authorName: authorName, publisher: publisher,
                 numberOfPage: numberOfPage,
                 dateOfPublication: dateOfPublication, price: price,
-                quantity: quantity, categoryId: categoryId
+                quantity: quantity, categoryId: categoryId,
+                productThumb: productThumb
             }
 
             await updateApi({ id: updateData.id, data: updateData });
@@ -115,6 +113,14 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
             .trim()
             .max(250, "Name is too long"),
         description: yup.string().notRequired(),
+        productThumb: yup.mixed()
+            .test('fileSize', 'File size should be less than 5MB', (value) => {
+                return !value || value.size <= 5 * 1024 * 1024;
+            })
+            .test('fileType', 'Only image files are allowed', (value) => {
+                return !value || ['image/jpeg', 'image/png', 'image/jpg', 'image/svg', 'image/webp', 'image/heic', 'image/gif'].includes(value.type);
+            })
+            .notRequired(),
         authorName: yup.string()
             .max(100, "Too long").notRequired(),
         publisher: yup.string()
@@ -164,9 +170,10 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
                             price: product.price,
                             quantity: product.quantity,
                             categoryId: product.categoryId,
+                            productThumb: undefined
                         }}
                     >
-                        {({ handleSubmit, handleChange, values, touched, errors }) => (
+                        {({ handleSubmit, handleChange, setFieldValue, values, touched, errors }) => (
                             <Form id="updateForm" onSubmit={handleSubmit}>
                                 <input type="hidden" name="id" value={product.id} />
                                 <Form.Group
@@ -203,6 +210,26 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
                                     />
                                     <Form.Control.Feedback type="invalid" className="d-block text-danger">
                                         {errors.description}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+
+                                <Form.Group
+                                    controlId="validationProductThumb"
+                                    className="position-relative mb-3"
+                                >
+                                    <Form.Label className="form-label">Product Thumbnail</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        name="productThumb"
+                                        placeholder="Choose product thumbnail"
+                                        onChange={(event) => {
+                                            setFieldValue('productThumb', event.currentTarget.files[0]);
+                                        }}
+                                        isValid={touched.productThumb && !errors.productThumb}
+                                        isInvalid={touched.productThumb && !!errors.productThumb}
+                                    />
+                                    <Form.Control.Feedback type="invalid" className="d-block text-danger">
+                                        {errors.productThumb}
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
@@ -290,6 +317,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
                                         type="number"
                                         name="price"
                                         min={0}
+                                        step={0.1}
                                         placeholder="Input price"
                                         value={values.price}
                                         onChange={handleChange}

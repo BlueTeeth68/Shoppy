@@ -17,7 +17,11 @@ export const filterProductListApi = async (filter) => {
 };
 
 export const createApi = async (data) => {
-    const response = await instance.post(`products`, data);
+    const response = await instance.post(`products`, data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
     return response.data;
 }
 
@@ -26,7 +30,11 @@ export const getCategoriesApi = async () => {
     return response.data;
 }
 export const updateApi = async ({ id, data }) => {
-    const response = await instance.put(`products/${id}`, data);
+    const response = await instance.put(`products/${id}`, data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
     return response.data;
 }
 
