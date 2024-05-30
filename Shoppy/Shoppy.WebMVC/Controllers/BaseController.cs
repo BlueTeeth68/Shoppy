@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Shoppy.SharedLibrary.Models.Error;
 using Shoppy.WebMVC.ExceptionHandlers;
-using Shoppy.WebMVC.Models;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Controllers;
@@ -23,7 +22,9 @@ public class BaseController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        // return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var model = new ErrorModel { Status = 500, Title = "Something wrong", Detail = "Something wrong" };
+        return RedirectToAction("Index", "Error", model);
     }
 
     protected async Task<IActionResult?> FetchCategoriesAsync()

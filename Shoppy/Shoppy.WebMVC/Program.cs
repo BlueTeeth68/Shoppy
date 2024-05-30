@@ -42,6 +42,7 @@ if (!app.Environment.IsDevelopment())
 //middleware
 
 app.UseMiddleware<LoginMiddleware>();
+app.UseMiddleware<NotFoundMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

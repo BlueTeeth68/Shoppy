@@ -48,16 +48,22 @@ public class CartController : BaseController
         try
         {
             var response = await _cartService.AddToCartAsync(productId, accessToken);
-            if (response == null) return RedirectToAction("Index");
 
-            ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
-            return RedirectToAction("Error");
+
+            if (response == null)
+            {
+                var totalItemResult = await _cartService.GetCartTotalItemAsync(accessToken);
+
+               var totalItem = totalItemResult?.Result ?? 0;
+                return Json(new { success = true, totalItem });
+            }
+
+            return Json(new { success = false, error = response.Error?.Detail ?? "Something wrong" });
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when fetching cart.\nDate: {}\nDetail: {}", DateTime.UtcNow,
-                e.Message);
-            return RedirectToAction("Error");
+            _logger.LogError("Error when adding product to cart.\nDate: {}\nDetail: {}", DateTime.UtcNow, e.Message);
+            return Json(new { success = false, error = "Something went wrong" });
         }
     }
 

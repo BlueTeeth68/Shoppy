@@ -6,10 +6,10 @@
 
             <img class="img-fluid w-100" src=@(Model.ProductThumbUrl ?? "~/img/product-1.jpg") alt="">
 
-            <form asp-controller="Cart" asp-action="AddToCart" method="post" id="@Model.Id">
+            <form asp-controller="Cart" id="@Model.Id">
                 <div class="product-action">
                     <input type="hidden" name="productId" value="@Model.Id"/>
-                    <button class="btn btn-outline-dark btn-square" type="submit">
+                    <button class="btn btn-outline-dark btn-square add-to-cart-btn" type="submit" onclick="addToCart(event, '@Model.Id')">
                         <i class="fa fa-shopping-cart"></i>
                     </button>
                 </div>
@@ -19,9 +19,6 @@
             <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none text-truncate">@Model.Name</a>
             <div class="d-flex align-items-center justify-content-center mt-2">
                 <h5>$@Model.Price</h5>
-                @* <h6 class="text-muted ml-2"> *@
-                @*     <del>$123.00</del> *@
-                @* </h6> *@
             </div>
             <div class="d-flex align-items-center justify-content-center mb-1">
                 <small class="fa fa-star text-primary mr-1"></small>
@@ -34,3 +31,5 @@
         </div>
     </div>
 </div>
+
+
