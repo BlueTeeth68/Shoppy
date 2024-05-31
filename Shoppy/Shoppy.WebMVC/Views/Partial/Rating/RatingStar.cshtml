@@ -1,0 +1,24 @@
+﻿@model decimal?;
+
+<div class="d-flex align-items-center justify-content-center my-2">
+    @{
+        var fullStars = (int)Math.Floor(Model ?? 0);
+        var halfStar = Model - fullStars >= 0.5m;
+        var emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+    }
+
+    @for (var i = 0; i < fullStars; i++)
+    {
+        <small class="fa fa-star text-primary mr-1"></small>
+    }
+
+    @if (halfStar)
+    {
+        <small class="fa fa-star-half-alt text-primary mr-1"></small>
+    }
+
+    @for (var i = 0; i < emptyStars; i++)
+    {
+        <small class="far fa-star text-primary mr-1"></small>
+    }
+</div>

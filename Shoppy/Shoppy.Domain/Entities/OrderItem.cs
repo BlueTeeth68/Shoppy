@@ -15,6 +15,8 @@ public class OrderItem : BaseEntity<Guid>, IAggregateRoot
     public bool IsReviewed { get; set; }
 
     public virtual ProductRating? ProductRating { get; set; }
+    
+    public virtual Guid OrderId { get; set; }
 
     public virtual Order Order { get; set; } = null!;
 }

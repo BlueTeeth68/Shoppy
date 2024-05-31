@@ -8,6 +8,7 @@ using Shoppy.Domain.Constants;
 using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
+using Shoppy.SharedLibrary.Models.Responses.Products;
 
 namespace Shoppy.WebAPI.Controllers;
 
@@ -54,6 +55,26 @@ public class ProductsController : ControllerBase
     {
         var data = await _mediator.Send(new GetProductByIdQuery(id));
         var result = new BaseResult<ProductDetailQueryResult>()
+        {
+            IsSuccess = true,
+            Result = data
+        };
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}/rating")]
+    public async Task<ActionResult<BaseResult<PagingResult<ProductRatingDto>>>> FilterProductRatingAsync(
+        [FromRoute] Guid id,
+        [FromQuery] int? page,
+        [FromQuery] int? size)
+    {
+        var data = await _mediator.Send(new FilterProductRatingQuery()
+        {
+            ProductId = id,
+            Page = page,
+            Size = size
+        });
+        var result = new BaseResult<PagingResult<ProductRatingDto>>()
         {
             IsSuccess = true,
             Result = data

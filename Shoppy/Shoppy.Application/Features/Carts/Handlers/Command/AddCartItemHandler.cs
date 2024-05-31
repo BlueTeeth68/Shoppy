@@ -13,7 +13,6 @@ public class AddCartItemHandler: IRequestHandler<AddCartItemCommand>
         _userService = userService;
     }
 
-
     public async Task Handle(AddCartItemCommand request, CancellationToken cancellationToken = default)
     {
         await _userService.AddToCartAsync(request, cancellationToken);

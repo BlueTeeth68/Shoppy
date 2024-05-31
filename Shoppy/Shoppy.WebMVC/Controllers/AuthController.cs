@@ -63,7 +63,8 @@ public class AuthController : Controller
             {
                 { "email", result.Result.Email ?? "" },
                 { "accessToken", result.Result.AccessToken },
-                { "fullName", result.Result.FullName }
+                { "fullName", result.Result.FullName },
+                { "pictureUrl", result.Result.PictureUrl ?? "" }
             };
 
             await AddCookieOptionsAsync(accessOptions, accessTokenCookieOptions);
@@ -119,6 +120,7 @@ public class AuthController : Controller
         Response.Cookies.Delete("accessToken");
         Response.Cookies.Delete("fullName");
         Response.Cookies.Delete("email");
+        Response.Cookies.Delete("pictureUrl");
         return RedirectToAction("Index", "Home");
     }
 

@@ -4,15 +4,16 @@
     var name = (string?)ViewBag.Name;
     var fullName = Context.Request.Cookies["fullName"];
     var accessToken = Context.Request.Cookies["accessToken"];
+    var pictureUrl = Context.Request.Cookies["pictureUrl"];
     var cartTotalItem = (int?)ViewBag.CartTotalItem;
     var isAuthenticated = accessToken != null;
 }
 
 <!-- Navbar Start -->
-<div class="container-fluid bg-dark mb-30">
+<div class="container-fluid bg-light mb-3">
     <div class="row px-xl-5">
         <div class="col-lg-3 d-none d-lg-block">
-            <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+            <a class="btn d-flex align-items-center justify-content-between w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
                 <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Categories</h6>
                 <i class="fa fa-angle-down text-dark"></i>
             </a>
@@ -30,61 +31,79 @@
             </nav>
         </div>
         <div class="col-lg-9">
-            <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+            <nav class="navbar navbar-expand-lg navbar-dark py-3 py-lg-0 px-0">
                 <a asp-controller="Home" asp-action="Index" class="text-decoration-none d-block d-lg-none">
                     <h2 class="text-uppercase text-primary fw-bold ">Shoppy</h2>
                 </a>
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                    <span class="navbar-toggler-icon"></span>
+                <button type="button" class="navbar-toggler text-dark" data-toggle="collapse" data-target="#navbarCollapse">
+                    <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link @Html.Raw(ViewBag.Active == 1 ? "active" : "")">Home</a>
-                        @* <a asp-controller="Books" asp-action="Index" class="nav-item nav-link @Html.Raw(ViewBag.Active == 2 ? "active" : "")">Bookstore</a> *@
-                        @* <a asp-controller="Books" asp-action="Detail" class="nav-item nav-link @Html.Raw(ViewBag.Active == 3 ? "active" : "")">Book Detail</a> *@
-                        <a asp-controller="Order" asp-action="Index" class="nav-item nav-link @Html.Raw(ViewBag.Active == 5 ? "active" : "")">Purchase history</a>
-                        @* <div class="nav-item dropdown "> *@
-                        @*     <a href="#" class="nav-link dropdown-toggle @Html.Raw(ViewBag.Active == 4 ? "active" : "")" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a> *@
-                        @*     <div class="dropdown-menu bg-primary rounded-0 border-0 m-0"> *@
-                        @*         <a asp-controller="Cart" asp-action="Index" class="dropdown-item">Shopping Cart</a> *@
-                        @*         <a asp-controller="Cart" asp-action="CheckOut" class="dropdown-item">Checkout</a> *@
-                        @*     </div> *@
-                        @* </div> *@
+                        <a asp-action="Index" asp-controller="Home" class="nav-item nav-link nav-link-header @Html.Raw(ViewBag.Active == 1 ? "active" : "")">Home</a>
+                        <a asp-controller="Order" asp-action="Index" class="nav-item nav-link nav-link-header @Html.Raw(ViewBag.Active == 5 ? "active" : "")">Purchase history</a>
+
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a class="btn px-0 ml-3" asp-controller="Cart" asp-action="Index">
                             <i class="fas fa-shopping-cart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle cart-total-item" style="padding-bottom: 2px;">@(cartTotalItem ?? 0)</span>
+                            <span class="badge border border-primary rounded-circle cart-total-item text-primary" style="padding-bottom: 2px">@(cartTotalItem ?? 0)</span>
                         </a>
+                        @* <div class="btn-group"> *@
+                        @*     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"> *@
+                        @*         @(fullName ?? "My Account") *@
+                        @*     </button> *@
+                        @*     <div class="dropdown-menu dropdown-menu-right"> *@
+                        @* *@
+                        @*         @{ *@
+                        @*             if (isAuthenticated) *@
+                        @*             { *@
+                        @*                 <button class="dropdown-item" type="button"> *@
+                        @*                     <a asp-controller="Auth" asp-action="Login">My Account</a> *@
+                        @*                 </button> *@
+                        @*                 <button class="dropdown-item" type="button"> *@
+                        @*                     <a asp-controller="Auth" asp-action="Logout">Log out</a> *@
+                        @*                 </button> *@
+                        @*             } *@
+                        @*             else *@
+                        @*             { *@
+                        @*                 <button class="dropdown-item" type="button"> *@
+                        @*                     <a asp-controller="Auth" asp-action="Login">Sign in</a> *@
+                        @*                 </button> *@
+                        @*                 <button class="dropdown-item" type="button"> *@
+                        @*                     <a asp-controller="Auth" asp-action="Register">Sign up</a> *@
+                        @*                 </button> *@
+                        @*             } *@
+                        @*         } *@
+                        @* *@
+                        @*     </div> *@
+                        @* </div> *@
+
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
-                                @(fullName ?? "My Account")
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-
-                                @{
-                                    if (isAuthenticated)
-                                    {
-                                        <button class="dropdown-item" type="button">
-                                            <a asp-controller="Auth" asp-action="Login">My Account</a>
-                                        </button>
-                                        <button class="dropdown-item" type="button">
-                                            <a asp-controller="Auth" asp-action="Logout">Log out</a>
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button class="dropdown-item" type="button">
-                                            <a asp-controller="Auth" asp-action="Login">Sign in</a>
-                                        </button>
-                                        <button class="dropdown-item" type="button">
-                                            <a asp-controller="Auth" asp-action="Register">Sign up</a>
-                                        </button>
-                                    }
-                                }
-
+                        @if (isAuthenticated)
+                        {
+                            <a class="nav-link nav-icon-hover" id="drop2" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                
+                                <img src="@(pictureUrl ?? "~/img/default/default_user_img.png")" alt="" width="35" height="35" class="rounded-circle"/>
+                                <span class="text-dark">@fullName</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                                <div class="message-body">
+                                    <div class="w-100 px-2">
+                                        <a class="btn btn-outline-primary w-100 mt-2 d-block rounded-border-1"  asp-controller="Auth" asp-action="Logout">Log out</a>
+                                    </div>
+                                </div>
                             </div>
+                        }
+                        else
+                        {
+                            <a class=" nav-link nav-icon-hover text-dark" asp-controller="Auth" asp-action="Login">
+                                Sign in
+                            </a>
+                        }
                         </div>
+
                     </div>
                 </div>
             </nav>

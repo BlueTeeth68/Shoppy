@@ -109,7 +109,7 @@
 
 
 function addToCart(event, productId) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     fetch('/Cart/AddToCart', {
         method: 'POST',
@@ -118,18 +118,76 @@ function addToCart(event, productId) {
         },
         body: 'productId=' + encodeURIComponent(productId)
     })
-        .then(response => response.json())
+        .then(response => {
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 alert("Add product to cart successfully");
                 $('.cart-total-item').html(data?.totalItem);
             } else {
-                alert('Error adding product to cart:\n ' + data.error);
+                if (data?.redirectUrl != null) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    alert('Error adding product to cart:\n ' + data.error);
+                }
             }
         })
         .catch(error => {
             alert('Error adding product to cart:\n ' + error);
         });
+}
+
+function loadProductRatings(productId, page, size) {
+    console.log("Call Ajax");
+    debugger
+    fetch('/Books/Rating?ProductId=' + productId + '&Page=' + page + '&Size=' + size)
+        .then(response => {
+            debugger
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .then(data => {
+            debugger
+            if (data.success) {
+                renderProductRatings(data.data);
+            } else {
+                console.error(data.error);
+            }
+        })
+        .catch(error => {
+            debugger
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
+async function renderProductRatings(data) {
+    debugger;
+    $('#product-ratings').empty();
+
+    try {
+        const response = await fetch('/Books/_RatingPartial', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const fullView = await response.text();
+            $('#product-ratings').html(fullView);
+            $('#review').html(`Review (${data.totalRecords})`);
+            $('#totalReview').html(`(${data.totalRecords} reviews)`);
+        } else {
+            console.error('Network response was not ok');
+        }
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
 }
 
 

@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Shoppy.Application.Features.Products.Requests.Command;
 using Shoppy.Application.Features.Products.Requests.Query;
@@ -11,7 +13,9 @@ using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.Domain.Repositories.UnitOfWork;
+using Shoppy.Persistence.Identity;
 using Shoppy.Persistence.Specifications;
+using Shoppy.SharedLibrary.Models.Responses.Products;
 
 namespace Shoppy.Infrastructure.Services;
 
@@ -20,13 +24,16 @@ public class ProductService : IProductService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<ProductService> _logger;
     private readonly IFileService _fileService;
+    private readonly UserManager<AppUser> _userManager;
     private const string ImageFolder = "images/product/thumbImage";
 
-    public ProductService(IUnitOfWork unitOfWork, ILogger<ProductService> logger, IFileService fileService)
+    public ProductService(IUnitOfWork unitOfWork, ILogger<ProductService> logger, IFileService fileService,
+        UserManager<AppUser> userManager)
     {
         _unitOfWork = unitOfWork;
         _logger = logger;
         _fileService = fileService;
+        _userManager = userManager;
     }
 
     public async Task<PagingResult<FilterProductResult>> FilterProductAsync(FilterProductQuery filter)
@@ -147,6 +154,51 @@ public class ProductService : IProductService
                 DateTime.UtcNow, e.Message);
             throw new Exception($"Error when execute {nameof(this.FilterProductAsync)} method");
         }
+    }
+
+    public async Task<PagingResult<ProductRatingDto>> FilterProductRatingAsync(FilterProductRatingQuery request)
+    {
+        var ratingQuery = _unitOfWork.ProductRatingRepository.GetQueryableSet();
+        var userQuery = _userManager.Users;
+
+        if (!request.Page.HasValue || !request.Size.HasValue || request.Page.Value <= 0 || request.Size.Value <= 0)
+        {
+            request.Page = 1;
+            request.Size = 10;
+        }
+
+        var totalRecord = await ratingQuery.Where(r => r.OrderItem.ProductId == request.ProductId)
+            .Select(r => r.Id)
+            .Skip((request.Page.Value - 1) * request.Size.Value)
+            .Take(request.Size.Value)
+            .CountAsync();
+
+        var data = ratingQuery.Where(r => r.OrderItem.ProductId == request.ProductId)
+            .Join(userQuery,
+                rating => rating.OrderItem.Order.UserId,
+                user => user.Id,
+                (rating, user) => new ProductRatingDto()
+                {
+                    Id = rating.Id,
+                    Comment = rating.Comment,
+                    Date = rating.CreatedDateTime,
+                    RateValue = rating.RateValue,
+                    UserName = user.FullName,
+                    PictureUrl = user.PictureUrl
+                })
+            .Skip((request.Page.Value - 1) * request.Size.Value)
+            .Take(request.Size.Value)
+            .ToList();
+
+        var totalPages = (int)Math.Ceiling((double)totalRecord / request.Size.Value);
+
+        var result = new PagingResult<ProductRatingDto>()
+        {
+            TotalPages = totalPages,
+            TotalRecords = totalRecord,
+            Results = data
+        };
+        return result;
     }
 
     public async Task SeedDataAsync(int size, Guid categoryId, CancellationToken cancellationToken = default)

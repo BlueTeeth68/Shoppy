@@ -1,0 +1,16 @@
+﻿@model Shoppy.SharedLibrary.Models.Responses.Products.ProductRatingDto
+
+<div class="media mb-4">
+    <img src="@(Model.PictureUrl ?? "~/img/default/default_user_img.png")" alt="Image" class="img-fluid mr-3 mt-1 rounded-circle" width="45px" height="45px">
+    <div class="media-body">
+        <h6>
+            @Model.UserName<small> - <i>@Model.Date</i></small>
+        </h6>
+
+        <div class="d-flex align-items-center justify-content-start mb-1">
+            @await Html.PartialAsync("~/Views/Partial/Rating/RatingStar.cshtml", (decimal)(Model.RateValue ?? 0))
+        </div>
+
+        <p>@Model.Comment</p>
+    </div>
+</div>

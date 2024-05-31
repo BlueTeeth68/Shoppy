@@ -8,7 +8,7 @@ public abstract class BaseEntity<TKey> : IHasKey<TKey>, ITrackable
 
     [Timestamp] public byte[] RowVersion { get; set; } = null!;
 
-    public DateTime CreatedDateTime { get; set; }
+    public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedDateTime { get; set; }
 }

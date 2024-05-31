@@ -1,35 +1,33 @@
 ﻿@model Shoppy.SharedLibrary.Models.Responses.Products.FilterProductResultDto;
 
-<div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-    <div class="product-item bg-light mb-4">
+<div class="col-lg-3 col-md-4 col-sm-6 pb-1 ">
+    <div class="bg-light mb-4 card mx-3 product-item" >
         <div class="product-img position-relative overflow-hidden">
 
-            <img class="img-fluid w-100" src=@(Model.ProductThumbUrl ?? "~/img/product-1.jpg") alt="">
+            <img class="img-fluid" src=@(Model.ProductThumbUrl ?? "~/img/product-1.jpg") alt="">
 
             <form asp-controller="Cart" id="@Model.Id">
                 <div class="product-action">
                     <input type="hidden" name="productId" value="@Model.Id"/>
-                    <button class="btn btn-outline-dark btn-square add-to-cart-btn" type="submit" onclick="addToCart(event, '@Model.Id')">
+                    <button title="Add to cart" class="btn btn-outline-primary rounded-circle add-to-cart-btn rounded-button" type="submit" onclick="addToCart(event, '@Model.Id')">
                         <i class="fa fa-shopping-cart"></i>
                     </button>
                 </div>
             </form>
         </div>
-        <div class="text-center py-4">
-            <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none text-truncate">@Model.Name</a>
-            <div class="d-flex align-items-center justify-content-center mt-2">
+        <div class="text-center py-2 product-info">
+            <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none ">@Model.Name</a>
+
+            <div class="d-flex align-items-center justify-content-center mb-1">
+                @if (Model.AvgRate != null)
+                {
+                    @await Html.PartialAsync("~/Views/Partial/Rating/RatingStar.cshtml", Model.AvgRate ?? 0)
+                }
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
                 <h5>$@Model.Price</h5>
             </div>
-            <div class="d-flex align-items-center justify-content-center mb-1">
-                <small class="fa fa-star text-primary mr-1"></small>
-                <small class="fa fa-star text-primary mr-1"></small>
-                <small class="fa fa-star text-primary mr-1"></small>
-                <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                <small class="far fa-star text-primary mr-1"></small>
-                <small>(99)</small>
-            </div>
+
         </div>
     </div>
 </div>
-
-

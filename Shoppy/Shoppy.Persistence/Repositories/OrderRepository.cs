@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories;
@@ -13,7 +14,7 @@ public class OrderRepository : BaseRepository<Order, Guid>, IOrderRepository
     {
     }
 
-    public async Task AddAsync(Order entity, CancellationToken cancellationToken = default)
+    public new async Task AddAsync(Order entity, CancellationToken cancellationToken = default)
     {
         var productList = new List<Product>();
         foreach (var i in entity.Items)
@@ -25,13 +26,21 @@ public class OrderRepository : BaseRepository<Order, Guid>, IOrderRepository
                 throw new BadRequestException($"Product {i.ProductId} is not available");
             }
 
-            product.NumberOfSale = i.Quantity;
-            product.Quantity = product.Quantity = i.Quantity;
+            product.NumberOfSale += i.Quantity;
+            product.Quantity -= i.Quantity;
+            product.Status = product.Quantity switch
+            {
+                < 0 => throw new BadRequestException(
+                    $"Order quantity exceed current product quantity of product {product.Id}"),
+                <= 0 => ProductStatus.OutOfStock,
+                _ => product.Status
+            };
+
             productList.Add(product);
         }
 
         entity.CreatedDateTime = DateTime.UtcNow;
         await DbSet.AddAsync(entity, cancellationToken);
-        await _dbContext.Products.AddRangeAsync(productList, cancellationToken);
+        _dbContext.Products.UpdateRange(productList);
     }
 }

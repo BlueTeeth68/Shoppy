@@ -7,7 +7,7 @@ public class Order : BaseEntity<Guid>, IAggregateRoot
 {
     public decimal TotalPrice { get; set; }
 
-    public OrderStatus Status { get; set; }
+    public OrderStatus Status { get; set; } = OrderStatus.Success;
 
     public Guid UserId { get; set; }
 

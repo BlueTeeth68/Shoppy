@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shoppy.Domain.Repositories.Base;
+using Shoppy.SharedLibrary.Models.Requests.Products;
+using Shoppy.SharedLibrary.Models.Responses.Products;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Controllers;
@@ -38,6 +41,44 @@ public class BooksController : BaseController
                 e.Message);
             return RedirectToAction("Error");
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Rating(FilterProductRating request)
+    {
+        if (request.Page == null || request.Size == null)
+        {
+            request.Page = 1;
+            request.Size = 8;
+        }
+
+        try
+        {
+            var response = await _productService.FilterProductRatingAsync(request);
+
+            if (response == null)
+            {
+                return Json(new { success = false, error = "Something wrong when fetch product rating" });
+            }
+
+            if (!response.IsSuccess)
+                return Json(new
+                    { success = false, error = response.Error?.Detail ?? "Something wrong when fetch product rating" });
+
+            var data = response.Result;
+            return Json(new { success = true, data });
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error when fetch product rating.\nDate: {}\nDetail: {}", DateTime.UtcNow, e.Message);
+            return Json(new { success = false, error = "Something went wrong" });
+        }
+    }
+
+    [HttpPost]
+    public IActionResult _RatingPartial([FromBody] PagingResult<ProductRatingDto> data)
+    {
+        return  View("~/Views/Partial/Books/Review.cshtml", data);
     }
 
     private async Task<IActionResult?> FetchProductAsync(Guid id)

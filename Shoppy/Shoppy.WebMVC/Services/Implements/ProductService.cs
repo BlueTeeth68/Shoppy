@@ -34,6 +34,18 @@ public class ProductService : IProductService
         return result;
     }
 
+    public async Task<BaseResult<PagingResult<ProductRatingDto>>?> FilterProductRatingAsync(FilterProductRating request)
+    {
+        var response =
+            await _client.GetAsync(
+                $"{_appSettings.Apis.BaseUrl}{BasePath}/{request.ProductId}/rating?page={request.Page}&size={request.Size}");
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<BaseResult<PagingResult<ProductRatingDto>>>(content);
+
+        return result;
+    }
+
     public async Task<BaseResult<ProductDto>?> GetByIdAsync(Guid id)
     {
         var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}{BasePath}/{id}");
@@ -51,17 +63,16 @@ public class ProductService : IProductService
         foreach (var property in request.GetType().GetProperties())
         {
             var value = property.GetValue(request);
-            if (value != null)
-            {
-                if (queryStringBuilder.Length > 0)
-                {
-                    queryStringBuilder.Append("&");
-                }
+            if (value == null) continue;
 
-                queryStringBuilder.Append(property.Name);
-                queryStringBuilder.Append("=");
-                queryStringBuilder.Append(Uri.EscapeDataString(value.ToString()));
+            if (queryStringBuilder.Length > 0)
+            {
+                queryStringBuilder.Append('&');
             }
+
+            queryStringBuilder.Append(property.Name);
+            queryStringBuilder.Append('=');
+            queryStringBuilder.Append(Uri.EscapeDataString(value.ToString() ?? string.Empty));
         }
 
         return queryStringBuilder.ToString();

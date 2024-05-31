@@ -9,5 +9,7 @@ public interface IProductService
 {
     Task<BaseResult<PagingResult<FilterProductResultDto>>?> FilterProductAsync(FilterProductDto request);
 
+    Task<BaseResult<PagingResult<ProductRatingDto>>?> FilterProductRatingAsync(FilterProductRating request);
+
     Task<BaseResult<ProductDto>?> GetByIdAsync(Guid id);
 }

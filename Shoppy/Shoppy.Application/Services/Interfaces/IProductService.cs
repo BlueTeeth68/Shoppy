@@ -2,12 +2,15 @@
 using Shoppy.Application.Features.Products.Requests.Query;
 using Shoppy.Application.Features.Products.Results.Query;
 using Shoppy.Domain.Repositories.Base;
+using Shoppy.SharedLibrary.Models.Responses.Products;
 
 namespace Shoppy.Application.Services.Interfaces;
 
 public interface IProductService
 {
     Task<PagingResult<FilterProductResult>> FilterProductAsync(FilterProductQuery request);
+
+    Task<PagingResult<ProductRatingDto>> FilterProductRatingAsync(FilterProductRatingQuery request);
 
     Task SeedDataAsync(int size, Guid categoryId, CancellationToken cancellationToken = default);
 
