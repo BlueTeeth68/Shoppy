@@ -13,94 +13,94 @@
 <!-- Products Start -->
 <div class="container-fluid pt-5 pb-3">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
-        <span class="bg-secondary pr-3">Featured Products</span>
+        <span class="bg-light ps-2 pe-3 rounded-border-1">Featured Products</span>
     </h2>
     <div class="row px-xl-5">
+            <div class="col-12 pb-1">
+                <div class="d-flex align-items-center justify-content-end mb-4">
 
-        <div class="col-12 pb-1">
-            <div class="d-flex align-items-center justify-content-end mb-4">
-
-                <div class="ml-2">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle rounded-border-1" data-toggle="dropdown">Sorting</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item"
-                               asp-controller="Home"
-                               asp-action="Index"
-                               asp-route-name="@name"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-page="@pageNumber"
-                               asp-route-size="@size"
-                               asp-route-sortName="asc">
-                                Name ascending
-                            </a>
-                            <a class="dropdown-item"
-                               asp-controller="Home"
-                               asp-action="Index"
-                               asp-route-name="@name"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-page="@pageNumber"
-                               asp-route-size="@size"
-                               asp-route-sortName="desc">
-                                Name descending
-                            </a>
-                            <a class="dropdown-item"
-                               asp-controller="Home"
-                               asp-action="Index"
-                               asp-route-name="@name"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-page="@pageNumber"
-                               asp-route-size="@size"
-                               asp-route-sortPrice="asc">
-                                Price ascending
-                            </a>
-                            <a class="dropdown-item"
-                               asp-controller="Home"
-                               asp-action="Index"
-                               asp-route-name="@name"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-page="@pageNumber"
-                               asp-route-size="@size"
-                               asp-route-sortPrice="desc">
-                                Price descending
-                            </a>
+                    <div class="ml-2">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle rounded-border-1 px-3" data-toggle="dropdown">Sorting</button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item"
+                                   asp-controller="Home"
+                                   asp-action="Index"
+                                   asp-route-name="@name"
+                                   asp-route-categoryId="@categoryId"
+                                   asp-route-page="@pageNumber"
+                                   asp-route-size="@size"
+                                   asp-route-sortName="asc">
+                                    Name ascending
+                                </a>
+                                <a class="dropdown-item"
+                                   asp-controller="Home"
+                                   asp-action="Index"
+                                   asp-route-name="@name"
+                                   asp-route-categoryId="@categoryId"
+                                   asp-route-page="@pageNumber"
+                                   asp-route-size="@size"
+                                   asp-route-sortName="desc">
+                                    Name descending
+                                </a>
+                                <a class="dropdown-item"
+                                   asp-controller="Home"
+                                   asp-action="Index"
+                                   asp-route-name="@name"
+                                   asp-route-categoryId="@categoryId"
+                                   asp-route-page="@pageNumber"
+                                   asp-route-size="@size"
+                                   asp-route-sortPrice="asc">
+                                    Price ascending
+                                </a>
+                                <a class="dropdown-item"
+                                   asp-controller="Home"
+                                   asp-action="Index"
+                                   asp-route-name="@name"
+                                   asp-route-categoryId="@categoryId"
+                                   asp-route-page="@pageNumber"
+                                   asp-route-size="@size"
+                                   asp-route-sortPrice="desc">
+                                    Price descending
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="btn-group ml-2">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle rounded-border-1" data-toggle="dropdown">Showing</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item"
-                               asp-controller="Home"
-                               asp-action="Index"
-                               asp-route-name="@name"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-page="@pageNumber"
-                               asp-route-size="8"
-                               asp-route-sortName="@sortName"
-                               asp-route-sortPrice="@sortPrice">
-                                8
-                            </a>
-                            <a class="dropdown-item"
-                               asp-controller="Home"
-                               asp-action="Index"
-                               asp-route-name="@name"
-                               asp-route-categoryId="@categoryId"
-                               asp-route-page="@pageNumber"
-                               asp-route-size="16"
-                               asp-route-sortName="@sortName"
-                               asp-route-sortPrice="@sortPrice">
-                                16
-                            </a>
+                        <div class="btn-group ml-2">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle rounded-border-1 px-3" data-toggle="dropdown">Showing</button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item"
+                                   asp-controller="Home"
+                                   asp-action="Index"
+                                   asp-route-name="@name"
+                                   asp-route-categoryId="@categoryId"
+                                   asp-route-page="@pageNumber"
+                                   asp-route-size="8"
+                                   asp-route-sortName="@sortName"
+                                   asp-route-sortPrice="@sortPrice">
+                                    8
+                                </a>
+                                <a class="dropdown-item"
+                                   asp-controller="Home"
+                                   asp-action="Index"
+                                   asp-route-name="@name"
+                                   asp-route-categoryId="@categoryId"
+                                   asp-route-page="@pageNumber"
+                                   asp-route-size="16"
+                                   asp-route-sortName="@sortName"
+                                   asp-route-sortPrice="@sortPrice">
+                                    16
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        @foreach (var product in Model)
-        {
-            @await Html.PartialAsync("~/Views/Partial/Home/ProductItemComponent.cshtml", product)
-        }
+            @foreach (var product in Model)
+            {
+                @await Html.PartialAsync("~/Views/Partial/Home/ProductItemComponent.cshtml", product)
+            }
+
 
         <div class="col-12">
             <nav>
@@ -145,7 +145,7 @@
                             else
                             {
                                 startPage = Math.Max(2, totalPage - maxVisiblePages + 1);
-                                endPage = totalPage-1;
+                                endPage = totalPage - 1;
                             }
                         }
                     }

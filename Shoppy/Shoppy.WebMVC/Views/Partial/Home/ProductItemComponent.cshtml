@@ -4,7 +4,7 @@
     <div class="bg-light mb-4 card mx-3 product-item" >
         <div class="product-img position-relative overflow-hidden">
 
-            <img class="img-fluid" src=@(Model.ProductThumbUrl ?? "~/img/product-1.jpg") alt="">
+            <img class="img-fluid" src=@(Model.ProductThumbUrl ?? "/img/default/default_book.jpg") alt="">
 
             <form asp-controller="Cart" id="@Model.Id">
                 <div class="product-action">
@@ -16,7 +16,7 @@
             </form>
         </div>
         <div class="text-center py-2 product-info">
-            <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none ">@Model.Name</a>
+            <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.Id" class="h5 d-block text-decoration-none text-truncate mx-2">@Model.Name</a>
 
             <div class="d-flex align-items-center justify-content-center mb-1">
                 @if (Model.AvgRate != null)

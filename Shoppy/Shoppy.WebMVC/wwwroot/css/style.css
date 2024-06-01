@@ -10332,9 +10332,9 @@ a.text-dark:hover, a.text-dark:focus {
     padding: 30px;
 }
 
-.btn.btn-primary {
-    color: #3D464D !important;
-}
+/*.btn.btn-primary {*/
+/*    color: #3D464D !important;*/
+/*}*/
 
 .btn-square {
     width: 40px;

@@ -1,14 +1,14 @@
 ﻿@model Shoppy.SharedLibrary.Models.Responses.Orders.OrderItemDto;
 
 <tr>
-    <td class="d-flex justify-content-start align-items-start">
+    <td class="d-flex w-100 justify-content-start align-items-center"  style="width:40%">
         <img class="me-3" src=@(Model.ProductThumbUrl ?? "~/img/product-1.jpg") alt="" style="width: 50px;">
         <a asp-controller="Books" asp-action="Detail" asp-route-id="@Model.ProductId" class="h6 text-decoration-none text-truncate"> @Model.ProductName</a>
     </td>
-    <td class="align-middle">$@Model.Price</td>
-    <td class="align-middle">@Model.Quantity</td>
-    <td class="align-middle">$@(Model.Quantity * Model.Price)</td>
-    <td class="align-middle">
+    <td class="align-middle"  style="width:20%">$@Model.Price</td>
+    <td class="align-middle"  style="width:10%">@Model.Quantity</td>
+    <td class="align-middle"  style="width:10%">$@(Model.Quantity * Model.Price)</td>
+    <td class="align-middle"  style="width:20%">
         @(Model.RatingDto != null
             ? await Html.PartialAsync("~/Views/Partial/Rating/ViewRatingModal.cshtml", Model.RatingDto)
             : await Html.PartialAsync("~/Views/Partial/Rating/RatingModal.cshtml", Model.Id.ToString())

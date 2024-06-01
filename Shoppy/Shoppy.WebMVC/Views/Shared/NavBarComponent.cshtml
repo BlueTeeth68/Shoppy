@@ -45,9 +45,9 @@
 
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                        <a class="btn px-0 ml-3" asp-controller="Cart" asp-action="Index">
+                        <a class="btn px-0 me-3" asp-controller="Cart" asp-action="Index">
                             <i class="fas fa-shopping-cart text-primary"></i>
-                            <span class="badge border border-primary rounded-circle cart-total-item text-primary" style="padding-bottom: 2px">@(cartTotalItem ?? 0)</span>
+                            <span class="badge border border-primary rounded-circle cart-total-item text-primary px-0 py-0" style="width: 20px; height: 20px;">@(cartTotalItem ?? 0)</span>
                         </a>
                         @* <div class="btn-group"> *@
                         @*     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"> *@
@@ -85,8 +85,8 @@
                             <a class="nav-link nav-icon-hover" id="drop2" data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 
-                                <img src="@(pictureUrl ?? "~/img/default/default_user_img.png")" alt="" width="35" height="35" class="rounded-circle"/>
-                                <span class="text-dark">@fullName</span>
+                                <img src="@(pictureUrl ?? "/img/default/default_user_img.png")" alt="" width="35" height="35" class="rounded-circle" style="border: 1px solid grey"/>
+                                <span class="text-dark ms-2">@fullName</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                                 <div class="message-body">

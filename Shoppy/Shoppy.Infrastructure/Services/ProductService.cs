@@ -186,6 +186,7 @@ public class ProductService : IProductService
                     UserName = user.FullName,
                     PictureUrl = user.PictureUrl
                 })
+            .OrderByDescending(pr => pr.Date)
             .Skip((request.Page.Value - 1) * request.Size.Value)
             .Take(request.Size.Value)
             .ToList();

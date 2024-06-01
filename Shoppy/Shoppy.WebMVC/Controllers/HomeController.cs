@@ -86,10 +86,10 @@ namespace Shoppy.WebMVC.Controllers
                 return RedirectToAction("Error");
             }
 
-            foreach (var tmp in products.Result.Results)
-            {
-                tmp.Name = StringUtil.FormatProductName(tmp.Name, 30, 27);
-            }
+            // foreach (var tmp in products.Result.Results)
+            // {
+            //     tmp.Name = StringUtil.FormatProductName(tmp.Name, 30, 27);
+            // }
 
             ViewBag.Products = products.Result.Results;
             ViewBag.TotalPage = products.Result.TotalPages;

@@ -1,10 +1,10 @@
 ﻿@model Shoppy.SharedLibrary.Models.Responses.Orders.OrderQueryDto
 
 <tr>
-    <td class="align-middle">
+    <td class="align-middle" style="width:40%">
         <a asp-controller="Order" asp-action="Detail" asp-route-id="@Model.Id" class="h6 text-decoration-none text-truncate">@Model.Id</a>
     </td>
-    <td class="align-middle">@Model.Date</td>
-    <td class="align-middle"><span class="badge rounded-pill bg-success">@Model.Status</span></td>
-    <td class="align-middle">$@Model.TotalPrice</td>
+    <td class="align-middle" style="width:30%">@Model.Date</td>
+    <td class="align-middle" style="width:15%"><span class="badge rounded-pill bg-success">@Model.Status</span></td>
+    <td class="align-middle" style="width:15%">$@Model.TotalPrice</td>
 </tr>

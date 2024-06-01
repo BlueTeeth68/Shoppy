@@ -139,3 +139,7 @@ i.star {
 .btn .btn-primary {
     color: white;
 }
+
+.container-body {
+    min-height: 50vh;
+}

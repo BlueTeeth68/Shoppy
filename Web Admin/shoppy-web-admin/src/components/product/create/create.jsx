@@ -30,7 +30,7 @@ export function AddNewProduct({ categoryList }) {
 
     const handleSubmit = async (values) => {
         const { name, description, authorName, publisher, numberOfPage,
-            dateOfPublication, price, quantity, categoryId
+            dateOfPublication, price, quantity, categoryId, productThumb
         } = values;
         setIsLoading(true);
         try {
@@ -41,7 +41,8 @@ export function AddNewProduct({ categoryList }) {
                 authorName: authorName, publisher: publisher,
                 numberOfPage: numberOfPage,
                 dateOfPublication: dateOfPublication, price: price,
-                quantity: quantity, categoryId: categoryId
+                quantity: quantity, categoryId: categoryId,
+                productThumb: productThumb
             }
 
             await createApi(createData);

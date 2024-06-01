@@ -2,7 +2,8 @@ import axios from "axios";
 
 
 //api production
-const url = "https://localhost:7061/api/v1/";
+// const url = "https://localhost:7061/api/v1/";
+const url = "https://localhost:44301/api/v1";
 
 const instance = axios.create({
     baseURL: url,
