@@ -13,6 +13,7 @@ public class ProductCategoryRepository : BaseRepository<ProductCategory, Guid>, 
     {
     }
 
+
     public new async Task<ProductCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken,
         bool disableTracking = false)
     {
@@ -31,19 +32,21 @@ public class ProductCategoryRepository : BaseRepository<ProductCategory, Guid>, 
             }).FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
-
     public new async Task<List<ProductCategory>> GetAllAsync(CancellationToken cancellationToken = default,
         bool disableTracking = false)
     {
         var query = DbSet;
         if (disableTracking)
             query.AsNoTracking();
-        return await query.Select(pc => new ProductCategory()
-        {
-            Id = pc.Id,
-            Name = pc.Name,
-            Description = pc.Description
-        }).ToListAsync(cancellationToken);
+        return await query
+            .Select(pc => new ProductCategory()
+            {
+                Id = pc.Id,
+                Name = pc.Name,
+                Description = pc.Description
+            })
+            .OrderBy(pc => pc.Name)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> ExistByExpressionAsync(Expression<Func<ProductCategory, bool>> expression,
@@ -51,7 +54,7 @@ public class ProductCategoryRepository : BaseRepository<ProductCategory, Guid>, 
     {
         var entityId = await DbSet.Where(expression)
             .Select(pc => pc.Id)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
         return entityId != Guid.Empty;
     }

@@ -9,7 +9,7 @@ import { Backdrop, CircularProgress, Dialog, DialogActions, DialogContent, Dialo
 import { useNavigate } from "react-router-dom";
 
 
-export function UpdateProduct({ categoryList, open, setOpen, productId, setProductId }) {
+export function UpdateProduct({ categoryList, open, productId, setUpdateModal }) {
 
     const navigate = useNavigate();
 
@@ -31,8 +31,9 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
         });
 
     useEffect(() => {
-
         const fetchApi = async () => {
+            //log
+            console.log("Call fetch update porduct");
             setIsLoading(true);
             try {
 
@@ -103,8 +104,10 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
 
     const handleClose = () => {
         setProduct(null);
-        setProductId(null);
-        setOpen(false);
+        setUpdateModal({
+            open: false,
+            currentId: null
+        })
     }
 
     const schema = yup.object().shape({
@@ -140,7 +143,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
     return (<>
         {/* < !--Button trigger modal-- > */}
         <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 2 }}
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 4 }}
             open={isLoading}
         >
             <CircularProgress color="primary" />
@@ -148,7 +151,7 @@ export function UpdateProduct({ categoryList, open, setOpen, productId, setProdu
         {product &&
             <Dialog
                 open={open}
-                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                sx={{ zIndex: (theme) => theme.zIndex.drawer + 3 }}
                 onClose={handleClose}
                 maxWidth="md"
                 fullWidth>
@@ -390,6 +393,5 @@ UpdateProduct.propTypes = {
     categoryList: PropTypes.array.isRequired,
     productId: PropTypes.string.isRequired,
     open: PropTypes.bool,
-    setOpen: PropTypes.func,
-    setProductId: PropTypes.func
+    setUpdateModal: PropTypes.func.isRequired
 }

@@ -5,8 +5,9 @@ import "./productList.css";
 import defaultBookImg from "./../../assets/images/logos/default_book_img.png";
 import { UpdateProduct } from "./update/update";
 import { useState } from "react";
+import { convertStatus } from "../../services/utils/productUtils";
 
-const columns = (convertStatus, setCurrentId, setOpen) => [
+const columns = (setUpdateModal) => [
     {
         //product is {pictureUrl, name}
         field: "product",
@@ -28,14 +29,6 @@ const columns = (convertStatus, setCurrentId, setOpen) => [
         },
         sortable: false,
     },
-    // {
-    //     field: "description",
-    //     headerName: "Description",
-    //     headerAlign: "center",
-    //     flex: 2,
-    //     align: "center",
-    //     sortable: false,
-    // },
 
     {
         field: "price",
@@ -58,7 +51,6 @@ const columns = (convertStatus, setCurrentId, setOpen) => [
             return (<Rating name="read-only" value={data} readOnly />
             );
         },
-
 
     },
 
@@ -118,9 +110,11 @@ const columns = (convertStatus, setCurrentId, setOpen) => [
                         </button>
                         <button type="button" onClick={() => {
                             //log
-                            console.log(`Current id: ${data}`)
-                            setCurrentId(data);
-                            setOpen(true);
+                            console.log(`Current id: ${data}`);
+                            setUpdateModal({
+                                open: true, 
+                                currentId: data
+                            })
                         }} className="btn btn-primary" title="Update" data-bs-toggle="modal"  >
                             <i className="fa-solid fa-pen-to-square"></i>
                         </button>
@@ -135,12 +129,6 @@ const columns = (convertStatus, setCurrentId, setOpen) => [
     },
 ];
 
-const convertStatus = (value) => {
-    if (value === 1) return { label: "Active", color: "primary" };
-    if (value === 2) return { label: "Inactive", color: "success" };
-    if (value === 3) return { label: "Out of stock", color: "error" };
-};
-
 export default function ProductList({
     data,
     page,
@@ -152,8 +140,11 @@ export default function ProductList({
 }) {
 
     // const [currentProduct, setCurrentProduct] = useState();
-    const [currentId, setCurrentId] = useState();
-    const [open, setOpen] = useState(false);
+
+    const [updateModal, setUpdateModal] = useState({
+        open: false,
+        currentId: undefined
+    })
 
     const isDataEmpty = data?.length === 0;
 
@@ -178,7 +169,7 @@ export default function ProductList({
                         }))}
 
                         getRowHeight={() => "auto"}
-                        columns={columns(convertStatus, setCurrentId, setOpen)}
+                        columns={columns(setUpdateModal)}
                         initialState={{
                             pagination: {
                                 paginationModel: { page: page - 1, pageSize: size },
@@ -202,8 +193,8 @@ export default function ProductList({
                 )}
             </div>
 
-            {currentId &&
-                <UpdateProduct categoryList={categoryList} productId={currentId} open={open} setOpen={setOpen} setProductId={setCurrentId} />}
+            {updateModal.open &&
+                <UpdateProduct categoryList={categoryList} productId={updateModal.currentId} open={updateModal.open} setUpdateModal={setUpdateModal} />}
         </>
     );
 }

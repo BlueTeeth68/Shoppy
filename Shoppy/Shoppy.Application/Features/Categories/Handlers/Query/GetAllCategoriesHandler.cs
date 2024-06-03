@@ -17,7 +17,7 @@ public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesQuery, Li
 
     public async Task<List<CategoryResult>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _unitOfWork.ProductCategoryRepository.GetAllAsync(cancellationToken);
+        var entities = await _unitOfWork.ProductCategoryRepository.GetAllAsync(cancellationToken, disableTracking: true);
         return CategoryMapper.CategoryToCategoryResult(entities);
     }
 }
