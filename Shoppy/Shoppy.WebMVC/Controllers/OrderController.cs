@@ -25,12 +25,11 @@ public class OrderController(
         ViewBag.Page = page;
         ViewBag.Size = size;
 
-        var accessToken = GetAccessTokenAsync();
         try
         {
             var fetchCategoryTask = FetchCategoriesAsync();
             var fetchCartTotalItemTask = FetchCartTotalItemAsync();
-            var fetchOrderTask = FetchOrdersAsync(page.Value, size.Value, accessToken);
+            var fetchOrderTask = FetchOrdersAsync(page.Value, size.Value);
 
             await Task.WhenAll(fetchCategoryTask, fetchOrderTask, fetchCartTotalItemTask);
 
@@ -54,14 +53,12 @@ public class OrderController(
 
         ViewBag.OrderId = id;
 
-        var accessToken = GetAccessTokenAsync();
-
         try
         {
             var fetchCategoryTask = FetchCategoriesAsync();
 
             var fetchCartTotalItemTask = FetchCartTotalItemAsync();
-            var fetchOrderTask = FetchOrderDetailAsync(id, accessToken);
+            var fetchOrderTask = FetchOrderDetailAsync(id);
 
             await Task.WhenAll(fetchCategoryTask, fetchCartTotalItemTask, fetchOrderTask);
 
@@ -83,11 +80,9 @@ public class OrderController(
             return RedirectToAction("Detail", new { id = orderId });
         }
 
-        var accessToken = GetAccessTokenAsync();
-
         try
         {
-            var result = await AddReviewAsync(dto, accessToken);
+            var result = await AddReviewAsync(dto);
             return result ?? RedirectToAction("Detail", new { id = orderId });
         }
         catch (Exception e)
@@ -98,7 +93,7 @@ public class OrderController(
         }
     }
 
-    private async Task<IActionResult?> FetchOrdersAsync(int page, int size, string? accessToken)
+    private async Task<IActionResult?> FetchOrdersAsync(int page, int size)
     {
         // var orders = await orderService.FilterUserOrderAsync(page, size, accessToken);
 
@@ -121,7 +116,7 @@ public class OrderController(
         return null;
     }
 
-    private async Task<IActionResult?> FetchOrderDetailAsync(Guid id, string? accessToken)
+    private async Task<IActionResult?> FetchOrderDetailAsync(Guid id)
     {
         // var order = await orderService.GetOrderByIdAsync(id, accessToken);
 
@@ -148,7 +143,7 @@ public class OrderController(
         return null;
     }
 
-    private async Task<IActionResult?> AddReviewAsync(AddRatingDto dto, string? accessToken)
+    private async Task<IActionResult?> AddReviewAsync(AddRatingDto dto)
     {
         try
         {

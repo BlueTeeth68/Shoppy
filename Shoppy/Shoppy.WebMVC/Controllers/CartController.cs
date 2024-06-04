@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Shoppy.SharedLibrary.Models.Requests.Carts;
 using Shoppy.WebMVC.ExceptionHandlers;
 using Shoppy.WebMVC.Helpers.Utils;
-using Shoppy.WebMVC.Services.Interfaces;
 using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers;
@@ -12,7 +11,7 @@ public class CartController(
     ILogger<HomeController> logger,
     ICartsClient cartsClient,
     ICategoriesClient categoriesClient,
-    IOrderService orderService) : BaseController(logger, cartsClient, categoriesClient)
+    IOrdersClient ordersClient) : BaseController(logger, cartsClient, categoriesClient)
 {
     // GET
     [HttpGet]
@@ -45,12 +44,12 @@ public class CartController(
     {
         // var accessToken = GetAccessTokenAsync();
 
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
-        if (string.IsNullOrEmpty(accessToken))
-        {
-            const string redirectUrl = "/Auth/Login";
-            return Json(new { success = false, redirectUrl });
-        }
+        // var accessToken = HttpContext.Request.Cookies["accessToken"];
+        // if (string.IsNullOrEmpty(accessToken))
+        // {
+        //     const string redirectUrl = "/Auth/Login";
+        //     return Json(new { success = false, redirectUrl });
+        // }
 
         try
         {
@@ -64,6 +63,11 @@ public class CartController(
 
             var totalItem = totalItemResult?.Result ?? 0;
             return Json(new { success = true, totalItem });
+        }
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
+        {
+            const string redirectUrl = "/Auth/Login";
+            return Json(new { success = false, redirectUrl });
         }
         catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.NoContent or HttpStatusCode.OK)
         {
@@ -149,15 +153,23 @@ public class CartController(
     [HttpPost]
     public async Task<IActionResult> CheckOut()
     {
-        var accessToken = GetAccessTokenAsync();
-
         try
         {
-            var response = await orderService.CreateOrderAsync(accessToken);
+            // var response = await orderService.CreateOrderAsync(accessToken);
+            var response = await ordersClient.CreateOrderAsync();
+
             if (response == null || response.IsSuccess) return RedirectToAction("Index");
 
             ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
             return RedirectToAction("Error");
+        }
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent)
+        {
+            return RedirectToAction("Index");
+        }
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
+        {
+            return RedirectToAction("Login", "Auth");
         }
         catch (Exception e)
         {
