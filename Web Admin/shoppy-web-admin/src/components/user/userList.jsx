@@ -106,7 +106,7 @@ export default function UserList({
             <div style={{ minHeight: "50vh", width: "100%" }}>
                 {isDataEmpty ? (
                     <h3 style={{ textAlign: "center" }}>
-                        There is no product in the system
+                        There is no user in the system
                     </h3>
                 ) : (
                     <DataGrid

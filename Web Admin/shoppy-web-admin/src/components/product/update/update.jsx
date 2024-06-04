@@ -32,8 +32,6 @@ export function UpdateProduct({ categoryList, open, productId, setUpdateModal })
 
     useEffect(() => {
         const fetchApi = async () => {
-            //log
-            console.log("Call fetch update porduct");
             setIsLoading(true);
             try {
 
@@ -157,7 +155,7 @@ export function UpdateProduct({ categoryList, open, productId, setUpdateModal })
                 fullWidth>
                 <ToastContainer />
 
-                <DialogTitle textAlign={"center"} > <Typography variant="h4">Update</Typography></DialogTitle>
+                <DialogTitle textAlign={"center"} > <Typography>Update</Typography></DialogTitle>
                 <DialogContent>
                     <Formik
                         validationSchema={schema}
@@ -165,7 +163,7 @@ export function UpdateProduct({ categoryList, open, productId, setUpdateModal })
                         initialValues={{
                             id: product.id,
                             name: product.name,
-                            description: product.description,
+                            description: product.description ?? undefined,
                             authorName: product.authorName,
                             publisher: product.publisher,
                             numberOfPage: product.numberOfPage,

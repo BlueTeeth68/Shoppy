@@ -5,7 +5,6 @@ export const convertStatus = (value) => {
     if (value === 3) return { label: "Out of stock", color: "error" };
 };
 
-
 export const ProductStatuses = [
     {
         name: "All",

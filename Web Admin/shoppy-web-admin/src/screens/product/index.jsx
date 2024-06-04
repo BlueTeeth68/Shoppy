@@ -6,7 +6,7 @@ import ProductList from "../../components/product/productList";
 import { Sidebar } from "../../components/sidebar/sidebar";
 import { Header } from "../../components/header/header";
 import { AddNewProduct } from "../../components/product/create/create";
-import { FilterNone, North, Search, South } from "@mui/icons-material";
+import {  North, Search, South } from "@mui/icons-material";
 import DropdownCustomComponent from "../../components/dropdowncomponent/dropdown";
 import { ProductStatuses } from "../../services/utils/productUtils";
 
@@ -112,7 +112,7 @@ export function Product() {
         }
 
         fetchData();
-    }, [categories]);
+    }, []);
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();

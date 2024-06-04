@@ -124,7 +124,7 @@ export function AddNewProduct({ categoryList }) {
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <p className="modal-title" ><Typography variant="h4">Add new</Typography> </p>
+                        <p ><Typography variant="h4">Add new</Typography> </p>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
