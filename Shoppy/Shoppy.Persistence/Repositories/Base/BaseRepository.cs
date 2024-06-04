@@ -9,21 +9,21 @@ namespace Shoppy.Persistence.Repositories.Base;
 public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
     where T : BaseEntity<TKey>, IAggregateRoot
 {
-    protected AppDbContext _dbContext;
+    protected readonly AppDbContext DbContext;
 
     protected ILogger<T> Logger;
 
-    protected DbSet<T> DbSet => _dbContext.Set<T>();
+    protected DbSet<T> DbSet => DbContext.Set<T>();
 
     public BaseRepository(AppDbContext dbContext, ILogger<T> logger)
     {
-        _dbContext = dbContext;
+        DbContext = dbContext;
         Logger = logger;
     }
 
     public void SetRowVersion(T entity, byte[] version)
     {
-        _dbContext.Entry(entity).OriginalValues[nameof(entity.RowVersion)] = version;
+        DbContext.Entry(entity).OriginalValues[nameof(entity.RowVersion)] = version;
     }
 
     public bool IsDbUpdateConcurrencyException(Exception ex)
@@ -58,7 +58,7 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
 
     public async Task AddOrUpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        if (entity.Id.Equals(default(TKey)))
+        if (entity.Id != null && entity.Id.Equals(default(TKey)))
         {
             await AddAsync(entity, cancellationToken);
         }
@@ -98,6 +98,6 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
 
     public async Task BulkInsertAsync(IEnumerable<T> entities, CancellationToken cancellationToken=default)
     {
-        await _dbContext.BulkInsertAsync(entities, cancellationToken: cancellationToken);
+        await DbContext.BulkInsertAsync(entities, cancellationToken: cancellationToken);
     }
 }

@@ -12,6 +12,7 @@ using Shoppy.Domain.Entities;
 using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.Domain.Repositories.UnitOfWork;
+using Shoppy.Persistence.DataGenerator;
 using Shoppy.Persistence.Identity;
 using Shoppy.Persistence.Specifications;
 using Shoppy.SharedLibrary.Models.Responses.Products;
@@ -121,9 +122,10 @@ public class ProductService : IProductService
 
             var queryable = SpecificationEvaluator.GetQuery(query, userSpecification);
 
-            var totalRecord = await queryable.CountAsync();
+            var totalRecord = await queryable.AsNoTracking().CountAsync();
 
             var result = await queryable
+                .AsNoTracking()
                 .Skip((filter.Page.Value - 1) * filter.Size.Value)
                 .Take(filter.Size.Value)
                 .Select(p => new FilterProductResult()
@@ -167,12 +169,10 @@ public class ProductService : IProductService
         }
 
         var totalRecord = await ratingQuery.Where(r => r.OrderItem.ProductId == request.ProductId)
-            .Select(r => r.Id)
-            .Skip((request.Page.Value - 1) * request.Size.Value)
-            .Take(request.Size.Value)
+            .AsNoTracking()
             .CountAsync();
 
-        var data = ratingQuery.Where(r => r.OrderItem.ProductId == request.ProductId)
+        var data = await ratingQuery.AsNoTracking().Where(r => r.OrderItem.ProductId == request.ProductId)
             .Join(userQuery,
                 rating => rating.OrderItem.Order.UserId,
                 user => user.Id,
@@ -188,7 +188,7 @@ public class ProductService : IProductService
             .OrderByDescending(pr => pr.Date)
             .Skip((request.Page.Value - 1) * request.Size.Value)
             .Take(request.Size.Value)
-            .ToList();
+            .ToListAsync();
 
         var totalPages = (int)Math.Ceiling((double)totalRecord / request.Size.Value);
 
@@ -201,7 +201,7 @@ public class ProductService : IProductService
         return result;
     }
 
-    public async Task SeedDataAsync(int size, Guid categoryId, CancellationToken cancellationToken = default)
+    public async Task SeedDataAsyncOldVersion(int size, Guid categoryId, CancellationToken cancellationToken = default)
     {
         if (!await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == categoryId,
                 cancellationToken))
@@ -228,6 +228,28 @@ public class ProductService : IProductService
                 Status = ProductStatus.Active
             });
         }
+
+        try
+        {
+            await _unitOfWork.ProductRepository.BulkInsertAsync(products, cancellationToken: cancellationToken);
+            await _unitOfWork.SaveChangeAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error seeding data: {}", e.Message);
+            throw new Exception("Error when seed product data");
+        }
+    }
+
+    public async Task SeedDataAsync(int size, Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        if (!await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Id == categoryId,
+                cancellationToken))
+        {
+            throw new BadRequestException("Category does not exist");
+        }
+
+        var products = DataGenerator.GetProductGenerator(categoryId).Generate(size <= 0 ? 1 : size);
 
         try
         {

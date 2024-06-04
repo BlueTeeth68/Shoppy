@@ -182,20 +182,6 @@ public class UserService : IUserService
     {
         var userQuery = _userManager.Users;
 
-        // var cart = await userQuery.Where(u => u.Id == _currentUser.UserId && u.Cart != null)
-        //     .Select(u => new CartDto()
-        //     {
-        //         TotalItem = u.Cart.TotalItem,
-        //         Items = u.Cart.Items.Select(i => new CartItemDto()
-        //         {
-        //             Quantity = i.Quantity,
-        //             ProductId = i.ProductId,
-        //             ProductName = i.Product.Name,
-        //             ProductThumbUrl = i.Product.ProductThumbUrl,
-        //             Price = i.Product.Price
-        //         }).ToList()
-        //     }).FirstOrDefaultAsync();
-
         var user = await userQuery.Where(u => u.Id == _currentUser.UserId)
             .Include(u => u.Cart)
             .ThenInclude(c => c.Items)
@@ -218,7 +204,7 @@ public class UserService : IUserService
     public async Task<int> GetCartTotalItemAsync()
     {
         var userQuery = _userManager.Users;
-        var user = await userQuery.Where(u => u.Id == _currentUser.UserId)
+        var user = await userQuery.AsNoTracking().Where(u => u.Id == _currentUser.UserId)
             .Select(u => new AppUser
             {
                 Cart = new Cart()
@@ -235,7 +221,7 @@ public class UserService : IUserService
     {
         //check product
         var product = await _unitOfWork.ProductRepository
-            .GetQueryableSet().Where(p => p.Id == item.ProductId && p.Status == ProductStatus.Active)
+            .GetQueryableSet().AsNoTracking().Where(p => p.Id == item.ProductId && p.Status == ProductStatus.Active)
             .Select(p => new Product()
             {
                 Price = p.Price,
@@ -282,7 +268,7 @@ public class UserService : IUserService
 
     public async Task RemoveCartItemAsync(Guid productId, CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.Users.Where(u => u.Id == _currentUser.UserId)
+        var user = await _userManager.Users.AsNoTracking().Where(u => u.Id == _currentUser.UserId)
             .Select(u => new AppUser()
             {
                 CartId = u.CartId
@@ -309,7 +295,7 @@ public class UserService : IUserService
     {
         //check product
         var product = await _unitOfWork.ProductRepository
-            .GetQueryableSet().Where(p => p.Id == productId && p.Status == ProductStatus.Active)
+            .GetQueryableSet().AsNoTracking().Where(p => p.Id == productId && p.Status == ProductStatus.Active)
             .Select(p => new Product()
             {
                 Price = p.Price,

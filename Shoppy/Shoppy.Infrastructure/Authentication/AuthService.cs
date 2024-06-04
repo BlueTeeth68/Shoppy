@@ -78,14 +78,6 @@ public class AuthService(
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(user, RoleConstant.UserRole);
-
-            // var accessTokenTask = tokenGenerator.GenerateAccessTokenAsync(user);
-            // var refreshTokenTask = tokenGenerator.GenerateRefreshTokenAsync(user);
-            //
-            // await Task.WhenAll(accessTokenTask, refreshTokenTask);
-            // var accessToken = accessTokenTask.Result;
-            // var refreshToken = refreshTokenTask.Result;
-
             var accessToken = await tokenGenerator.GenerateAccessTokenAsync(user);
             var refreshToken = await tokenGenerator.GenerateRefreshTokenAsync(user);
 

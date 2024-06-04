@@ -19,6 +19,6 @@ public class CartMapper
         => new CartDto()
         {
             TotalItem = entity.TotalItem,
-            Items = entity.Items?.Select(CartItemToCartItemDto).ToList() 
+            Items = entity.Items.Select(CartItemToCartItemDto).ToList() 
         };
 }

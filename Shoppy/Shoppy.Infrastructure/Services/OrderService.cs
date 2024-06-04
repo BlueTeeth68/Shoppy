@@ -12,7 +12,6 @@ public class OrderService : IOrderService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUser _currentUser;
 
-
     public OrderService(IUnitOfWork unitOfWork, ICurrentUser currentUser)
     {
         _unitOfWork = unitOfWork;
@@ -28,7 +27,7 @@ public class OrderService : IOrderService
         var totalRecord = await orderQuery.Where(o => o.UserId == _currentUser.UserId)
             .CountAsync(cancellationToken: cancellationToken);
 
-        var data = await orderQuery.Where(o => o.UserId == _currentUser.UserId)
+        var data = await orderQuery.AsNoTracking().Where(o => o.UserId == _currentUser.UserId)
             .OrderByDescending(o => o.CreatedDateTime)
             .Select(o => new OrderQueryDto()
             {

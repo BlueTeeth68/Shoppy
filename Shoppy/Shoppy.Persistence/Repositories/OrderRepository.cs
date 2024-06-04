@@ -19,7 +19,7 @@ public class OrderRepository : BaseRepository<Order, Guid>, IOrderRepository
         var productList = new List<Product>();
         foreach (var i in entity.Items)
         {
-            var product = await _dbContext.Products.Where(p => p.Id == i.ProductId)
+            var product = await DbContext.Products.Where(p => p.Id == i.ProductId)
                 .FirstOrDefaultAsync(cancellationToken: cancellationToken);
             if (product == null || product.Quantity < i.Quantity)
             {
@@ -41,6 +41,6 @@ public class OrderRepository : BaseRepository<Order, Guid>, IOrderRepository
 
         entity.CreatedDateTime = DateTime.UtcNow;
         await DbSet.AddAsync(entity, cancellationToken);
-        _dbContext.Products.UpdateRange(productList);
+        DbContext.Products.UpdateRange(productList);
     }
 }
