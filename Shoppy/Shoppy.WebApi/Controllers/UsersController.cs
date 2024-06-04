@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Carts.Request.Command;
 using Shoppy.Application.Features.Carts.Request.Query;
@@ -71,7 +70,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> AddToCartAsync([FromBody] AddCartItemCommand request)
     {
         await _mediator.Send(request);
-        return Ok();
+        return NoContent();
     }
 
     [HttpPatch("cart/item")]
@@ -79,7 +78,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> UpdateCartQuantity([FromBody] UpdateCartItemCommand request)
     {
         await _mediator.Send(request);
-        return Ok();
+        return NoContent();
     }
 
     [HttpDelete("cart/{productId:guid}")]
@@ -87,6 +86,6 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> RemoveFromCartAsync([FromRoute] Guid productId)
     {
         await _mediator.Send(new RemoveCartItemCommand() { ProductId = productId });
-        return Ok();
+        return NoContent();
     }
 }

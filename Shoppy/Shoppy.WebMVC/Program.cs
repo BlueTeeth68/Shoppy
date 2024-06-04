@@ -1,7 +1,6 @@
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Shoppy.WebMVC;
 using Shoppy.WebMVC.Configurations;
-using Shoppy.WebMVC.Middleware;
-using Shoppy.WebMVC.Services.Implements;
-using Shoppy.WebMVC.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,19 +14,12 @@ services.Configure<AppSettings>(configuration);
 services.AddSingleton(appSettings);
 
 // Add services to the container.
-services.AddControllersWithViews();
+services.AddControllersWithViews(opt =>
+{
+    opt.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
+});
 
-services.AddHttpClient();
-
-//add service
-services.AddScoped<IAuthService, AuthService>();
-services.AddScoped<IProductService, ProductService>();
-services.AddScoped<ICategoryService, CategoryService>();
-services.AddScoped<ICartService, CartService>();
-services.AddScoped<IOrderService, OrderService>();
-
-//add sesssion
-services.AddSession();
+services.AddDependency(appSettings);
 
 var app = builder.Build();
 
@@ -39,12 +31,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//middleware
+//Exception handler
+app.UseExceptionHandler(_ => { });
 
-app.UseMiddleware<LoginMiddleware>();
-app.UseMiddleware<NotFoundMiddleware>();
+//custom middleware
+app.UseCustomMiddleware();
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseSession();

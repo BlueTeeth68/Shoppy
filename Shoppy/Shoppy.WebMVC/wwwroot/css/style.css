@@ -4003,15 +4003,15 @@ input[type="button"].btn-block {
 }
 
 .custom-range:focus::-webkit-slider-thumb {
-    box-shadow: 0 0 0 1px #F5F5F5, none;
+    box-shadow: 0 0 0 1px #F5F5F5;
 }
 
 .custom-range:focus::-moz-range-thumb {
-    box-shadow: 0 0 0 1px #F5F5F5, none;
+    box-shadow: 0 0 0 1px #F5F5F5;
 }
 
 .custom-range:focus::-ms-thumb {
-    box-shadow: 0 0 0 1px #F5F5F5, none;
+    box-shadow: 0 0 0 1px #F5F5F5;
 }
 
 .custom-range::-moz-focus-outer {
@@ -10185,7 +10185,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .text-hide {
-    font: 0/0 a;
+    /*font: 0/0 a;*/
     color: transparent;
     text-shadow: none;
     background-color: transparent;
@@ -10542,7 +10542,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .product-item .btn:hover {
     /*color: #FFD333 !important;*/
-    color: #0d6efd0d6efd !important;
+    color: #0d6efd !important;
 }
 
 .table.table-borderless thead tr,

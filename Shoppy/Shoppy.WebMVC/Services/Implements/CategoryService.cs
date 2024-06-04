@@ -20,7 +20,7 @@ public class CategoryService : ICategoryService
 
     public async Task<BaseResult<List<CategoryDto>>?> GetAllAsync()
     {
-        var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}{BasePath}");
+        var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}/{BasePath}");
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<List<CategoryDto>>>(content);

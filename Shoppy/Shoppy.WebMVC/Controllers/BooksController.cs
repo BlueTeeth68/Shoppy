@@ -3,19 +3,16 @@ using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Requests.Products;
 using Shoppy.SharedLibrary.Models.Responses.Products;
 using Shoppy.WebMVC.Services.Interfaces;
+using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers;
 
-public class BooksController : BaseController
+public class BooksController(
+    ILogger<HomeController> logger,
+    ICartsClient cartsClient,
+    ICategoriesClient categoriesClient,
+    IProductsClient productsClient) : BaseController(logger, cartsClient, categoriesClient)
 {
-    private IProductService _productService;
-
-    public BooksController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService,
-        IProductService productService) : base(logger, categoryService, cartService)
-    {
-        _productService = productService;
-    }
-
     // GET
     [HttpGet]
     public async Task<IActionResult> Detail([FromRoute] Guid id)
@@ -37,7 +34,7 @@ public class BooksController : BaseController
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when fetching home page.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+            Logger.LogError("Error when fetching home page.\nDate: {}\nDetail: {}", DateTime.UtcNow,
                 e.Message);
             return RedirectToAction("Error");
         }
@@ -54,7 +51,10 @@ public class BooksController : BaseController
 
         try
         {
-            var response = await _productService.FilterProductRatingAsync(request);
+            // var response = await _productService.FilterProductRatingAsync(request);
+            var response =
+                await productsClient.FilterProductRatingAsync(page: request.Page, size: request.Size,
+                    id: request.ProductId);
 
             if (response == null)
             {
@@ -70,7 +70,7 @@ public class BooksController : BaseController
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when fetch product rating.\nDate: {}\nDetail: {}", DateTime.UtcNow, e.Message);
+            Logger.LogError("Error when fetch product rating.\nDate: {}\nDetail: {}", DateTime.UtcNow, e.Message);
             return Json(new { success = false, error = "Something went wrong" });
         }
     }
@@ -78,12 +78,15 @@ public class BooksController : BaseController
     [HttpPost]
     public IActionResult _RatingPartial([FromBody] PagingResult<ProductRatingDto> data)
     {
-        return  View("~/Views/Partial/Books/Review.cshtml", data);
+        return View("~/Views/Partial/Books/Review.cshtml", data);
     }
 
     private async Task<IActionResult?> FetchProductAsync(Guid id)
     {
-        var product = await _productService.GetByIdAsync(id);
+        // var product = await _productService.GetByIdAsync(id);
+        var product = await productsClient.GetByIdAsync(id);
+
+
         if (product?.Result == null)
         {
             ViewBag.ErrorMessage = "Something wrong";

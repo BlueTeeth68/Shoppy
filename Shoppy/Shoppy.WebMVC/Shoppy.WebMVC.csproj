@@ -20,6 +20,24 @@
     <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s4.jpg" />
     <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s5.jpg" />
     <_ContentIncludedByDefault Remove="wwwroot\img\mordernize\images\products\s7.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar-core.esm.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar-core.esm.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.d.ts" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.esm.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.esm.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\dist\simplebar.umd.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\LICENSE" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\package.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\README.md" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\src\helpers.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\src\index.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\src\scrollbar-width.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\src\simplebar.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\simplebar\src\simplebar.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +47,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.2" />
   </ItemGroup>
 

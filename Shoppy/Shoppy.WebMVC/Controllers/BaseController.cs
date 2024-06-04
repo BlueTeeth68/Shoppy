@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Shoppy.SharedLibrary.Models.Error;
 using Shoppy.WebMVC.ExceptionHandlers;
-using Shoppy.WebMVC.Services.Interfaces;
+using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers;
 
-public class BaseController : Controller
+public class BaseController(
+    ILogger<HomeController> logger,
+    ICartsClient cartsClient,
+    ICategoriesClient categoriesClient)
+    : Controller
 {
-    protected readonly ILogger<HomeController> _logger;
-    protected readonly ICategoryService _categoryService;
-    protected readonly ICartService _cartService;
-
-    // GET
-    public BaseController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService)
-    {
-        _logger = logger;
-        _categoryService = categoryService;
-        _cartService = cartService;
-    }
+    protected readonly ILogger<HomeController> Logger = logger;
+    protected readonly ICartsClient CartClient = cartsClient;
+    protected readonly ICategoriesClient CategoriesClient = categoriesClient;
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
@@ -29,7 +26,7 @@ public class BaseController : Controller
 
     protected async Task<IActionResult?> FetchCategoriesAsync()
     {
-        var categories = await _categoryService.GetAllAsync();
+        var categories = await CategoriesClient.GetAllAsync();
         if (categories?.Result == null)
         {
             ViewBag.ErrorMessage = "Something wrong";
@@ -49,25 +46,29 @@ public class BaseController : Controller
 
     protected async Task<IActionResult?> FetchCartTotalItemAsync()
     {
-        var accessToken = HttpContext.Request.Cookies["accessToken"];
-        if (string.IsNullOrEmpty(accessToken))
+        try
+        {
+            var totalItem = await CartClient.GetCartTotalItemAsync();
+            if (totalItem?.Result == null)
+            {
+                ViewBag.ErrorMessage = "Something wrong";
+                return RedirectToAction("Error");
+            }
+
+            if (!totalItem.IsSuccess)
+            {
+                ViewBag.ErrorMessage = totalItem.Error?.Detail ?? "Something wrong";
+                // return View();
+                return RedirectToAction("Error");
+            }
+
+            ViewBag.CartTotalItem = totalItem.Result;
             return null;
-        var totalItem = await _cartService.GetCartTotalItemAsync(accessToken);
-        if (totalItem?.Result == null)
-        {
-            ViewBag.ErrorMessage = "Something wrong";
-            return RedirectToAction("Error");
         }
-
-        if (!totalItem.IsSuccess)
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.NoContent or HttpStatusCode.Unauthorized)
         {
-            ViewBag.ErrorMessage = totalItem.Error?.Detail ?? "Something wrong";
-            // return View();
-            return RedirectToAction("Error");
+            return null;
         }
-
-        ViewBag.CartTotalItem = totalItem.Result;
-        return null;
     }
 
     protected string GetAccessTokenAsync()
@@ -77,7 +78,6 @@ public class BaseController : Controller
         {
             throw new NotLoginException("User do not login");
         }
-
         return accessToken;
     }
 }

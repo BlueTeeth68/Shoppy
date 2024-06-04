@@ -21,7 +21,7 @@ public class AuthService : IAuthService
 
     public async Task<BaseResult<LoginResponse>?> LoginAsync(LoginDto request)
     {
-        var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}{BasePath}login", request);
+        var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}/{BasePath}login", request);
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<LoginResponse>>(content);
@@ -31,7 +31,7 @@ public class AuthService : IAuthService
 
     public async Task<BaseResult<RegisterResponse>?> RegisterAsync(RegisterDto request)
     {
-        var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}{BasePath}register", request);
+        var response = await _client.PostAsJsonAsync($"{_appSettings.Apis.BaseUrl}/{BasePath}register", request);
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<RegisterResponse>>(content);

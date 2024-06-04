@@ -1,20 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.SharedLibrary.Models.Requests.Products;
-using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces;
+using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController(
+        ILogger<HomeController> logger,
+        ICartsClient cartsClient,
+        ICategoriesClient categoriesClient,
+        IProductsClient productsClient) : BaseController(logger, cartsClient, categoriesClient)
     {
-        private readonly IProductService _productService;
-
-        public HomeController(ILogger<HomeController> logger, ICategoryService categoryService,
-            ICartService cartService, IProductService productService) : base(logger, categoryService, cartService)
-        {
-            _productService = productService;
-        }
-
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] FilterProductDto? filter)
         {
@@ -60,20 +56,20 @@ namespace Shoppy.WebMVC.Controllers
 
                 await Task.WhenAll(fetchCategoryTask, fetchProductsTask, fetchCartTotalItemTask);
 
-                return fetchCategoryTask.Result ?? fetchProductsTask.Result ?? View();
+                return fetchCategoryTask.Result ?? fetchProductsTask.Result ?? fetchCartTotalItemTask.Result ?? View();
             }
             catch (Exception e)
             {
-                _logger.LogError("Error when fetching home page.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+                Logger.LogError("Error when fetching home page.\nDate: {}\nDetail: {}", DateTime.UtcNow,
                     e.Message);
                 return RedirectToAction("Error");
             }
         }
 
-
         private async Task<IActionResult?> FetchProductsAsync(FilterProductDto filterProduct)
         {
-            var products = await _productService.FilterProductAsync(filterProduct);
+            var products = await productsClient.FilterProductAsync(filterProduct);
+
             if (products?.Result == null)
             {
                 ViewBag.ErrorMessage = "Something wrong";
@@ -85,11 +81,6 @@ namespace Shoppy.WebMVC.Controllers
                 ViewBag.ErrorMessage = products.Error?.Detail ?? "Something wrong";
                 return RedirectToAction("Error");
             }
-
-            // foreach (var tmp in products.Result.Results)
-            // {
-            //     tmp.Name = StringUtil.FormatProductName(tmp.Name, 30, 27);
-            // }
 
             ViewBag.Products = products.Result.Results;
             ViewBag.TotalPage = products.Result.TotalPages;

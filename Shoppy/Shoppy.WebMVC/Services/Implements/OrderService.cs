@@ -24,7 +24,7 @@ public class OrderService : IOrderService
 
     public async Task<BaseResult<object>?> CreateOrderAsync(string? accessToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{_appSettings.Apis.BaseUrl}{BasePath}");
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_appSettings.Apis.BaseUrl}/{BasePath}");
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -43,7 +43,7 @@ public class OrderService : IOrderService
         string? accessToken)
     {
         var request = new HttpRequestMessage(HttpMethod.Get,
-            $"{_appSettings.Apis.BaseUrl}{BasePath}/account?page={page}&size={size}");
+            $"{_appSettings.Apis.BaseUrl}/{BasePath}/account?page={page}&size={size}");
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -60,7 +60,7 @@ public class OrderService : IOrderService
 
     public async Task<BaseResult<OrderDto>?> GetOrderByIdAsync(Guid id, string? accessToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}{BasePath}/{id}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}/{BasePath}/{id}");
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -81,7 +81,7 @@ public class OrderService : IOrderService
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var request = new HttpRequestMessage(HttpMethod.Post,
-            $"{_appSettings.Apis.BaseUrl}{BasePath}/{dto.OrderItemId}/rating")
+            $"{_appSettings.Apis.BaseUrl}/{BasePath}/{dto.OrderItemId}/rating")
         {
             Content = content
         };

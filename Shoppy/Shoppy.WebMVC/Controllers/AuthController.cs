@@ -1,20 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shoppy.SharedLibrary.Models.Requests.Auth;
-using Shoppy.SharedLibrary.Models.Responses.Auth;
-using Shoppy.WebMVC.Configurations;
 using Shoppy.WebMVC.Services.Interfaces;
+using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers;
 
 public class AuthController : Controller
 {
-    private readonly IAuthService _authService;
-    private readonly AppSettings _appSettings;
+    private readonly IAuthClient _authClient;
+    private readonly ITokenManager _tokenManager;
 
-    public AuthController(IAuthService authService, AppSettings appSettings)
+    public AuthController(IAuthClient authClient, ITokenManager tokenManager)
     {
-        _authService = authService;
-        _appSettings = appSettings;
+        _authClient = authClient;
+        _tokenManager = tokenManager;
     }
 
     public IActionResult Index()
@@ -37,7 +36,7 @@ public class AuthController : Controller
             return View(request);
         }
 
-        var result = await _authService.LoginAsync(request);
+        var result = await _authClient.LoginAsync(request);
 
         if (result == null)
         {
@@ -53,21 +52,7 @@ public class AuthController : Controller
                 return View();
             }
 
-            var accessTokenCookieOptions = new CookieOptions()
-            {
-                HttpOnly = true,
-                Expires = DateTime.UtcNow.AddMinutes(_appSettings.JwtSettings.AccessExpireInMinutes)
-            };
-
-            var accessOptions = new Dictionary<string, object>()
-            {
-                { "email", result.Result.Email ?? "" },
-                { "accessToken", result.Result.AccessToken },
-                { "fullName", result.Result.FullName },
-                { "pictureUrl", result.Result.PictureUrl ?? "" }
-            };
-
-            await AddCookieOptionsAsync(accessOptions, accessTokenCookieOptions);
+            await _tokenManager.AddLoginCookiesAsync(result.Result);
 
             return RedirectToAction("Index", "Home");
         }
@@ -90,7 +75,7 @@ public class AuthController : Controller
             return View(request);
         }
 
-        var result = await _authService.RegisterAsync(request);
+        var result = await _authClient.RegisterAsync(request);
 
         if (result == null)
         {
@@ -106,7 +91,7 @@ public class AuthController : Controller
                 return View();
             }
 
-            await AddResultOptionsAsync(result.Result);
+            await _tokenManager.AddRegisterCookiesAsync(result.Result);
 
             return RedirectToAction("Index", "Home");
         }
@@ -122,46 +107,5 @@ public class AuthController : Controller
         Response.Cookies.Delete("email");
         Response.Cookies.Delete("pictureUrl");
         return RedirectToAction("Index", "Home");
-    }
-
-    private Task AddCookieOptionsAsync(Dictionary<string, object> options, CookieOptions cookieOptions)
-    {
-        foreach (var option in options)
-        {
-            HttpContext.Response.Cookies.Append(option.Key, option.Value.ToString() ?? "", cookieOptions);
-        }
-
-        return Task.CompletedTask;
-    }
-
-    private async Task AddResultOptionsAsync(RegisterResultDto result)
-    {
-        var accessTokenCookieOptions = new CookieOptions()
-        {
-            HttpOnly = true,
-            Expires = DateTime.UtcNow.AddMinutes(_appSettings.JwtSettings.AccessExpireInMinutes)
-        };
-
-        var refreshTokenCookieOptions = new CookieOptions()
-        {
-            HttpOnly = true,
-            Expires = DateTime.UtcNow.AddDays(_appSettings.JwtSettings.RefreshExpireInDays)
-        };
-
-        var accessOptions = new Dictionary<string, object>()
-        {
-            { "email", result.Email ?? "" },
-            { "accessToken", result.AccessToken },
-            { "fullName", result.FullName }
-        };
-
-        var refreshOptions = new Dictionary<string, object>()
-        {
-            { "refreshToken", result.RefreshToken ?? "" }
-        };
-
-        var accessTask = AddCookieOptionsAsync(accessOptions, accessTokenCookieOptions);
-        var refreshTask = AddCookieOptionsAsync(refreshOptions, refreshTokenCookieOptions);
-        await Task.WhenAll(accessTask, refreshTask);
     }
 }

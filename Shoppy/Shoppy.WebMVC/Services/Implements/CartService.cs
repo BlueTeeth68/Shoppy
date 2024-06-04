@@ -13,7 +13,7 @@ public class CartService : ICartService
 {
     private readonly HttpClient _client;
     private readonly AppSettings _appSettings;
-
+    
     private const string BasePath = "users/cart";
 
     public CartService(AppSettings appSettings, HttpClient client)
@@ -24,7 +24,7 @@ public class CartService : ICartService
 
     public async Task<BaseResult<CartDto>?> GetCartAsync(string? accessToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}{BasePath}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}/{BasePath}");
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -42,7 +42,7 @@ public class CartService : ICartService
 
     public async Task<BaseResult<int>?> GetCartTotalItemAsync(string? accessToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}{BasePath}/totalItem");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_appSettings.Apis.BaseUrl}/{BasePath}/totalItem");
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -68,7 +68,7 @@ public class CartService : ICartService
         var json = JsonConvert.SerializeObject(body);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{_appSettings.Apis.BaseUrl}{BasePath}")
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_appSettings.Apis.BaseUrl}/{BasePath}")
         {
             Content = content
         };
@@ -89,7 +89,7 @@ public class CartService : ICartService
 
     public async Task<BaseResult<object>?> RemoveFromCartAsync(Guid productId, string? accessToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_appSettings.Apis.BaseUrl}{BasePath}/{productId}");
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_appSettings.Apis.BaseUrl}/{BasePath}/{productId}");
 
         if (!string.IsNullOrEmpty(accessToken))
         {
@@ -115,7 +115,7 @@ public class CartService : ICartService
         var json = JsonConvert.SerializeObject(body);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var request = new HttpRequestMessage(HttpMethod.Patch, $"{_appSettings.Apis.BaseUrl}{BasePath}/item")
+        var request = new HttpRequestMessage(HttpMethod.Patch, $"{_appSettings.Apis.BaseUrl}/{BasePath}/item")
         {
             Content = content
         };

@@ -1,11 +1,11 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Shoppy.Domain.Constants.Enums;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Requests.Products;
 using Shoppy.SharedLibrary.Models.Responses.Products;
 using Shoppy.WebMVC.Configurations;
+using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Services.Implements;
@@ -25,8 +25,8 @@ public class ProductService : IProductService
     public async Task<BaseResult<PagingResult<FilterProductResultDto>>?> FilterProductAsync(FilterProductDto request)
     {
         request.Status = ProductStatus.Active;
-        var queryString = BuildQueryString(request);
-        var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}{BasePath}?{queryString}");
+        var queryString = StringUtil.BuildQueryString(request);
+        var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}/{BasePath}?{queryString}");
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<PagingResult<FilterProductResultDto>>>(content);
@@ -38,7 +38,7 @@ public class ProductService : IProductService
     {
         var response =
             await _client.GetAsync(
-                $"{_appSettings.Apis.BaseUrl}{BasePath}/{request.ProductId}/rating?page={request.Page}&size={request.Size}");
+                $"{_appSettings.Apis.BaseUrl}/{BasePath}/{request.ProductId}/rating?page={request.Page}&size={request.Size}");
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<PagingResult<ProductRatingDto>>>(content);
@@ -48,33 +48,11 @@ public class ProductService : IProductService
 
     public async Task<BaseResult<ProductDto>?> GetByIdAsync(Guid id)
     {
-        var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}{BasePath}/{id}");
+        var response = await _client.GetAsync($"{_appSettings.Apis.BaseUrl}/{BasePath}/{id}");
 
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<BaseResult<ProductDto>>(content);
 
         return result;
-    }
-
-    private string BuildQueryString(FilterProductDto request)
-    {
-        var queryStringBuilder = new StringBuilder();
-
-        foreach (var property in request.GetType().GetProperties())
-        {
-            var value = property.GetValue(request);
-            if (value == null) continue;
-
-            if (queryStringBuilder.Length > 0)
-            {
-                queryStringBuilder.Append('&');
-            }
-
-            queryStringBuilder.Append(property.Name);
-            queryStringBuilder.Append('=');
-            queryStringBuilder.Append(Uri.EscapeDataString(value.ToString() ?? string.Empty));
-        }
-
-        return queryStringBuilder.ToString();
     }
 }

@@ -1,21 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Shoppy.SharedLibrary.Models.Requests.Rating;
 using Shoppy.WebMVC.Helpers.Utils;
-using Shoppy.WebMVC.Services.Interfaces;
+using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers;
 
-public class OrderController : BaseController
+public class OrderController(
+    ILogger<HomeController> logger,
+    ICartsClient cartsClient,
+    ICategoriesClient categoriesClient,
+    IOrdersClient ordersClient) : BaseController(logger, cartsClient, categoriesClient)
 {
-    private readonly IOrderService _orderService;
-
-    public OrderController(ILogger<HomeController> logger, ICategoryService categoryService, ICartService cartService,
-        IOrderService orderService) :
-        base(logger, categoryService, cartService)
-    {
-        _orderService = orderService;
-    }
-
     // GET
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] int? page, [FromQuery] int? size)
@@ -42,7 +38,7 @@ public class OrderController : BaseController
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when fetching order list.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+            Logger.LogError("Error when fetching order list.\nDate: {}\nDetail: {}", DateTime.UtcNow,
                 e.Message);
             return RedirectToAction("Error");
         }
@@ -73,7 +69,7 @@ public class OrderController : BaseController
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when fetching order detail.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+            Logger.LogError("Error when fetching order detail.\nDate: {}\nDetail: {}", DateTime.UtcNow,
                 e.Message);
             return RedirectToAction("Error");
         }
@@ -91,12 +87,12 @@ public class OrderController : BaseController
 
         try
         {
-            var result =  await AddReviewAsync(dto, accessToken);
+            var result = await AddReviewAsync(dto, accessToken);
             return result ?? RedirectToAction("Detail", new { id = orderId });
         }
         catch (Exception e)
         {
-            _logger.LogError("Error when add review.\nDate: {}\nDetail: {}", DateTime.UtcNow,
+            Logger.LogError("Error when add review.\nDate: {}\nDetail: {}", DateTime.UtcNow,
                 e.Message);
             return RedirectToAction("Error");
         }
@@ -104,7 +100,10 @@ public class OrderController : BaseController
 
     private async Task<IActionResult?> FetchOrdersAsync(int page, int size, string? accessToken)
     {
-        var orders = await _orderService.FilterUserOrderAsync(page, size, accessToken);
+        // var orders = await orderService.FilterUserOrderAsync(page, size, accessToken);
+
+        var orders = await ordersClient.FilterUserOrderAsync(page, size);
+        
         if (orders?.Result == null)
         {
             ViewBag.ErrorMessage = "Something wrong";
@@ -124,7 +123,10 @@ public class OrderController : BaseController
 
     private async Task<IActionResult?> FetchOrderDetailAsync(Guid id, string? accessToken)
     {
-        var order = await _orderService.GetOrderByIdAsync(id, accessToken);
+        // var order = await orderService.GetOrderByIdAsync(id, accessToken);
+
+        var order = await ordersClient.GetOrderByIdAsync(id);
+        
         if (order?.Result == null)
         {
             ViewBag.ErrorMessage = "Something wrong";
@@ -148,10 +150,17 @@ public class OrderController : BaseController
 
     private async Task<IActionResult?> AddReviewAsync(AddRatingDto dto, string? accessToken)
     {
-        var data = await _orderService.AddReviewAsync(dto, accessToken);
-        if (data is not { IsSuccess: false }) return null;
+        try
+        {
+            var data = await ordersClient.AddReviewAsync(dto.OrderItemId, dto);
+            if (data is not { IsSuccess: false }) return null;
 
-        ViewBag.ErrorMessage = data.Error?.Detail ?? "Something wrong";
-        return RedirectToAction("Error");
+            ViewBag.ErrorMessage = data.Error?.Detail ?? "Something wrong";
+            return RedirectToAction("Error");
+        }
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent)
+        {
+            return null;
+        }
     }
 }
