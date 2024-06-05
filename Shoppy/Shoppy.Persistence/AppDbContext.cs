@@ -12,6 +12,8 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
+    
+    public AppDbContext() : base(new DbContextOptions<AppDbContext>()) { }
 
     public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<Cart> Carts { get; set; }

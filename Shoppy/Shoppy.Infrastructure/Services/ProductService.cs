@@ -71,7 +71,7 @@ public class ProductService : IProductService
                 filterExpression = Expression.AndAlso(filterExpression,
                     Expression.Call(
                         Expression.Property(parameter, nameof(Product.Name)),
-                        typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) })
+                        typeof(string).GetMethod(nameof(string.Contains), [typeof(string)])
                         ?? throw new NotSupportedException(
                             $"{nameof(string.Contains)} method is deprecated or not supported."),
                         Expression.Constant(filter.Name)));
@@ -122,10 +122,9 @@ public class ProductService : IProductService
 
             var queryable = SpecificationEvaluator.GetQuery(query, userSpecification);
 
-            var totalRecord = await queryable.AsNoTracking().CountAsync();
+            var totalRecord = await queryable.CountAsync();
 
             var result = await queryable
-                .AsNoTracking()
                 .Skip((filter.Page.Value - 1) * filter.Size.Value)
                 .Take(filter.Size.Value)
                 .Select(p => new FilterProductResult()

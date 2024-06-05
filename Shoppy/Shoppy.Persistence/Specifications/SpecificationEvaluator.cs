@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shoppy.Domain.Entities.Base;
 using Shoppy.Domain.Specifications;
 
 namespace Shoppy.Persistence.Specifications;

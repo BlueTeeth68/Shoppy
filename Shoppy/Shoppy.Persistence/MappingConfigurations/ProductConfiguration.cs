@@ -27,9 +27,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         #region Create index
 
-        builder.HasIndex(p => p.IsDelete);
-
-        builder.HasIndex(p => p.Name);
+        builder.HasIndex(p => new {p.IsDelete, p.Name});
 
         #endregion
 

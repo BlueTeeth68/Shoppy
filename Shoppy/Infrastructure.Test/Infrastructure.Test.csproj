@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Application.Test\Application.Test.csproj" />
       <ProjectReference Include="..\Shoppy.Infrastructure\Shoppy.Infrastructure.csproj" />
     </ItemGroup>
 
