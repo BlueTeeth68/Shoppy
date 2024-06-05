@@ -12,6 +12,7 @@
     <ItemGroup>
         <PackageReference Include="AutoFixture.Xunit" Version="5.0.0-preview0011" />
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
+        <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.6" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
         <PackageReference Include="MockQueryable.Moq" Version="7.0.1" />

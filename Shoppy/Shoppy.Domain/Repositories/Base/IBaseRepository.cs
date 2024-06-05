@@ -23,7 +23,7 @@ public interface IBaseRepository<TEntity, in TKey> : IConcurrencyHandler<TEntity
 
     void UpdateRange(List<TEntity> entities, CancellationToken cancellationToken = default);
 
-    void Delete(TEntity entity);
+    Task DeleteAsync(TEntity entity);
 
     Task BulkInsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 }

@@ -91,12 +91,13 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
         DbSet.UpdateRange(entities);
     }
 
-    public void Delete(T entity)
+    public Task DeleteAsync(T entity)
     {
         DbSet.Remove(entity);
+        return Task.CompletedTask;
     }
 
-    public async Task BulkInsertAsync(IEnumerable<T> entities, CancellationToken cancellationToken=default)
+    public async Task BulkInsertAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         await DbContext.BulkInsertAsync(entities, cancellationToken: cancellationToken);
     }

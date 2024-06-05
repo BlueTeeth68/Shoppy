@@ -21,7 +21,7 @@ public class DeleteCommandHandler : IRequestHandler<DeleteProductCommand>
         if (entity == null)
             throw new BadRequestException($"Product {request.Id} does not exist");
 
-        _unitOfWork.ProductRepository.Delete(entity);
+        await _unitOfWork.ProductRepository.DeleteAsync(entity);
         await _unitOfWork.SaveChangeAsync();
     }
 }

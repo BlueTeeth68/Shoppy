@@ -19,6 +19,9 @@ public class TestBase : IDisposable
     {
         ProductRepoMock = new Mock<IProductRepository>();
         Fixture = new Fixture();
+        Fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList().ForEach(b => Fixture.Behaviors.Remove(b));
+        Fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+
         UnitOfWorkMock = new Mock<IUnitOfWork>();
         ProductRepoMock = new Mock<IProductRepository>();
 
