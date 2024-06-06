@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using Shoppy.WebMVC.Services.Implements;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Middleware;

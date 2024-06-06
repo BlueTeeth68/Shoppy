@@ -19,7 +19,6 @@
       <Folder Include="Features\Users\Handlers\Command\" />
       <Folder Include="Features\Users\Requests\Command\" />
       <Folder Include="Features\Users\Validations\" />
-      <Folder Include="Services\Implements\" />
     </ItemGroup>
 
     <ItemGroup>

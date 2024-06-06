@@ -21,9 +21,13 @@ public interface IBaseRepository<TEntity, in TKey> : IConcurrencyHandler<TEntity
 
     Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-    void UpdateRange(List<TEntity> entities, CancellationToken cancellationToken = default);
+    Task UpdateRangeAsync(List<TEntity> entities, CancellationToken cancellationToken = default);
 
     Task DeleteAsync(TEntity entity);
 
     Task BulkInsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+
+    Task BulkUpdateAsync(List<TEntity> entities, CancellationToken cancellationToken = default);
+    
+    Task BulkDeleteAsync(List<TEntity> entities, CancellationToken cancellationToken = default);
 }

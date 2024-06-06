@@ -2,7 +2,6 @@
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Requests.Products;
 using Shoppy.SharedLibrary.Models.Responses.Products;
-using Shoppy.WebMVC.Services.Interfaces;
 using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers;

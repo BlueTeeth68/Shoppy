@@ -86,9 +86,10 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
         await Task.CompletedTask;
     }
 
-    public void UpdateRange(List<T> entities, CancellationToken cancellationToken = default)
+    public Task UpdateRangeAsync(List<T> entities, CancellationToken cancellationToken = default)
     {
         DbSet.UpdateRange(entities);
+        return Task.CompletedTask;
     }
 
     public Task DeleteAsync(T entity)
@@ -100,5 +101,15 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
     public async Task BulkInsertAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         await DbContext.BulkInsertAsync(entities, cancellationToken: cancellationToken);
+    }
+
+    public async Task BulkUpdateAsync(List<T> entities, CancellationToken cancellationToken = default)
+    {
+        await DbContext.BulkUpdateAsync(entities, cancellationToken: cancellationToken);
+    }
+
+    public  async Task BulkDeleteAsync(List<T> entities, CancellationToken cancellationToken = default)
+    {
+        await DbContext.BulkDeleteAsync(entities, cancellationToken: cancellationToken);
     }
 }

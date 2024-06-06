@@ -1,6 +1,5 @@
 ﻿using Shoppy.Application.Features.Products.Requests.Command;
 using Shoppy.Application.Features.Products.Results.Query;
-using Shoppy.Application.Utils;
 using Shoppy.Domain.Entities;
 
 namespace Shoppy.Application.Mappers;
@@ -40,7 +39,7 @@ public static class ProductMapper
             NumberOfSale = entity.NumberOfSale,
             ProductThumbUrl = entity.ProductThumbUrl,
             CategoryId = entity.CategoryId,
-            CategoryName = entity.Category?.Name
+            CategoryName = entity.Category.Name
         };
     }
 
