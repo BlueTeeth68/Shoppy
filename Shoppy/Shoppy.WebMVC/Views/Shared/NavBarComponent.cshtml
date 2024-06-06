@@ -49,36 +49,6 @@
                             <i class="fas fa-shopping-cart text-primary"></i>
                             <span class="badge border border-primary rounded-circle cart-total-item text-primary px-0 py-0" style="width: 20px; height: 20px;">@(cartTotalItem ?? 0)</span>
                         </a>
-                        @* <div class="btn-group"> *@
-                        @*     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"> *@
-                        @*         @(fullName ?? "My Account") *@
-                        @*     </button> *@
-                        @*     <div class="dropdown-menu dropdown-menu-right"> *@
-                        @* *@
-                        @*         @{ *@
-                        @*             if (isAuthenticated) *@
-                        @*             { *@
-                        @*                 <button class="dropdown-item" type="button"> *@
-                        @*                     <a asp-controller="Auth" asp-action="Login">My Account</a> *@
-                        @*                 </button> *@
-                        @*                 <button class="dropdown-item" type="button"> *@
-                        @*                     <a asp-controller="Auth" asp-action="Logout">Log out</a> *@
-                        @*                 </button> *@
-                        @*             } *@
-                        @*             else *@
-                        @*             { *@
-                        @*                 <button class="dropdown-item" type="button"> *@
-                        @*                     <a asp-controller="Auth" asp-action="Login">Sign in</a> *@
-                        @*                 </button> *@
-                        @*                 <button class="dropdown-item" type="button"> *@
-                        @*                     <a asp-controller="Auth" asp-action="Register">Sign up</a> *@
-                        @*                 </button> *@
-                        @*             } *@
-                        @*         } *@
-                        @* *@
-                        @*     </div> *@
-                        @* </div> *@
-
                         <div class="btn-group">
                         @if (isAuthenticated)
                         {

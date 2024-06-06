@@ -26,4 +26,8 @@
       <ProjectReference Include="..\Shoppy.Application\Shoppy.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Products\Handlers\Query\" />
+    </ItemGroup>
+
 </Project>

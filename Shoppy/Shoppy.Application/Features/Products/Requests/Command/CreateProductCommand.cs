@@ -12,7 +12,7 @@ public class CreateProductCommand : IRequest<Guid>
     public string? Description { get; init; }
 
     [Required]
-    public IFormFile ProductThumb { get; init; } = null!;
+    public IFormFile ProductThumb { get; set; } = null!;
     
     [MaxLength(100)]
     public string? AuthorName { get; init; }

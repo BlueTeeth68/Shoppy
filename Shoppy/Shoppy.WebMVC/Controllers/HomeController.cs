@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.SharedLibrary.Models.Requests.Products;
-using Shoppy.WebMVC.Services.Interfaces;
 using Shoppy.WebMVC.Services.Interfaces.Refit;
 
 namespace Shoppy.WebMVC.Controllers

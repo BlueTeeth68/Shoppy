@@ -7,7 +7,7 @@ public class ProductRating : BaseEntity<Guid>, IAggregateRoot
 {
     public int RateValue { get; set; }
 
-    [StringLength(250)] public string? Comment { get; set; }
+    [StringLength(1000)] public string? Comment { get; set; }
 
     public virtual OrderItem OrderItem { get; set; } = null!;
 

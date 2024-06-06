@@ -8,7 +8,7 @@ namespace Shoppy.WebMVC.Services.Interfaces.Refit;
 
 public interface IOrdersClient
 {
-    [Get("/orders")]
+    [Post("/orders")]
     Task<BaseResult<object>?> CreateOrderAsync();
 
     [Get("/orders/account")]

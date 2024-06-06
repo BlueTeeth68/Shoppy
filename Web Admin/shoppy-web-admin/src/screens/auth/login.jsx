@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Backdrop, CircularProgress } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 
 export function Login() {
 
@@ -40,8 +41,16 @@ export function Login() {
                 pictureUrl: data.result.pictureUrl,
             }
             const accessToken = data.result.accessToken;
-            localStorage.setItem("user",  JSON.stringify(user));
+
+            const decodedToken = jwtDecode(accessToken ?? "");
+            const roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            if (!roles?.includes("Admin")) {
+                throw Error("Access denied");
+            }
+
+            localStorage.setItem("user", JSON.stringify(user));
             localStorage.setItem("accessToken", accessToken);
+
             navigate("/home");
             console.log(JSON.stringify(data, null, 2));
         } catch (error) {

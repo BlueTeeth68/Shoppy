@@ -4,11 +4,26 @@ import {
     PublicPages,
     UnauthenticatedPages,
 } from "../../services/auth/authPage";
+import PropTypes from 'prop-types';
+import { jwtDecode } from "jwt-decode";
 
 const PrivateRoute = ({ page: page, component: Component }) => {
     const location = useLocation();
 
     const userString = localStorage.getItem("user");
+    const accessTokenn = localStorage.getItem("accessToken");
+
+    let isAdmin = false;
+
+    if(accessTokenn){
+        const decodedToken = jwtDecode(accessTokenn ?? "");
+        //log
+        console.log(`Decoded token: ${JSON.stringify(decodedToken, null,2)}}`);
+        const roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    
+         isAdmin = roles?.includes("Admin") ?? false;
+    }
+
     let user;
 
     try {
@@ -20,7 +35,7 @@ const PrivateRoute = ({ page: page, component: Component }) => {
     if (!page) {
         return <Navigate to="/not-found" state={{ from: location }} replace />;
     } else {
-        if (!user) {
+        if (!user || !isAdmin) {
             //Check case user have not logged in
             if (!PublicPages.includes(page) && !UnauthenticatedPages.includes(page)) {
                 return <Navigate to="/auth/login" state={{ from: location }} replace />;
@@ -56,3 +71,8 @@ const PrivateRoute = ({ page: page, component: Component }) => {
 };
 
 export default PrivateRoute;
+
+PrivateRoute.propTypes = {
+    page: PropTypes.string,
+    component: PropTypes.element
+}

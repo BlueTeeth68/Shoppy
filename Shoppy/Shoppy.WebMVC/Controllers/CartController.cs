@@ -42,14 +42,6 @@ public class CartController(
     [HttpPost(Name = "AddToCart")]
     public async Task<IActionResult> AddToCart([FromForm] Guid productId)
     {
-        // var accessToken = GetAccessTokenAsync();
-
-        // var accessToken = HttpContext.Request.Cookies["accessToken"];
-        // if (string.IsNullOrEmpty(accessToken))
-        // {
-        //     const string redirectUrl = "/Auth/Login";
-        //     return Json(new { success = false, redirectUrl });
-        // }
 
         try
         {
@@ -148,8 +140,7 @@ public class CartController(
             return RedirectToAction("Error");
         }
     }
-
-
+    
     [HttpPost]
     public async Task<IActionResult> CheckOut()
     {

@@ -184,7 +184,7 @@ public class UserService : IUserService
 
         var user = await userQuery.Where(u => u.Id == _currentUser.UserId)
             .Include(u => u.Cart)
-            .ThenInclude(c => c.Items)
+            .ThenInclude(c => c!.Items)
             .ThenInclude(i => i.Product)
             .FirstOrDefaultAsync();
 
@@ -207,10 +207,7 @@ public class UserService : IUserService
         var user = await userQuery.AsNoTracking().Where(u => u.Id == _currentUser.UserId)
             .Select(u => new AppUser
             {
-                Cart = new Cart()
-                {
-                    TotalItem = u.Cart.TotalItem
-                }
+                Cart = u.Cart != null ? new Cart { TotalItem = u.Cart.TotalItem } : new Cart { TotalItem = 0 }
             })
             .FirstOrDefaultAsync()
             .ContinueWith(t => t.Result ?? throw new NotFoundException("User not found"));
@@ -233,7 +230,7 @@ public class UserService : IUserService
         //get cart 
         var user = await _userManager.Users.Where(u => u.Id == _currentUser.UserId)
             .Include(u => u.Cart)
-            .ThenInclude(c => c.Items)
+            .ThenInclude(c => c!.Items)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken)
             .ContinueWith(t => t.Result ?? throw new NotFoundException("User not found"), cancellationToken);
 
@@ -307,7 +304,7 @@ public class UserService : IUserService
         //get cart 
         var user = await _userManager.Users.Where(u => u.Id == _currentUser.UserId)
             .Include(u => u.Cart)
-            .ThenInclude(c => c.Items)
+            .ThenInclude(c => c!.Items)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken)
             .ContinueWith(t => t.Result ?? throw new NotFoundException("User not found"), cancellationToken);
 

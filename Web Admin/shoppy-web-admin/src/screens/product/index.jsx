@@ -90,7 +90,7 @@ export function Product() {
                         title: "All",
                         handleClick: () => setCategoryId(undefined)
                     },
-                    ...categories.map((item) => ({
+                    ...categoriesData.map((item) => ({
                         title: item.name,
                         handleClick: () => setCategoryId(item.id)
                     }))

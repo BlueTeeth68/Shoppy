@@ -1,6 +1,9 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Shoppy.Domain.Repositories.Base;
+using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Requests.Rating;
+using Shoppy.SharedLibrary.Models.Responses.Orders;
 using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces.Refit;
 
@@ -95,10 +98,16 @@ public class OrderController(
 
     private async Task<IActionResult?> FetchOrdersAsync(int page, int size)
     {
-        // var orders = await orderService.FilterUserOrderAsync(page, size, accessToken);
+        BaseResult<PagingResult<OrderQueryDto>>? orders;
+        try
+        {
+            orders = await ordersClient.FilterUserOrderAsync(page, size);
+        }
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
 
-        var orders = await ordersClient.FilterUserOrderAsync(page, size);
-        
         if (orders?.Result == null)
         {
             ViewBag.ErrorMessage = "Something wrong";
@@ -118,10 +127,16 @@ public class OrderController(
 
     private async Task<IActionResult?> FetchOrderDetailAsync(Guid id)
     {
-        // var order = await orderService.GetOrderByIdAsync(id, accessToken);
+        BaseResult<OrderDto>? order;
+        try
+        {
+            order = await ordersClient.GetOrderByIdAsync(id);
+        }
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
 
-        var order = await ordersClient.GetOrderByIdAsync(id);
-        
         if (order?.Result == null)
         {
             ViewBag.ErrorMessage = "Something wrong";
@@ -152,6 +167,10 @@ public class OrderController(
 
             ViewBag.ErrorMessage = data.Error?.Detail ?? "Something wrong";
             return RedirectToAction("Error");
+        }
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
+        {
+            return RedirectToAction("Login", "Auth");
         }
         catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent)
         {

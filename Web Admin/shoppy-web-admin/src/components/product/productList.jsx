@@ -36,7 +36,12 @@ const columns = (setUpdateModal) => [
         headerAlign: "center",
         flex: 2,
         align: "center",
+        minWidth: 120,
         sortable: false,
+        renderCell: (params) => {
+            const data = params.value;
+            return (<span>{data} USD</span>);
+        },
     },
 
     {
@@ -112,7 +117,7 @@ const columns = (setUpdateModal) => [
                             //log
                             console.log(`Current id: ${data}`);
                             setUpdateModal({
-                                open: true, 
+                                open: true,
                                 currentId: data
                             })
                         }} className="btn btn-primary" title="Update" data-bs-toggle="modal"  >
