@@ -19,5 +19,4 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
         return await _authService.LoginAsync(request);
     }
     
-    
 }

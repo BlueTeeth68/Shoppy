@@ -19,7 +19,6 @@ public class BaseController(
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        // return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         var model = new ErrorModel { Status = 500, Title = "Something wrong", Detail = "Something wrong" };
         return RedirectToAction("Index", "Error", model);
     }
@@ -65,7 +64,7 @@ public class BaseController(
             ViewBag.CartTotalItem = totalItem.Result;
             return null;
         }
-        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.NoContent or HttpStatusCode.Unauthorized)
+        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
         {
             return null;
         }
@@ -78,6 +77,7 @@ public class BaseController(
         {
             throw new NotLoginException("User do not login");
         }
+
         return accessToken;
     }
 }

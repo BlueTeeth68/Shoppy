@@ -26,7 +26,12 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> CreateAsync()
     {
         await _mediator.Send(new CreateOrderCommand());
-        return Ok();
+        var result = new BaseResult<object>()
+        {
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 
     [HttpGet("account")]
@@ -66,6 +71,11 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> AddRatingAsync([FromBody] CreateRatingCommand request)
     {
         await _mediator.Send(request);
-        return Ok();
+        var result = new BaseResult<object>()
+        {
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 }

@@ -16,14 +16,32 @@ public class GetByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductD
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ProductDetailQueryResult> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+    public Task<ProductDetailQueryResult> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
         //Need to check delete
-        var entity = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, disableTracking: true,
-            cancellationToken: cancellationToken);
-        if (entity == null)
-            throw new NotFoundException($"Product {request.Id} do not found");
-        var result = ProductMapper.ProductToProductDetail(entity);
-        return result;
+
+        var result = _unitOfWork.ProductRepository.GetQueryableSet()
+            .Where(p => p.Id == request.Id)
+            .Select(p => new ProductDetailQueryResult()
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                AuthorName = p.AuthorName,
+                Publisher = p.Publisher,
+                NumberOfPage = p.NumberOfPage,
+                DateOfPublication = p.DateOfPublication,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                Status = p.Status,
+                AvgRate = p.AvgRate,
+                NumberOfSale = p.NumberOfSale,
+                ProductThumbUrl = p.ProductThumbUrl,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category.Name
+            })
+            .FirstOrDefault();
+
+        return Task.FromResult(result ?? throw new NotFoundException($"Product {request.Id} do not found"));
     }
 }

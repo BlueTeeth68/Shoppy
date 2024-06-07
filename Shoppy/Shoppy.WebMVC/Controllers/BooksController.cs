@@ -84,8 +84,7 @@ public class BooksController(
     {
         // var product = await _productService.GetByIdAsync(id);
         var product = await productsClient.GetByIdAsync(id);
-
-
+        
         if (product?.Result == null)
         {
             ViewBag.ErrorMessage = "Something wrong";

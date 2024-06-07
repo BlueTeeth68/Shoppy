@@ -108,7 +108,7 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey>
         await DbContext.BulkUpdateAsync(entities, cancellationToken: cancellationToken);
     }
 
-    public  async Task BulkDeleteAsync(List<T> entities, CancellationToken cancellationToken = default)
+    public async Task BulkDeleteAsync(List<T> entities, CancellationToken cancellationToken = default)
     {
         await DbContext.BulkDeleteAsync(entities, cancellationToken: cancellationToken);
     }

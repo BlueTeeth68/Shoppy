@@ -172,9 +172,5 @@ public class OrderController(
         {
             return RedirectToAction("Login", "Auth");
         }
-        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent)
-        {
-            return null;
-        }
     }
 }

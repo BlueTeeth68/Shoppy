@@ -1,6 +1,8 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MockQueryable.Moq;
 using Moq;
 using Shoppy.Domain.Entities;
 using Shoppy.Domain.Repositories.Base;
@@ -11,12 +13,13 @@ namespace Persistence.Test.Repositories;
 public class BaseRepositoryTest : TestBase
 {
     private readonly IBaseRepository<Product, Guid> _baseRepository;
+    private readonly Mock<ILogger<Product>> _logger;
 
 
     public BaseRepositoryTest()
     {
-        Mock<ILogger<Product>> logger = new();
-        _baseRepository = new BaseRepository<Product, Guid>(DbContext, logger.Object);
+        _logger = new Mock<ILogger<Product>>();
+        _baseRepository = new BaseRepository<Product, Guid>(DbContext, _logger.Object);
     }
 
     #region Setup
@@ -188,7 +191,6 @@ public class BaseRepositoryTest : TestBase
 
     #endregion
 
-
     #region AddAsync Tests
 
     [Fact]
@@ -215,7 +217,6 @@ public class BaseRepositoryTest : TestBase
     [Fact]
     public async Task AddRangeAsync_ShouldReturnCorrectData()
     {
-        //Arrange
         await using (DbContext)
         {
             //Act
@@ -274,4 +275,77 @@ public class BaseRepositoryTest : TestBase
     }
 
     #endregion
+
+    #region UpdateRangeAsync Tests
+
+    [Fact]
+    public async Task UpdateRangeAsync_ShouldReturnNumberOfUpdatedRow()
+    {
+        await using (DbContext)
+        {
+            //Arrange
+            await DbContext.AddRangeAsync(Products);
+            await DbContext.SaveChangesAsync();
+
+            //Act
+            await _baseRepository.UpdateRangeAsync(Products);
+            var result = await DbContext.SaveChangesAsync();
+
+            //Assert
+            result.Should().Be(Products.Count);
+        }
+    }
+
+    #endregion
+
+    #region ToPaginationAsync Tests
+
+    [Theory]
+    [InlineData(1, 2, 10)]
+    [InlineData(2, 3, 10)]
+    public async Task ToPaginationAsync_ShouldReturnCorrectData_WhenInputDataIsValid(int page, int size, int dataSize)
+    {
+        //Arrange
+        var data = Fixture.Build<Product>()
+            .CreateMany(dataSize);
+        var mockData = data.AsQueryable().BuildMock();
+
+        //Act
+        await _baseRepository.ToPaginationAsync(ref mockData, page, size);
+        var result = await mockData.ToListAsync();
+
+        //Assert
+        Assert.NotNull(data);
+        Assert.Equal(size, result.Count);
+        Assert.Equal(data.ToList()[(page - 1) * size].Id, result[0].Id);
+    }
+
+    #endregion
+
+    // #region AddOrUpdateAsync Tests
+    //
+    // [Fact]
+    // public async Task AddOrUpdateAsync_ShouldCallAddAsync_WhenIdIsNotNull()
+    // {
+    //     //Arrange
+    //     var dataMock = new Product()
+    //     {
+    //         Id = Guid.NewGuid(),
+    //         Name = "Test"
+    //     };
+    //
+    //     var baseRepoMock = new Mock<BaseRepository<Product, Guid>>();
+    //     baseRepoMock.Setup(m => m.AddAsync(It.IsAny<Product>(), It.IsAny<CancellationToken>()))
+    //         .Returns(Task.CompletedTask);
+    //     baseRepoMock.Setup(m => m.UpdateAsync(It.IsAny<Product>(), It.IsAny<CancellationToken>()))
+    //         .Returns(Task.CompletedTask);
+    //
+    //     //Act
+    //     await baseRepoMock.Object.AddOrUpdateAsync(dataMock);
+    //
+    //     //Assert
+    //     baseRepoMock.Verify(x => x.AddAsync(It.IsAny<Product>(), It.IsAny<CancellationToken>()), Times.Once);
+    // }
+    //
+    // #endregion
 }

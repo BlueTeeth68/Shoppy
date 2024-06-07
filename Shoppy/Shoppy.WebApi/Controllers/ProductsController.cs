@@ -90,10 +90,12 @@ public class ProductsController : ControllerBase
         if (id != request.Id)
             throw new BadRequestException("Id do not match");
         await _mediator.Send(request);
-        return Ok(new BaseResult<object>()
+        var result = new BaseResult<object>()
         {
-            IsSuccess = true
-        });
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 
     [HttpPatch("{id:guid}")]
@@ -115,6 +117,11 @@ public class ProductsController : ControllerBase
     public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await _mediator.Send(new DeleteProductCommand(id));
-        return NoContent();
+        var result = new BaseResult<object>()
+        {
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 }

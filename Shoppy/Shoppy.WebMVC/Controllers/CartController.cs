@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Shoppy.SharedLibrary.Models.Requests.Carts;
-using Shoppy.WebMVC.ExceptionHandlers;
 using Shoppy.WebMVC.Helpers.Utils;
 using Shoppy.WebMVC.Services.Interfaces.Refit;
 
@@ -27,10 +26,6 @@ public class CartController(
 
             return fetchCategoryTask.Result ?? fetchCartTask.Result ?? fetchCartTotalItemTask.Result ?? View();
         }
-        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.NoContent or HttpStatusCode.OK)
-        {
-            return RedirectToAction("Index");
-        }
         catch (Exception e)
         {
             Logger.LogError("Error when fetching cart.\nDate: {}\nDetail: {}", DateTime.UtcNow,
@@ -42,13 +37,12 @@ public class CartController(
     [HttpPost(Name = "AddToCart")]
     public async Task<IActionResult> AddToCart([FromForm] Guid productId)
     {
-
         try
         {
             var data = new AddCartItemDto() { ProductId = productId, Quantity = 1 };
             var response = await CartClient.AddToCartAsync(data);
 
-            if (response != null)
+            if (response is { IsSuccess: false })
                 return Json(new { success = false, error = response.Error?.Detail ?? "Something wrong" });
 
             var totalItemResult = await CartClient.GetCartTotalItemAsync();
@@ -60,13 +54,6 @@ public class CartController(
         {
             const string redirectUrl = "/Auth/Login";
             return Json(new { success = false, redirectUrl });
-        }
-        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.NoContent or HttpStatusCode.OK)
-        {
-            var totalItemResult = await CartClient.GetCartTotalItemAsync();
-
-            var totalItem = totalItemResult?.Result ?? 0;
-            return Json(new { success = true, totalItem });
         }
         catch (Exception e)
         {
@@ -81,14 +68,10 @@ public class CartController(
         try
         {
             var response = await CartClient.RemoveFromCartAsync(productId);
-            if (response == null) return RedirectToAction("Index");
 
+            if (response is not { IsSuccess: false }) return RedirectToAction("Index");
             ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
             return RedirectToAction("Error");
-        }
-        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.NoContent or HttpStatusCode.OK)
-        {
-            return RedirectToAction("Index");
         }
         catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
         {
@@ -114,20 +97,9 @@ public class CartController(
         {
             var response = await CartClient.UpdateCartItemAsync(dto);
 
-            switch (response)
-            {
-                case { Error.Status: 401 }:
-                    throw new UnauthenticatedException("User do not login");
-                case null:
-                    return RedirectToAction("Index");
-                default:
-                    ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
-                    return RedirectToAction("Error");
-            }
-        }
-        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.NoContent or HttpStatusCode.OK)
-        {
-            return RedirectToAction("Index");
+            if (response is not { IsSuccess: false }) return RedirectToAction("Index");
+            ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
+            return RedirectToAction("Error");
         }
         catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
         {
@@ -140,23 +112,18 @@ public class CartController(
             return RedirectToAction("Error");
         }
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CheckOut()
     {
         try
         {
-            // var response = await orderService.CreateOrderAsync(accessToken);
             var response = await ordersClient.CreateOrderAsync();
 
-            if (response == null || response.IsSuccess) return RedirectToAction("Index");
+            if (response is not { IsSuccess: false }) return RedirectToAction("Index", "Order");
 
             ViewBag.ErrorMessage = response.Error?.Detail ?? "Something wrong";
             return RedirectToAction("Error");
-        }
-        catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent)
-        {
-            return RedirectToAction("Index");
         }
         catch (Refit.ApiException ex) when (ex.StatusCode is HttpStatusCode.Unauthorized)
         {

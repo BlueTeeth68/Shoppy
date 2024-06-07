@@ -70,7 +70,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> AddToCartAsync([FromBody] AddCartItemCommand request)
     {
         await _mediator.Send(request);
-        return NoContent();
+        var result = new BaseResult<object>()
+        {
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 
     [HttpPatch("cart/item")]
@@ -78,7 +83,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> UpdateCartQuantity([FromBody] UpdateCartItemCommand request)
     {
         await _mediator.Send(request);
-        return NoContent();
+        var result = new BaseResult<object>()
+        {
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 
     [HttpDelete("cart/{productId:guid}")]
@@ -86,6 +96,11 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> RemoveFromCartAsync([FromRoute] Guid productId)
     {
         await _mediator.Send(new RemoveCartItemCommand() { ProductId = productId });
-        return NoContent();
+        var result = new BaseResult<object>()
+        {
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 }

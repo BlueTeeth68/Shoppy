@@ -69,9 +69,11 @@ public class CategoriesController : ControllerBase
             throw new BadRequestException("Id does not match");
 
         await _mediator.Send(request);
-        return Ok(new BaseResult<object>()
+        var result = new BaseResult<object>()
         {
-            IsSuccess = true
-        });
+            IsSuccess = true,
+            Result = null
+        };
+        return Ok(result);
     }
 }
