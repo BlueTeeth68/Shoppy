@@ -5,7 +5,6 @@ using Microsoft.OpenApi.Models;
 using Shoppy.Domain.Identity;
 using Shoppy.Infrastructure.Configurations;
 using Shoppy.Infrastructure.Identity;
-using Shoppy.Infrastructure.Web.Authentication;
 
 namespace Shoppy.WebAPI;
 

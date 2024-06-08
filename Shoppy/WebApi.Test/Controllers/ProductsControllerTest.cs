@@ -8,6 +8,7 @@ using Shoppy.Application.Features.Products.Requests.Command;
 using Shoppy.Application.Features.Products.Requests.Query;
 using Shoppy.Application.Features.Products.Results.Query;
 using Shoppy.Domain.Constants;
+using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Responses.Products;
@@ -139,5 +140,95 @@ public class ProductsControllerTest : TestBase
         result.Error.Should().BeNull();
         result.Result.Should().BeOfType<PagingResult<ProductRatingDto>>();
         result.Result.Should().BeEquivalentTo(expectedData);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldReturnOkStatusCode_WhenRequestIsValid()
+    {
+        //Arrange
+        var bytes = "Product thumb"u8.ToArray();
+        IFormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", "image.png");
+        var inputData = Fixture.Build<UpdateProductCommand>()
+            .With(p => p.ProductThumb, () => file)
+            .Create();
+
+        MediatorMock.Setup(m => m.Send(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        //Act
+        var response = await _controller.UpdateAsync(id: inputData.Id, inputData);
+        var okObjectResult = (OkObjectResult)response.Result!;
+        var result = (BaseResult<object>)okObjectResult.Value!;
+
+        //Assert
+        okObjectResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+        result.IsSuccess.Should().BeTrue();
+        result.Error.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldThrowBadRequest_WhenRequestIdIsNotMatch()
+    {
+        //Arrange
+        var bytes = "Product thumb"u8.ToArray();
+        IFormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", "image.png");
+        var id = new Guid("bca03fa1-f138-4cb1-913e-992cee2f1cf5");
+        var inputData = Fixture.Build<UpdateProductCommand>()
+            .With(p => p.Id, () => new Guid("5d0f850a-45f5-4a52-ad77-85a871f71c33"))
+            .With(p => p.ProductThumb, () => file)
+            .Create();
+
+        MediatorMock.Setup(m => m.Send(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        //Act
+
+        //Assert
+        await Assert.ThrowsAsync<BadRequestException>(() => _controller.UpdateAsync(id, inputData));
+    }
+
+    [Fact]
+    public async Task UpdateProductThumbAsync_ShouldReturnCorrectData()
+    {
+        //Arrange
+        var bytes = "Product thumb"u8.ToArray();
+        IFormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", "image.png");
+        var inputData = Fixture.Build<UpdateProductImageCommand>()
+            .With(p => p.File, () => file)
+            .Create();
+        const string expectedData = "https://www.uuidgenerator.net/guid";
+
+        MediatorMock.Setup(m => m.Send(It.IsAny<UpdateProductImageCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedData);
+
+        //Act
+        var response = await _controller.UpdateProductThumbAsync(inputData);
+        var okObjectResult = (OkObjectResult)response.Result!;
+        var result = (BaseResult<string>)okObjectResult.Value!;
+
+        //Assert
+        okObjectResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+        result.IsSuccess.Should().BeTrue();
+        result.Error.Should().BeNull();
+        result.Result.Should().BeOfType<string>();
+        result.Result.Should().BeEquivalentTo(expectedData);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ShouldReturnSuccessStatus()
+    {
+        //Arrange
+        MediatorMock.Setup(m => m.Send(It.IsAny<DeleteProductCommand>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        //Act
+        var response = await _controller.DeleteAsync(Guid.NewGuid());
+        var okObjectResult = (OkObjectResult)response.Result!;
+        var result = (BaseResult<object>)okObjectResult.Value!;
+
+        //Assert
+        okObjectResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+        result.IsSuccess.Should().BeTrue();
+        result.Error.Should().BeNull();
     }
 }

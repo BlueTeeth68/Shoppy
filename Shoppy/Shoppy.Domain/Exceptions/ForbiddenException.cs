@@ -5,7 +5,7 @@ namespace Shoppy.Domain.Exceptions;
 
 public class ForbiddenException : BaseException
 {
-    private const int _statusCode = (int)HttpStatusCode.Conflict;
+    private const int _statusCode = (int)HttpStatusCode.Forbidden;
     private const string? _title = "Forbidden.";
     private const string? _type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3";
 

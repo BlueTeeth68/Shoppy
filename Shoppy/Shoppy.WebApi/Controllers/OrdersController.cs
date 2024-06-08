@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shoppy.Application.Features.Orders.Requests.Command;
 using Shoppy.Application.Features.Orders.Requests.Query;
 using Shoppy.Application.Features.ProductRatings.Request.Command;
+using Shoppy.Domain.Exceptions;
 using Shoppy.Domain.Repositories.Base;
 using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Responses.Orders;
@@ -23,7 +24,7 @@ public class OrdersController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateAsync()
+    public async Task<ActionResult<BaseResult<object>>> CreateAsync()
     {
         await _mediator.Send(new CreateOrderCommand());
         var result = new BaseResult<object>()
@@ -68,8 +69,10 @@ public class OrdersController : ControllerBase
 
     [HttpPost("{id:guid}/rating")]
     [Authorize]
-    public async Task<IActionResult> AddRatingAsync([FromBody] CreateRatingCommand request)
+    public async Task<ActionResult<BaseResult<object>>> AddRatingAsync([FromBody] CreateRatingCommand request, Guid id)
     {
+        if (id != request.OrderItemId)
+            throw new BadRequestException("Id is not match");
         await _mediator.Send(request);
         var result = new BaseResult<object>()
         {

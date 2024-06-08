@@ -10,10 +10,6 @@ namespace Shoppy.WebAPI.Middlewares.GlobalExceptions;
 
 public class GlobalExceptionHandlers : IExceptionHandler
 {
-    public GlobalExceptionHandlers()
-    {
-    }
-
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
         CancellationToken cancellationToken)
     {
@@ -27,28 +23,28 @@ public class GlobalExceptionHandlers : IExceptionHandler
 
         problemDetails.Extensions.Add("message", exception.Message);
 
-        if (exception is BaseException ex)
+        switch (exception)
         {
-            problemDetails.Status = ex.StatusCode;
-            problemDetails.Title = ex.Title;
-            problemDetails.Type = ex.Type;
-        }
-        else if (exception is ValidationException)
-        {
-            problemDetails.Status = (int)HttpStatusCode.BadRequest;
-            problemDetails.Title = "Bad Request";
-            problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
-        }
-        else
-        {
-            problemDetails.Status = (int)HttpStatusCode.InternalServerError;
-            problemDetails.Title = "Internal Server Error";
-            problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1";
+            case BaseException ex:
+                problemDetails.Status = ex.StatusCode;
+                problemDetails.Title = ex.Title;
+                problemDetails.Type = ex.Type;
+                break;
+            case ValidationException:
+                problemDetails.Status = (int)HttpStatusCode.BadRequest;
+                problemDetails.Title = "Bad Request";
+                problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                break;
+            default:
+                problemDetails.Status = (int)HttpStatusCode.InternalServerError;
+                problemDetails.Title = "Internal Server Error";
+                problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1";
+                break;
         }
 
         response.ContentType = "application/problem+json";
         response.StatusCode = problemDetails.Status.Value;
-        
+
         var options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
