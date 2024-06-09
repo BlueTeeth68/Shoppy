@@ -19,7 +19,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.AvgRate)
             .HasPrecision(2, 1);
 
-        builder.HasMany<ProductImage>(p => p.Images)
+        builder.HasMany(p => p.Images)
             .WithOne()
             .HasForeignKey(i => i.ProductId);
 

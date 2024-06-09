@@ -66,7 +66,6 @@ public static class DependencyInjection
 
     public static WebApplication UseCustomMiddleware(this WebApplication app)
     {
-        app.UseMiddleware<LoginMiddleware>();
         app.UseMiddleware<NotFoundMiddleware>();
 
         return app;

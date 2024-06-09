@@ -75,7 +75,7 @@ public class BaseController(
         var accessToken = HttpContext.Request.Cookies["accessToken"];
         if (string.IsNullOrEmpty(accessToken))
         {
-            throw new NotLoginException("User do not login");
+            throw new UnauthenticatedException("User do not login");
         }
 
         return accessToken;

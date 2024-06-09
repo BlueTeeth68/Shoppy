@@ -5,6 +5,7 @@ using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Requests.Carts;
 using Shoppy.SharedLibrary.Models.Responses.Carts;
 using Shoppy.WebMVC.Configurations;
+using Shoppy.WebMVC.ExceptionHandlers;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Services.Implements;
@@ -13,7 +14,7 @@ public class CartService : ICartService
 {
     private readonly HttpClient _client;
     private readonly AppSettings _appSettings;
-    
+
     private const string BasePath = "users/cart";
 
     public CartService(AppSettings appSettings, HttpClient client)
@@ -30,6 +31,10 @@ public class CartService : ICartService
         {
             // Add the bearer token to the request
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
         }
 
         var response = await _client.SendAsync(request);
@@ -48,6 +53,10 @@ public class CartService : ICartService
         {
             // Add the bearer token to the request
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
         }
 
         var response = await _client.SendAsync(request);
@@ -78,6 +87,10 @@ public class CartService : ICartService
             // Add the bearer token to the request
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
+        }
 
         var response = await _client.SendAsync(request);
 
@@ -95,6 +108,10 @@ public class CartService : ICartService
         {
             // Add the bearer token to the request
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
         }
 
         var response = await _client.SendAsync(request);
@@ -124,6 +141,10 @@ public class CartService : ICartService
         {
             // Add the bearer token to the request
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
         }
 
         var response = await _client.SendAsync(request);

@@ -6,6 +6,7 @@ using Shoppy.SharedLibrary.Models.Base;
 using Shoppy.SharedLibrary.Models.Requests.Rating;
 using Shoppy.SharedLibrary.Models.Responses.Orders;
 using Shoppy.WebMVC.Configurations;
+using Shoppy.WebMVC.ExceptionHandlers;
 using Shoppy.WebMVC.Services.Interfaces;
 
 namespace Shoppy.WebMVC.Services.Implements;
@@ -30,6 +31,10 @@ public class OrderService : IOrderService
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
+        }
 
         var response = await _client.SendAsync(request);
 
@@ -49,6 +54,10 @@ public class OrderService : IOrderService
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
+        }
 
         var response = await _client.SendAsync(request);
 
@@ -65,6 +74,10 @@ public class OrderService : IOrderService
         if (!string.IsNullOrEmpty(accessToken))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
         }
 
         var response = await _client.SendAsync(request);
@@ -90,6 +103,10 @@ public class OrderService : IOrderService
         {
             // Add the bearer token to the request
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        else
+        {
+            throw new UnauthenticatedException("User do not login");
         }
 
         var response = await _client.SendAsync(request);

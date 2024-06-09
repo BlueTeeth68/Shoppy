@@ -9,7 +9,6 @@ public class TokenManager : ITokenManager
     private readonly IHttpContextAccessor  _httpContextAccessor;
     private readonly AppSettings _appSettings;
 
-
     public TokenManager(IHttpContextAccessor httpContextAccessor, AppSettings appSettings)
     {
         _httpContextAccessor = httpContextAccessor;
