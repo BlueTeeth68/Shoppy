@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Moq.Protected;
-using WebApi.Test;
+using CoreTestBase = Core.Test.CoreTestBase;
 
 namespace WebMVC.Test;
 

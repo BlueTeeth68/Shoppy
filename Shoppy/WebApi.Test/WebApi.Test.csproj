@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Core.Test\Core.Test.csproj" />
       <ProjectReference Include="..\Shoppy.WebApi\Shoppy.WebApi.csproj" />
     </ItemGroup>
 

@@ -6,11 +6,11 @@ using Shoppy.Domain.Repositories.UnitOfWork;
 
 namespace Shoppy.Application.Features.Categories.Handlers.Query;
 
-public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesQuery, List<CategoryResult>>
+public class GetAllHandler : IRequestHandler<GetAllCategoriesQuery, List<CategoryResult>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public GetAllCategoriesHandler(IUnitOfWork unitOfWork)
+    public GetAllHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

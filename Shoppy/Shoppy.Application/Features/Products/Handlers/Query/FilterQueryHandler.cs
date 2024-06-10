@@ -6,11 +6,11 @@ using Shoppy.Domain.Repositories.Base;
 
 namespace Shoppy.Application.Features.Products.Handlers.Query;
 
-public class FilterProductQueryHandler : IRequestHandler<FilterProductQuery, PagingResult<FilterProductResult>>
+public class FilterQueryHandler : IRequestHandler<FilterProductQuery, PagingResult<FilterProductResult>>
 {
     private readonly IProductService _productService;
 
-    public FilterProductQueryHandler(IProductService productService)
+    public FilterQueryHandler(IProductService productService)
     {
         _productService = productService;
     }

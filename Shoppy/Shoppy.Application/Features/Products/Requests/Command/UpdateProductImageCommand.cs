@@ -6,6 +6,6 @@ namespace Shoppy.Application.Features.Products.Requests.Command;
 
 public class UpdateProductImageCommand : IRequest<string>
 {
-    [Required] public Guid Id { get; set; }
-    [Required] public IFormFile File { get; set; } = null!;
+    [Required] public Guid Id { get; init; }
+    [Required] public IFormFile File { get; init; } = null!;
 }

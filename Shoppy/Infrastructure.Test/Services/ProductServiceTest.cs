@@ -59,7 +59,9 @@ public class ProductServiceTest
             Name = "Test 1",
             Price = 10,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[1].Id
+            CategoryId = CategoryIds[1].Id,
+            AvgRate = 2,
+            NumberOfSale = 100
         },
 
         new Product()
@@ -68,7 +70,9 @@ public class ProductServiceTest
             Name = "Test 2",
             Price = 9,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[0].Id
+            CategoryId = CategoryIds[0].Id,
+            AvgRate = 3,
+            NumberOfSale = 101
         },
 
         new Product()
@@ -77,16 +81,20 @@ public class ProductServiceTest
             Name = "Test 3",
             Price = 11,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[1].Id
+            CategoryId = CategoryIds[1].Id,
+            AvgRate = 5,
+            NumberOfSale = 103
         },
 
         new Product()
         {
             Id = Guid.NewGuid(),
             Name = "Test 4",
-            Price = 16,
+            Price = 17,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[1].Id
+            CategoryId = CategoryIds[1].Id,
+            AvgRate = 4.5m,
+            NumberOfSale = 99
         },
 
         new Product()
@@ -95,7 +103,9 @@ public class ProductServiceTest
             Name = "Test",
             Price = 16,
             Status = ProductStatus.Inactive,
-            CategoryId = CategoryIds[1].Id
+            CategoryId = CategoryIds[1].Id,
+            AvgRate = 5,
+            NumberOfSale = 98
         },
         new Product()
         {
@@ -103,15 +113,19 @@ public class ProductServiceTest
             Name = "Test 6",
             Price = 5,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[0].Id
+            CategoryId = CategoryIds[0].Id,
+            AvgRate = 4,
+            NumberOfSale = 105
         },
         new Product()
         {
             Id = Guid.NewGuid(),
             Name = "Product 7",
-            Price = 5,
+            Price = 4,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[0].Id
+            CategoryId = CategoryIds[0].Id,
+            AvgRate = 5,
+            NumberOfSale = 97
         },
         new Product()
         {
@@ -119,7 +133,9 @@ public class ProductServiceTest
             Name = "Product 8",
             Price = 6,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[0].Id
+            CategoryId = CategoryIds[0].Id,
+            AvgRate = 5,
+            NumberOfSale = 100
         },
         new Product()
         {
@@ -127,7 +143,9 @@ public class ProductServiceTest
             Name = "Product 9",
             Price = 6,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[0].Id
+            CategoryId = CategoryIds[0].Id,
+            AvgRate = 4.3m,
+            NumberOfSale = 100
         },
         new Product()
         {
@@ -135,7 +153,9 @@ public class ProductServiceTest
             Name = "Product 10",
             Price = 6,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[0].Id
+            CategoryId = CategoryIds[0].Id,
+            AvgRate = 4.2m,
+            NumberOfSale = 100
         },
         new Product()
         {
@@ -143,14 +163,16 @@ public class ProductServiceTest
             Name = "Product 11",
             Price = 6,
             Status = ProductStatus.Active,
-            CategoryId = CategoryIds[0].Id
+            CategoryId = CategoryIds[0].Id,
+            AvgRate = 4.8m,
+            NumberOfSale = 100
         }
     ];
 
     #endregion
 
     [Fact]
-    public async Task FilterProductAsync_Should_ReturnPagingResult_WhenFilterValid()
+    public async Task FilterProductAsync_ShouldReturnPagingResult_WhenFilterValid()
     {
         //Arrange
         var filter = new FilterProductQuery()
@@ -178,7 +200,7 @@ public class ProductServiceTest
         Assert.NotNull(result);
         Assert.Equal(3, result.TotalRecords);
     }
-    
+
     [Theory]
     [InlineData(1, null)]
     [InlineData(0, 6)]
@@ -186,7 +208,7 @@ public class ProductServiceTest
     [InlineData(1, 0)]
     [InlineData(1, -1)]
     [InlineData(null, 4)]
-    public async Task FilterProductAsync_Should_ReturnDefaultPageSize_WhenPageSizeIsInvalid(int? page, int? size)
+    public async Task FilterProductAsync_ShouldReturnDefaultPageSize_WhenPageSizeIsInvalid(int? page, int? size)
     {
         //Arrange
         var filter = new FilterProductQuery()
@@ -209,5 +231,47 @@ public class ProductServiceTest
         Assert.NotNull(result);
         Assert.Equal(Products.Count, result.TotalRecords);
         Assert.Equal(10, result.Results.Count);
+    }
+
+    [Theory]
+    [InlineData("asc", null, null, null, "Product 10")]
+    [InlineData("desc", null, null, null, "Test 6")]
+    [InlineData(null, "asc", null, null, "Product 7")]
+    [InlineData(null, "desc", null, null, "Test 4")]
+    [InlineData(null, null, "asc", null, "Test 1")]
+    [InlineData(null, null, "desc", null, "Test 3")]
+    [InlineData(null, null, null, "asc", "Product 7")]
+    [InlineData(null, null, null, "desc", "Test 6")]
+    public async Task FilterProductAsync_ShouldReturnCorrectSortOrder(
+        string? sortName,
+        string? sortPrice,
+        string? sortAvgRate,
+        string? sortNumberOfSale,
+        string expectedProductName)
+    {
+        //Arrange
+        var filter = new FilterProductQuery()
+        {
+            Page = 1,
+            Size = 10,
+            SortName = sortName,
+            SortPrice = sortPrice,
+            SortAvgRate = sortAvgRate,
+            SortNumberOfSale = sortNumberOfSale
+        };
+
+        var mock = Products.AsQueryable().BuildMock();
+
+        _unitOfWork.Setup(u => u.ProductRepository)
+            .Returns(_productRepository.Object);
+        _productRepository.Setup(p => p.GetQueryableSet())
+            .Returns(mock);
+
+        //Act
+        var result = await _productService.FilterProductAsync(filter);
+
+        //Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedProductName, result.Results.First().Name);
     }
 }

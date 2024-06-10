@@ -15,7 +15,7 @@ public class UpdateProductImageHandler: IRequestHandler<UpdateProductImageComman
     
     public async Task<string> Handle(UpdateProductImageCommand request, CancellationToken cancellationToken)
     {
-        var result = await _productService.UpdateProductThumbAsync(request);
+        var result = await _productService.UpdateProductThumbAsync(request, cancellationToken);
         return result;
     }
 }

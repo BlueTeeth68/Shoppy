@@ -6,11 +6,11 @@ using Shoppy.Domain.Repositories.UnitOfWork;
 
 namespace Shoppy.Application.Features.Categories.Handlers.Command;
 
-public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand>
+public class UpdateCommandHandler : IRequestHandler<UpdateCategoryCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateCategoryCommandHandler(IUnitOfWork unitOfWork)
+    public UpdateCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

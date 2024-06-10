@@ -7,12 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Features\Authentication\Handlers\Query\" />
       <Folder Include="Features\Authentication\Requests\Query\" />
       <Folder Include="Features\Authentication\Results\Query\" />
       <Folder Include="Features\Carts\Response\" />
       <Folder Include="Features\Categories\Results\Command\" />
-      <Folder Include="Features\ProductRatings\Handler\Query\" />
       <Folder Include="Features\ProductRatings\Request\Query\" />
       <Folder Include="Features\ProductRatings\Result\" />
       <Folder Include="Features\Products\Results\Command\" />

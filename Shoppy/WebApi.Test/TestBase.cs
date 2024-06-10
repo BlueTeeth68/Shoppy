@@ -3,7 +3,7 @@ using Moq;
 
 namespace WebApi.Test;
 
-public class TestBase : CoreTestBase
+public class TestBase : Core.Test.CoreTestBase
 {
     protected readonly Mock<IMediator> MediatorMock;
 

@@ -18,7 +18,7 @@ public class CreateCommandHandler : IRequestHandler<CreateCategoryCommand, Guid>
 
     public async Task<Guid> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
-        if (await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Name == request.Name))
+        if (await _unitOfWork.ProductCategoryRepository.ExistByExpressionAsync(pc => pc.Name == request.Name, cancellationToken))
             throw new BadRequestException("Name has been existed");
 
         var entity = new ProductCategory()
